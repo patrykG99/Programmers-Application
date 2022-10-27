@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,14 +21,15 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepo userRepository;
     private final RoleRepo roleRepository;
 
-    //private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User saveUser(User user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -58,18 +60,20 @@ public class UserServiceImpl implements UserService{
 
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username);
+        if(user == null){
+            throw new UsernameNotFoundException("not found");
+        }else{
 
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        User user = userRepository.findByUsername(username);
-//        if(user == null){
-//            throw new UsernameNotFoundException("not found");
-//        }else{
-//
-//        }
-//
-//        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-//        user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
-//        return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),authorities);
-//    }
+        }
+
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
+        return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),authorities);
+    }
+
+
+
 }
