@@ -32,21 +32,21 @@ public class ProjectServiceImpl implements ProjectService{
         return projectRepo.findByOwner(userRepo.findByUsername(username).get());
     }
 
-    @Override
-    public void addUserToProject(String username, Long projectId) {
-        Project project = projectRepo.findById(projectId).get();
-        User user = userRepo.findByUsername(username).get();
-        List<User> newUserArray = project.getMembers();
-        newUserArray.add(user);
-        project.setMembers(newUserArray);
-    }
-
-    @Override
-    public void removeUserFromProject(String username, Long projectId) {
-        Project project = projectRepo.findById(projectId).get();
-        User user = userRepo.findByUsername(username).get();
-        List<User> newUserArray = project.getMembers();
-        newUserArray.remove(user);
-        project.setMembers(newUserArray);
-    }
+//    @Override
+//    public void addUserToProject(String username, Long projectId) {
+//        Project project = projectRepo.findById(projectId).get();
+//        //User user = userRepo.findByUsername(username);
+//        List<User> newUserArray = project.getMembers();
+//        newUserArray.add(user);
+//        project.setMembers(newUserArray);
+//    }
+//
+//    @Override
+//    public void removeUserFromProject(String username, Long projectId) {
+//        Project project = projectRepo.findById(projectId).get();
+//        //User user = userRepo.findByUsername(username);
+//        List<User> newUserArray = project.getMembers();
+//        newUserArray.remove(user);
+//        project.setMembers(newUserArray);
+//    }
 }

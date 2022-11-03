@@ -150,7 +150,17 @@ export default class Register extends Component {
                   />
                 </div>
 
-        
+                <div className="form-group">
+                  <label htmlFor="email">Email</label>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    name="email"
+                    value={this.state.email}
+                    onChange={this.onChangeEmail}
+                    validations={[required, email]}
+                  />
+                </div>
 
                 <div className="form-group">
                   <label htmlFor="password">Password</label>

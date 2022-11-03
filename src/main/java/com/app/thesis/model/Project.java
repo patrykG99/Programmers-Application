@@ -1,6 +1,7 @@
 package com.app.thesis.model;
 
 
+import com.app.thesis.service.ProjectService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,4 +25,8 @@ public class Project {
 
     @ManyToMany(targetEntity = User.class, fetch = FetchType.EAGER)
     private List<User> members = new ArrayList<>();
+
+    public Project(String name){
+        this.name = name;
+    }
 }

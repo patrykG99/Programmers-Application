@@ -12,6 +12,8 @@ import Profile from "./components/profile.component";
 import BoardUser from "./components/board-user.component";
 import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
+import Projects from "./components/projects.component";
+import ProjectAdd from "./components/projectAdd.component"
 
 class App extends Component {
   constructor(props) {
@@ -117,7 +119,7 @@ class App extends Component {
           )}
           <div className="navbar-nav mr-auto">
           <li className="nav-item">
-              <Link to={"/home"} className="nav-link">
+              <Link to={"/projects"} className="nav-link">
                 Projects
               </Link>
             </li>
@@ -134,6 +136,8 @@ class App extends Component {
             <Route path="/user" element={<BoardUser />} />
             <Route path="/mod" element={<BoardModerator />} />
             <Route path="/admin" element={<BoardAdmin />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/projectAdd" element={<ProjectAdd />} />
           </Routes>
         </div>
       </div>

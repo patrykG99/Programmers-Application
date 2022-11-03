@@ -9,15 +9,6 @@ import java.security.Principal;
 @RestController
 public class HomeController {
 
-    @GetMapping
-    public String home(Principal p){
-        return "index";
-    }
 
-    @PreAuthorize("hasAuthority('SCOPE_read')")
-    @GetMapping("/secure")
-    public String secure(){
-        return "secured";
-    }
 
 }

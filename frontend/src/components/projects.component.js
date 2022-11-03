@@ -1,35 +1,65 @@
+import Button from 'react-bootstrap/Button';
 import React, { Component } from "react";
-import { Navigate } from "react-router-dom";
-import AuthService from "../services/auth.service";
+
+import { Routes, Route, Link } from "react-router-dom";
+
+
+import Card from 'react-bootstrap/Card';
+import CardGroup from 'react-bootstrap/CardGroup';
 
 export default class Profile extends Component {
-  constructor(props) {
-		super(props);
-		this.state = {projects: []};
-	}
+  state = {
+    projects: []
+  };
+
+  
 
   async componentDidMount() {
-    const response = await fetch('/api/projects');
+    const user = JSON.parse(localStorage.getItem('user'));
+    console.log(user.accessToken);
+    const response = await fetch('http://localhost:8080/api/projects',{
+      method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}
+    });
     const body = await response.json();
     this.setState({projects: body});
+    
   }
+  
+
+
 
   render() {
     const {projects} = this.state;
     return (
-        <div className="App">
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <div className="App-intro">
+      <>
+      <div style={{disply:'flex', justifyContent:'left'}}>
+        <Link to={"/projectAdd"} className="nav-link">
+        <Button variant="primary">Add Projects</Button>{' '}
+        </Link></div>
+      <div>
+        
               <h2>Projects</h2>
-              {clients.map(project =>
-                  <div key={project.id}>
+              <CardGroup>
+              {projects.map(project =>
+              
+              <Card style={{width:'25rem'}}>
+                <Card.Body>
+                <Card.Title><div key={project.id}>
                     {project.name} 
-                  </div>
+                  </div></Card.Title>
+                  <Card.Text>
+                    Test Test
+            
+                  </Card.Text>
+                  </Card.Body>
+                  </Card>
+                  
               )}
-            </div>
-          </header>
+              </CardGroup>
+            
+        
         </div>
+        </>
     );
   }
 }

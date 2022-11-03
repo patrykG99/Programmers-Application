@@ -87,6 +87,8 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/api/projects/save").hasAuthority("ROLE_USER")
+                .antMatchers("/api/projects").hasAuthority("ROLE_USER")
                 .antMatchers("/api/test/**").permitAll()
                 .anyRequest().authenticated();
 

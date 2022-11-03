@@ -15,6 +15,7 @@ import java.net.URI;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+@CrossOrigin(origins = "*", maxAge = 3600)
 
 @RestController
 @RequestMapping("/api")
@@ -49,18 +50,18 @@ public class ProjectController {
 //        return ResponseEntity.ok().build();
 //    }
 //
-//    @PostMapping("/projects/save")
-//    public ResponseEntity<Project> saveProject(@RequestBody Project project, Principal p){
-//        List<User> membersList = project.getMembers();
-//        project.setOwner(userService.getUser(p.getName()));
-//        membersList.add(userService.getUser(p.getName()));
-//        project.setMembers(membersList);
-//
-//        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/projects/save").toUriString());
-//        return ResponseEntity.created(uri).body(projectService.saveProject(project));
-//
-//
-//    }
+    @PostMapping("/projects/save")
+    public ResponseEntity<Project> saveProject(@RequestBody Project project, Principal p){
+        List<User> membersList = project.getMembers();
+        project.setOwner(userService.getUser(p.getName()));
+        membersList.add(userService.getUser(p.getName()));
+        project.setMembers(membersList);
+
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/projects/save").toUriString());
+        return ResponseEntity.created(uri).body(projectService.saveProject(project));
+
+
+    }
 
 }
 @Data
