@@ -9,4 +9,5 @@ public class PasswordConfig {
 
     @Bean
     public BCryptPasswordEncoder createPwEncoder() { return new BCryptPasswordEncoder(); }
+
 }

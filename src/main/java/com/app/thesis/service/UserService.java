@@ -8,7 +8,7 @@ import java.util.List;
 public interface UserService {
     User saveUser(User user);
     Role saveRole(Role role);
-    void addRoleToUser(String user, String role);
-    User getUser(String username);
+    //void addRoleToUser(String user, String role);
+    //User getUser(String username);
     List<User> getUsers();
 }

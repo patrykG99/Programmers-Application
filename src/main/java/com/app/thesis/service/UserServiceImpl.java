@@ -21,7 +21,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService{
     private final UserRepo userRepository;
     private final RoleRepo roleRepository;
 
@@ -39,10 +39,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
 
-    @Override
-    public User getUser(String username) {
-        return userRepository.findByUsername(username);
-    }
+//    @Override
+//    public User getUser(String username) {
+//        return userRepository.findByUsername(username);
+//    }
 
     @Override
     public List<User> getUsers() {
@@ -52,27 +52,27 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
 
-    @Override
-    public void addRoleToUser(String username, String roleName) {
-        User user = userRepository.findByUsername(username);
-        Role role = roleRepository.findByName(roleName);
-        user.getRoles().add(role);
+//    @Override
+//    public void addRoleToUser(String username, String roleName) {
+//        User user = userRepository.findByUsername(username);
+//        Role role = roleRepository.findByName(roleName);
+//        user.getRoles().add(role);
+//
+//    }
 
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        if(user == null){
-            throw new UsernameNotFoundException("not found");
-        }else{
-
-        }
-
-        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
-        return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),authorities);
-    }
+//    @Override
+//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//        User user = userRepository.findByUsername(username);
+//        if(user == null){
+//            throw new UsernameNotFoundException("not found");
+//        }else{
+//
+//        }
+//
+//        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+//        user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
+//        return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),authorities);
+//    }
 
 
 

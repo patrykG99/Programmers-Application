@@ -11,7 +11,7 @@ public class HomeController {
 
     @GetMapping
     public String home(Principal p){
-        return "hello" + p.getName();
+        return "index";
     }
 
     @PreAuthorize("hasAuthority('SCOPE_read')")
