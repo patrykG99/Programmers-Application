@@ -1,5 +1,6 @@
 import Button from 'react-bootstrap/Button';
 import React, { Component } from "react";
+import Row from 'react-bootstrap/Row';
 
 import { Routes, Route, Link } from "react-router-dom";
 
@@ -39,23 +40,25 @@ export default class Profile extends Component {
       <div>
         
               <h2>Projects</h2>
-              <CardGroup>
+              <Row xs={5} md={5} lg={5} className="g-7">
               {projects.map(project =>
               
               <Card style={{width:'25rem'}}>
+                <Card.Header>{project.tech}</Card.Header>
                 <Card.Body>
                 <Card.Title><div key={project.id}>
                     {project.name} 
                   </div></Card.Title>
                   <Card.Text>
-                    Test Test
-            
+                    {project.description}<br/>
+                    <a href={"/projects/" + project.id} class="btn btn-primary stretched-link">Go somewhere</a>
                   </Card.Text>
                   </Card.Body>
                   </Card>
                   
               )}
-              </CardGroup>
+              </Row>
+              
             
         
         </div>

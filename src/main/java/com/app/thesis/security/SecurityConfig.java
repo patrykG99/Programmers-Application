@@ -88,7 +88,10 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/projects/save").hasAuthority("ROLE_USER")
-                .antMatchers("/api/projects").hasAuthority("ROLE_USER")
+                .antMatchers("/api/projects/**").hasAuthority("ROLE_USER")
+                .antMatchers("/api/invites/**").hasAuthority("ROLE_USER")
+                .antMatchers("/api/project/**").hasAuthority("ROLE_USER")
+                .antMatchers("/api/project/end/**").hasAuthority("ROLE_USER")
                 .antMatchers("/api/test/**").permitAll()
                 .anyRequest().authenticated();
 

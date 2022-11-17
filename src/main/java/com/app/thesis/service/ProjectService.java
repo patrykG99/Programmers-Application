@@ -10,7 +10,10 @@ public interface ProjectService {
     List<Project> getProjects();
     Project saveProject(Project project);
     Project getProjectByOwner(String username);
-//    void addUserToProject(String username, Long projectId);
+    Project getProject(Long id);
+
+    List<User> getUsersFromProject(Long id);
+    void addUserToProject(User user, Project project);
 //    void removeUserFromProject(String username, Long projectId);
 
 

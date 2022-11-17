@@ -26,7 +26,18 @@ public class Project {
     @ManyToMany(targetEntity = User.class, fetch = FetchType.EAGER)
     private List<User> members = new ArrayList<>();
 
-    public Project(String name){
+    private int maxUsers;
+
+    private boolean finished = false;
+
+    private String description ;
+    private String tech;
+
+    public Project(String name, String description, int maxUsers, String tech){
+
         this.name = name;
+        this.description = description;
+        this.maxUsers = maxUsers;
+        this.tech = tech;
     }
 }

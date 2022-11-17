@@ -26,6 +26,9 @@ public class User {
     private String email;
     private String password;
 
+    @OneToMany(targetEntity = Invite.class)
+    private List<Invite> invitesReceived;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(  name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),

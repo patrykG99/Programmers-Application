@@ -14,6 +14,7 @@ import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
 import Projects from "./components/projects.component";
 import ProjectAdd from "./components/projectAdd.component"
+import ProjectPage from "./components/projectPage.component"
 
 class App extends Component {
   constructor(props) {
@@ -138,6 +139,7 @@ class App extends Component {
             <Route path="/admin" element={<BoardAdmin />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/projectAdd" element={<ProjectAdd />} />
+            <Route path="/projects/:id" element={<ProjectPage />}/>
           </Routes>
         </div>
       </div>
