@@ -16,6 +16,7 @@ export default function ProjectPage(props) {
     const [userInvite, setUserInvite] = useState('')
     //const [rating, setRating] = useState(0)
     const [ratedUser, setRatedUser] = useState('')
+    const [requests, setRequests] = useState('')
     
     let { id } = useParams();
     const handleNameChange = event => {
@@ -76,6 +77,17 @@ export default function ProjectPage(props) {
             console.log(requestOptions)
       };
       
+    const requestInvite = event => {
+      const url = 'http://localhost:8080/api/invites/save/' + id
+      console.log(user.username)
+      const requestOptions = {
+        method: 'POST',
+        headers: {'Authorization':'Bearer ' + user.accessToken, 'Content-Type':'application/json'},
+        body: JSON.stringify({'invitedUsername':user.username,'type':"Request"})
+      };
+      fetch(url, requestOptions)
+      
+    }
    
     
     
@@ -86,11 +98,14 @@ export default function ProjectPage(props) {
             
             const response = await fetch('http://localhost:8080/api/project/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
             const response2 = await fetch('http://localhost:8080/api/project/users/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
+            const responseRequests = await fetch('http://localhost:8080/api/invites/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
             let actualData = await response.json();
             let actualData2 = await response2.json();
+            let actualDataRequests = await responseRequests.json();
             //console.log(actualData)
             setProject(actualData)
             setUsers(actualData2)
+            setRequests(actualDataRequests)
             setHasLoaded(true)
             console.log(users)
             
@@ -128,9 +143,9 @@ export default function ProjectPage(props) {
       <div style={{width:'50%',padding:'10px'}} className="rounded border"><h5>Invite requests:</h5></div></Row>
       </>
        : null}
-       {!project.finished && hasLoaded && users.includes(user) && users.length < project.maxUsers ?
+       {!project.finished && hasLoaded && !users.includes(user) && users.length < project.maxUsers ?
        
-       <button type="submit" className="btn btn-primary" style={{margin:'5px'}}>
+       <button type="submit" onClick={requestInvite} className="btn btn-primary" style={{margin:'5px'}}>
        Request invite
      </button>: null
       

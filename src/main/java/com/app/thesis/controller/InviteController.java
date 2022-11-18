@@ -32,6 +32,11 @@ public class InviteController {
         return ResponseEntity.ok().body(inviteService.getInvites());
     }
 
+    @GetMapping("/invites/{id}")
+    public ResponseEntity<List<Invite>> getRequests(@PathVariable("id") Long id){
+        return ResponseEntity.ok().body(inviteService.getInvitesByProjectAndType(id, "Request"));
+    }
+
     @PostMapping("/invites/save/{id}")
     public ResponseEntity<Invite> saveInvite(@RequestBody Invite invite, Principal p, @PathVariable("id") Long projectId){
         User user = userService.getUser(p.getName());
@@ -43,6 +48,13 @@ public class InviteController {
 
         if(project.getOwner().equals(user) && !project.getMembers().contains(invitedUser) && invite.getType().equals("Invite")){
             System.out.println("dziala");
+            invite.setProjectId(projectId);
+            invite.setUser(userService.getUser(invite.getInvitedUsername()));
+            invite.setProjectName(project.getName());
+            URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/invites/save/{id}").toUriString());
+            return ResponseEntity.created(uri).body(inviteService.saveInvite(invite));
+        }
+        else if(!project.getMembers().contains(invitedUser) && invite.getType().equals("Request")){
             invite.setProjectId(projectId);
             invite.setUser(userService.getUser(invite.getInvitedUsername()));
             invite.setProjectName(project.getName());
@@ -77,5 +89,7 @@ public class InviteController {
 
 
     }
+
+
 
 }

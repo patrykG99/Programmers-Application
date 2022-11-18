@@ -1,6 +1,7 @@
 package com.app.thesis.service;
 
 import com.app.thesis.model.Invite;
+import com.app.thesis.model.Project;
 import com.app.thesis.model.User;
 import com.app.thesis.repository.InviteRepo;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,11 @@ public class InviteServiceImpl implements InviteService{
     @Override
     public Invite getInvite(Long id) {
         return inviteRepo.findById(id).get();
+    }
+
+    @Override
+    public List<Invite> getInvitesByProjectAndType(Long id, String type) {
+        return inviteRepo.findByProjectIdAndType(id, type);
     }
 
     @Override

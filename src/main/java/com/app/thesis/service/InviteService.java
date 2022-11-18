@@ -1,6 +1,7 @@
 package com.app.thesis.service;
 
 import com.app.thesis.model.Invite;
+import com.app.thesis.model.Project;
 import com.app.thesis.model.User;
 
 import java.util.List;
@@ -11,6 +12,8 @@ public interface InviteService {
     List<Invite> getInvites();
     List<Invite> getInvitesByUser(User user);
     Invite getInvite(Long id);
+
+    List<Invite> getInvitesByProjectAndType(Long id, String type);
 
     void deleteInvite(Long id);
 }
