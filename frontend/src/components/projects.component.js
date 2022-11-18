@@ -25,9 +25,6 @@ export default class Profile extends Component {
     this.setState({projects: body});
     
   }
-  
-
-
 
   render() {
     const {projects} = this.state;
@@ -50,8 +47,8 @@ export default class Profile extends Component {
                     {project.name} 
                   </div></Card.Title>
                   <Card.Text>
-                    {project.description}<br/>
-                    <a href={"/projects/" + project.id} class="btn btn-primary stretched-link">Go somewhere</a>
+                    {project.description}<br/><br/>
+                    <a href={"/projects/" + project.id} class="btn btn-primary stretched-link">Go to project</a>
                   </Card.Text>
                   </Card.Body>
                   </Card>

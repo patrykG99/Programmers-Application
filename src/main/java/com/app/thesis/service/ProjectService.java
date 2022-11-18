@@ -2,6 +2,7 @@ package com.app.thesis.service;
 
 import com.app.thesis.model.Project;
 import com.app.thesis.model.User;
+import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 
@@ -14,7 +15,6 @@ public interface ProjectService {
 
     List<User> getUsersFromProject(Long id);
     void addUserToProject(User user, Project project);
-//    void removeUserFromProject(String username, Long projectId);
 
 
 }

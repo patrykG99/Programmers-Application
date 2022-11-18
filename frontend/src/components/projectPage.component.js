@@ -29,6 +29,7 @@ export default function ProjectPage(props) {
         
       };  
       fetch(url, requestOptions)
+      window.location.reload(false);
     }
     // const handleRatingChange = event => {
     //   setRating(event.target.rating)
@@ -53,7 +54,7 @@ export default function ProjectPage(props) {
 
     const onPointerEnter = (userrate) => setRatedUser(userrate.username)
     const onPointerLeave = () => console.log('Leave')
-    const onPointerMove = (value, index) => console.log(value, index)
+    const onPointerMove = (value, index) => console.log(user.username,project.owner.username)
 
     const sendRating = event =>{
       console.log(event.target.value)
@@ -102,79 +103,94 @@ export default function ProjectPage(props) {
     
     return (
         <>
-        <div>
+        <div>{ !project.finished && hasLoaded && project.owner.username == user.username ?
+        <>
         <form onSubmit={handleSubmit}>
-          <div>
-            <label>Project Name</label>
-            <input
-              type="userInvite"
-              name="userInvite"
-              placeholder="Enter name"
-              onChange={handleNameChange}
-              value={userInvite}
-            />
-            </div>
-            <button type="submit">
-            Submit
-          </button>
-        </form>
-        <button onClick={endProject}>End Project</button>
+        <div>
+          <label>Project Name</label>
+          <input
+            type="userInvite"
+            name="userInvite"
+            placeholder="Enter name"
+            onChange={handleNameChange}
+            value={userInvite}
+          />
+          </div>
+          <button type="submit">
+          Submit
+        </button>
+      </form>
+      <button onClick={endProject}>End Project</button> 
+      </>
+       : <p></p>}
+        
+        
         </div>
         <Row xs={3} md={3} lg={3} className="g-7">
-            <div style={{width:'20%'}} className="rounded border">
+            <div style={{width:'20%' ,padding:'10px'}} className="rounded border">
                 <h5>Project information</h5>
+                
                 <hr/>
-                <div>
-                    <h6>Main Technology:</h6>
+
+                <div >
+
+                    <h6>Project name:</h6>
+                    {hasLoaded ? <p>{project.name}</p> : <p>Loading...</p>}
+                    <h6>Main Language:</h6>
                     {hasLoaded ? <p>{project.tech}</p> : <p>Loading...</p>}
                 
-                <br/>
+                
 
                 <h6>Owner:</h6>
                 {hasLoaded ? <p>{project.owner.username}</p> : <p>Loading...</p>}
                 
                 
-                <h6>Description:</h6>
-                {hasLoaded ? <p>{project.description}</p> : <p>Loading...</p>}
+                
                 
                 
                 </div>
                 
             </div>
-            <div style={{width:'60%'}} className="rounded border"><h5>placeholder</h5>
+            <div style={{width:'60%',padding:'10px'}} className="rounded border"><h5>Description</h5>
             <hr/>
+            {project.description}
             </div>
 
 
-            <div style={{width:'20%'}} className="rounded border"><h5>Users</h5>
+            <div style={{width:'20%',padding:'10px'}} className="rounded border"><h5>Users ({users.length}/{project.maxUsers})</h5>
             <hr/>
             {users.map(user =>
-                  <div key={user.id}>
+                  <div key={user.id} className="rounded border" style={{margin:'10px',padding:'5px'}}>
                     {user.username}
                   </div>
               )}
             </div>
-            <div style={{width:'30%'}} className="rounded border"><h5>Rate users</h5>
+            {project.finished && users.length > 1? 
+            <div style={{width:'20%'}} className="rounded border"><h5>Rate users</h5>
             <hr/>
             
             {users.map(userrate =>
-                  <div className="rounded border">
-                    {userrate.username}
-                    <Rating
-                      key={userrate.id}
-                      onClick={handleRating}
-                      onPointerEnter={()=>onPointerEnter(userrate)}
-                      //onPointerLeave={onPointerLeave}
-                      //onPointerMove={onPointerMove}
-                      
-                      /* Available Props */
-                    />
-                    
-                  </div>
+              {return userrate.username != user.username ?
+                <div className="rounded border" key={userrate.id}>
+                {userrate.username}
+                <Rating
+                  
+                  onClick={handleRating}
+                  onPointerEnter={()=>onPointerEnter(userrate)}
+                  //onPointerLeave={onPointerLeave}
+                  onPointerMove={onPointerMove}
+                  size="30"
+                  /* Available Props */
+                />
+                
+              </div>: null } 
+                
+                  
               )}
             
             
-            </div>
+            </div>: <></>}
+            
         </Row>
         </>
     )

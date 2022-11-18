@@ -1,8 +1,6 @@
 package com.app.thesis.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -10,6 +8,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+
 public class Rating {
 
     @Id
@@ -32,4 +31,6 @@ public class Rating {
         this.score = score;
 
     }
+
+
 }

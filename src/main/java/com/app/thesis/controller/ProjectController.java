@@ -10,6 +10,7 @@ import com.app.thesis.service.RatingService;
 import com.app.thesis.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -57,7 +58,7 @@ public class ProjectController {
         return ResponseEntity.ok().body(projectService.getUsersFromProject(id));
     }
 
-//    @PostMapping("/projects/addUser")
+    //    @PostMapping("/projects/addUser")
 //    public ResponseEntity<Project> addUserToProject(@RequestBody UserToProjectForm form){
 //        projectService.addUserToProject(form.getUsername(), form.getProjectId());
 //        return ResponseEntity.ok().build();

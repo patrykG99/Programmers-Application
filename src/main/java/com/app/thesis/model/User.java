@@ -1,9 +1,8 @@
 package com.app.thesis.model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import javax.persistence.*;
@@ -15,7 +14,8 @@ import java.util.*;
         @UniqueConstraint(columnNames = "username"),
 
 })
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
@@ -35,8 +35,10 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+
     @OneToMany(targetEntity = Project.class)
     private List<Project> projectsOwned;
+
 
     @ManyToMany(targetEntity = Project.class)
     private List<Project> projectsIn;
