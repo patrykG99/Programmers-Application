@@ -68,7 +68,7 @@ export default function ProjectPage(props) {
         const requestOptions = {
             method: 'POST',
             headers: {  'Authorization':'Bearer ' + user.accessToken, 'Content-Type': 'application/json' },
-            body: JSON.stringify({'invitedUsername':userInvite})
+            body: JSON.stringify({'invitedUsername':userInvite, 'type':"Invite"})
         };
         fetch(url, requestOptions)
             .then(response => console.log('Submitted successfully'))
@@ -103,11 +103,14 @@ export default function ProjectPage(props) {
     
     return (
         <>
-        <div>{ !project.finished && hasLoaded && project.owner.username == user.username ?
+        { !project.finished && hasLoaded && project.owner.username == user.username ?
         <>
+        <Row xs={2} md={2} lg={2} className="g-7">
+        
+        <div  style={{width:'50%', padding:'10px'}} className="rounded border">
         <form onSubmit={handleSubmit}>
         <div>
-          <label>Project Name</label>
+          <label>User to invite:</label>
           <input
             type="userInvite"
             name="userInvite"
@@ -116,17 +119,28 @@ export default function ProjectPage(props) {
             value={userInvite}
           />
           </div>
-          <button type="submit">
-          Submit
+          <button type="submit" className="btn btn-primary" style={{margin:'5px'}}>
+          Invite user 
         </button>
       </form>
-      <button onClick={endProject}>End Project</button> 
+      </div>
+      {/* <button onClick={endProject}>End Project</button>  */}
+      <div style={{width:'50%',padding:'10px'}} className="rounded border"><h5>Invite requests:</h5></div></Row>
       </>
-       : <p></p>}
+       : null}
+       {!project.finished && hasLoaded && users.includes(user) && users.length < project.maxUsers ?
+       
+       <button type="submit" className="btn btn-primary" style={{margin:'5px'}}>
+       Request invite
+     </button>: null
+      
+      
+      }
         
         
-        </div>
+        
         <Row xs={3} md={3} lg={3} className="g-7">
+        
             <div style={{width:'20%' ,padding:'10px'}} className="rounded border">
                 <h5>Project information</h5>
                 

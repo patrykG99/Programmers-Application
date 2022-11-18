@@ -24,8 +24,11 @@ public class Invite {
     private String projectName;
     private String invitedUsername;
 
-    public Invite(String invitedUsername){
+    private String type;
+
+    public Invite(String invitedUsername, String type){
         this.invitedUsername = invitedUsername;
+        this.type = type;
     }
 
 

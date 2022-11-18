@@ -36,13 +36,16 @@ public class InviteController {
     public ResponseEntity<Invite> saveInvite(@RequestBody Invite invite, Principal p, @PathVariable("id") Long projectId){
         User user = userService.getUser(p.getName());
         Project project = projectService.getProject(projectId);
-        invite.setProjectId(projectId);
+
         User invitedUser = userService.getUser(invite.getInvitedUsername());
-        invite.setUser(userService.getUser(invite.getInvitedUsername()));
-        invite.setProjectName(project.getName());
+
         System.out.println(invite);
-        if(project.getMembers().contains(user) && !project.getMembers().contains(invitedUser)){
+
+        if(project.getOwner().equals(user) && !project.getMembers().contains(invitedUser) && invite.getType().equals("Invite")){
             System.out.println("dziala");
+            invite.setProjectId(projectId);
+            invite.setUser(userService.getUser(invite.getInvitedUsername()));
+            invite.setProjectName(project.getName());
             URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/invites/save/{id}").toUriString());
             return ResponseEntity.created(uri).body(inviteService.saveInvite(invite));
         }
@@ -63,6 +66,7 @@ public class InviteController {
         if(user.equals(userLogged)) {
 
             Project project = projectService.getProject(invite.getProjectId());
+            System.out.println("dziala");
             projectService.addUserToProject(userLogged,project);
             inviteService.deleteInvite(inviteId);
 

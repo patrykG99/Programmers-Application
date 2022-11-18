@@ -11,7 +11,7 @@ export default function ProjectPage(props) {
   const [users, setUsers] = useState([]);
   const [hasLoaded, setHasLoaded] = useState();
   const [userInvite, setUserInvite] = useState('')
-  //const [userProjects, setUserProjects] = useState([])
+  const [userProjects, setUserProjects] = useState([])
   //let { id } = useParams();
   const handleNameChange = event => {
       setUserInvite(event.target.value)
@@ -51,14 +51,15 @@ export default function ProjectPage(props) {
       async function getData(){
           
           const response = await fetch('http://localhost:8080/api/myinvites', {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
-          //const responseProjects = await fetch('http://localhost:8080/api/projects/user/' + user.username, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
+          const responseProjects = await fetch('http://localhost:8080/api/projects/user/projects/' + user.id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
           
           let actualData = await response.json();
-          //let actualDataProjects = await responseProjects.json();
+          let actualDataProjects = await responseProjects.json();
           
           //console.log(actualData)
           setInvites(actualData)
-          //setUserProjects(actualDataProjects)
+          setUserProjects(actualDataProjects)
+          console.log(userProjects  )
           
           setHasLoaded(true)
           //console.log(invites)
@@ -100,7 +101,17 @@ export default function ProjectPage(props) {
               
           </div>
           <div style={{width:'60%'}} className="rounded border"><h5>User's projects</h5>
+
           <hr/>
+          {userProjects.map(userProject=>
+            <div key={userProject.id}>
+
+                {userProject.name}
+
+            </div>
+            
+            
+            )}
                     
                     
           

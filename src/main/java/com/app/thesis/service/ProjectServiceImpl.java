@@ -30,6 +30,7 @@ public class ProjectServiceImpl implements ProjectService{
     @Override
     public Project getProjectByOwner(String username) {
         return projectRepo.findByOwner(userRepo.findByUsername(username).get());
+
     }
 
     @Override
@@ -39,8 +40,8 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Override
     public List<User> getUsersFromProject(Long id) {
-        Project p = projectRepo.findById(id).get();
-        return p.getMembers();
+         return userRepo.findAllByProjectsInId(id);
+
     }
 
 
@@ -49,6 +50,11 @@ public class ProjectServiceImpl implements ProjectService{
         List<User> newUserArray = project.getMembers();
         newUserArray.add(user);
         project.setMembers(newUserArray);
+    }
+
+    @Override
+    public List<Project> getProjectsByUser(Long id) {
+        return projectRepo.findAllByMembersId(id);
     }
 //
 //    @Override

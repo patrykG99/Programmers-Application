@@ -2,6 +2,7 @@ package com.app.thesis.model;
 
 
 import com.app.thesis.service.ProjectService;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,7 +24,14 @@ public class Project {
     @ManyToOne(targetEntity = User.class)
     private User owner;
 
-    @ManyToMany(targetEntity = User.class, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "project_members",
+            joinColumns = { @JoinColumn(name = "project_id") },
+            inverseJoinColumns = { @JoinColumn(name = "user_id") })
     private List<User> members = new ArrayList<>();
 
     private int maxUsers;

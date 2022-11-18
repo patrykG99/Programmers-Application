@@ -52,8 +52,13 @@ public class ProjectController {
 
         return ResponseEntity.ok().body(projectService.getProjectByOwner(username));
     }
+    @GetMapping("/projects/user/projects/{id}")
+    public ResponseEntity<List<Project>> getProjectsByUser(@PathVariable("id") Long id){
 
-    @GetMapping("project/users/{id}")
+        return ResponseEntity.ok().body(projectService.getProjectsByUser(id));
+    }
+
+    @GetMapping("/project/users/{id}")
     public ResponseEntity<List<User>> getProjectMembers(@PathVariable("id") Long id){
         return ResponseEntity.ok().body(projectService.getUsersFromProject(id));
     }

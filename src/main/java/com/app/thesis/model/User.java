@@ -40,7 +40,13 @@ public class User {
     private List<Project> projectsOwned;
 
 
-    @ManyToMany(targetEntity = Project.class)
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "members")
+    @JsonIgnore
     private List<Project> projectsIn;
 
     public User(String username, String email, String password) {
