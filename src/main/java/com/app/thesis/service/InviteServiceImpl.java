@@ -33,6 +33,11 @@ public class InviteServiceImpl implements InviteService{
     }
 
     @Override
+    public List<Invite> getInvitesByUserAndType(Long id, String type) {
+        return inviteRepo.findByUserIdAndType(id,type);
+    }
+
+    @Override
     public Invite getInvite(Long id) {
         return inviteRepo.findById(id).get();
     }

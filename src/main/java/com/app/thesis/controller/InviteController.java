@@ -67,7 +67,7 @@ public class InviteController {
     @GetMapping("/myinvites")
     public ResponseEntity<List<Invite>> getUserInvites(Principal p){
         User user = userService.getUser(p.getName());
-        return ResponseEntity.ok().body(inviteService.getInvitesByUser(user));
+        return ResponseEntity.ok().body(inviteService.getInvitesByUserAndType(user.getId(), "Invite"));
     }
 
     @DeleteMapping("/invites/accept/{id}")
@@ -75,14 +75,19 @@ public class InviteController {
         Invite invite = inviteService.getInvite(inviteId);
         User user = userService.getUser(invite.getInvitedUsername());
         User userLogged = userService.getUser(p.getName());
-        if(user.equals(userLogged)) {
+        Project project = projectService.getProject(invite.getProjectId());
+        if(user.equals(userLogged) && invite.getType().equals("Invite")) {
 
-            Project project = projectService.getProject(invite.getProjectId());
             System.out.println("dziala");
             projectService.addUserToProject(userLogged,project);
             inviteService.deleteInvite(inviteId);
 
             return ResponseEntity.noContent().build();
+
+        }
+        else if(project.getOwner().equals(userLogged) && invite.getType().equals("Request")){
+            projectService.addUserToProject(user, project);
+            inviteService.deleteInvite(inviteId);
 
         }
         return ResponseEntity.noContent().build();

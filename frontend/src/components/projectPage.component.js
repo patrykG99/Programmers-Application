@@ -88,6 +88,18 @@ export default function ProjectPage(props) {
       fetch(url, requestOptions)
       
     }
+
+    const acceptRequest = event => {
+      const url = 'http://localhost:8080/api/invites/accept/' + event.target.value
+    const requestOptions = {
+                 method: 'DELETE',
+                 headers: {  'Authorization':'Bearer ' + user.accessToken, 'Content-Type': 'application/json' },
+                 
+             };
+             fetch(url, requestOptions)
+             window.location.reload(false);
+
+    }
    
     
     
@@ -140,7 +152,22 @@ export default function ProjectPage(props) {
       </form>
       </div>
       {/* <button onClick={endProject}>End Project</button>  */}
-      <div style={{width:'50%',padding:'10px'}} className="rounded border"><h5>Invite requests:</h5></div></Row>
+      <div style={{width:'50%',padding:'10px'}} className="rounded border"><h5>Invite requests:</h5>
+      
+      {requests.map(request =>
+        <div>
+          {request.invitedUsername}
+          <button onClick={acceptRequest} value={request.id}>Accept</button>
+
+
+
+
+
+        </div>)}
+      
+      
+      
+      </div></Row>
       </>
        : null}
        {!project.finished && hasLoaded && !users.includes(user) && users.length < project.maxUsers ?

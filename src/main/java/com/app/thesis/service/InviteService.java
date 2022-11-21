@@ -11,6 +11,9 @@ public interface InviteService {
 
     List<Invite> getInvites();
     List<Invite> getInvitesByUser(User user);
+    List<Invite> getInvitesByUserAndType(Long id, String type);
+
+
     Invite getInvite(Long id);
 
     List<Invite> getInvitesByProjectAndType(Long id, String type);

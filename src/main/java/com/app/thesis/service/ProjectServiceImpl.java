@@ -48,7 +48,10 @@ public class ProjectServiceImpl implements ProjectService{
     @Override
     public void addUserToProject(User user, Project project) {
         List<User> newUserArray = project.getMembers();
-        newUserArray.add(user);
+        if(!newUserArray.contains(user)){
+            newUserArray.add(user);
+        }
+
         project.setMembers(newUserArray);
     }
 

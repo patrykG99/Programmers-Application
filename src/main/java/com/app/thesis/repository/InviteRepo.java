@@ -12,4 +12,5 @@ public interface InviteRepo extends JpaRepository<Invite, Long> {
     List<Invite> findByUser(User user);
 
     List<Invite> findByProjectIdAndType(Long id, String type);
+    List<Invite> findByUserIdAndType(Long id, String type);
 }
