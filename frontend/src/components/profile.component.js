@@ -12,7 +12,9 @@ export default function ProjectPage(props) {
   const [hasLoaded, setHasLoaded] = useState();
   const [userInvite, setUserInvite] = useState('')
   const [userProjects, setUserProjects] = useState([])
-  //let { id } = useParams();
+  const [userProfile, setUserProfile] = useState([])
+
+  let { id } = useParams();
   const handleNameChange = event => {
       setUserInvite(event.target.value)
   };
@@ -49,16 +51,28 @@ export default function ProjectPage(props) {
   useEffect(() => {
       
       async function getData(){
+
+          
           
           const response = await fetch('http://localhost:8080/api/myinvites', {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
-          const responseProjects = await fetch('http://localhost:8080/api/projects/user/projects/' + user.id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
+          const responseProjects = await fetch('http://localhost:8080/api/projects/user/projects/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
+          const responseUser = await fetch('http://localhost:8080/api/users/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
+          
+          
+          
+
           
           let actualData = await response.json();
           let actualDataProjects = await responseProjects.json();
+          let actualDataUser = await responseUser.json();
           
           //console.log(actualData)
           setInvites(actualData)
           setUserProjects(actualDataProjects)
+          setUserProfile(actualDataUser)
+          if(actualDataUser.id == user.id){
+            console.log("dziala")
+          }
           console.log(userProjects  )
           
           setHasLoaded(true)
@@ -73,9 +87,13 @@ export default function ProjectPage(props) {
   
   return (
       <>
-      <div>
-      
-      </div>
+      <Row lg={1}>
+        <div className="border rounded">
+          <h5>User Information</h5>
+          <hr/>
+          Username
+        </div>
+      </Row>
       <Row xs={3} md={3} lg={3} className="g-7">
           <div style={{width:'20%'}} className="rounded border">
               <h5>Your invites:</h5>
@@ -104,9 +122,11 @@ export default function ProjectPage(props) {
 
           <hr/>
           {userProjects.map(userProject=>
-            <div key={userProject.id}>
+            <div key={userProject.id} className="rounded border" style={{margin:'10px',padding:'5px'}}>
 
                 {userProject.name}
+                
+                {/* <a href={"/projects/" + userProject.id} class="btn btn-primary stretched-link" style={{float:'right',height:'25px',fontSize:'12px'}}>Go to project</a> */}
 
             </div>
             

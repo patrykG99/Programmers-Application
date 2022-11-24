@@ -10,6 +10,7 @@ public interface UserService {
     Role saveRole(Role role);
     //void addRoleToUser(String user, String role);
     User getUser(String username);
+    User getUser(Long id);
     List<User> getUsers();
 
 

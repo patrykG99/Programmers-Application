@@ -23,12 +23,14 @@ public class Rating {
     @ManyToOne(targetEntity = User.class)
     private User ratingUser;
 
+    private String comment;
+
     private float score;
 
-    public Rating(Project project, User user,User ratingUser, float score){
-
+    public Rating(float score, String comment){
 
         this.score = score;
+        this.comment = comment;
 
     }
 

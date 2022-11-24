@@ -15,6 +15,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserController {
@@ -26,6 +27,11 @@ public class UserController {
     @GetMapping("/users")
     public ResponseEntity<List<User>> getUsers(){
         return ResponseEntity.ok().body(userService.getUsers());
+    }
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<User> getUser(@PathVariable("id") Long id){
+        return ResponseEntity.ok().body(userService.getUser(id));
     }
 
     @PostMapping("/user/save")

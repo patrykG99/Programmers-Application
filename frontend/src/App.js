@@ -140,6 +140,7 @@ class App extends Component {
             <Route path="/projects" element={<Projects />} />
             <Route path="/projectAdd" element={<ProjectAdd />} />
             <Route path="/projects/:id" element={<ProjectPage />}/>
+            <Route path="/profile/:id" element={<Profile />}/>
           </Routes>
         </div>
       </div>

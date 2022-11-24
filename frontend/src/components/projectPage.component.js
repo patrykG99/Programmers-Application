@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import {useParams} from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { Rating } from 'react-simple-star-rating'
+import { Button } from "bootstrap";
 
 
 
@@ -17,6 +18,9 @@ export default function ProjectPage(props) {
     //const [rating, setRating] = useState(0)
     const [ratedUser, setRatedUser] = useState('')
     const [requests, setRequests] = useState('')
+    const [reviews, setReviews] = useState('')
+    const [rating, setRating] = useState(0)
+    const [comment, setComment] = useState('')
     
     let { id } = useParams();
     const handleNameChange = event => {
@@ -36,29 +40,29 @@ export default function ProjectPage(props) {
     //   setRating(event.target.rating)
     // };
     const handleRating = ( rate,value) => {
-      //setRating(rate)
+      setRating(rate)
       
-      //console.log(rating)
+      
       console.log(ratedUser)
-      const url = 'http://localhost:8080/api/project/rateuser/' + id + '/' + ratedUser
-      const requestOptions = {
-        method: 'PUT',
-        headers: {  'Authorization':'Bearer ' + user.accessToken, 'Content-Type': 'application/json' },
-        body: JSON.stringify({'score':rate})
-
-    };
-    console.log(requestOptions)
-    fetch(url, requestOptions)
+      
   
       // other logic
     }
 
-    const onPointerEnter = (userrate) => setRatedUser(userrate.username)
+    const onPointerEnter = (userrate) => {setRatedUser(userrate.username); setRating(0)}
     const onPointerLeave = () => console.log('Leave')
     const onPointerMove = (value, index) => console.log(user.username,project.owner.username)
 
     const sendRating = event =>{
-      console.log(event.target.value)
+      const url = 'http://localhost:8080/api/project/rateuser/' + id + '/' + ratedUser
+      const requestOptions = {
+        method: 'PUT',
+        headers: {  'Authorization':'Bearer ' + user.accessToken, 'Content-Type': 'application/json' },
+        body: JSON.stringify({'score':rating, 'comment':comment})
+
+    };
+    console.log(requestOptions)
+    fetch(url, requestOptions)
       
     }
     
@@ -100,6 +104,12 @@ export default function ProjectPage(props) {
              window.location.reload(false);
 
     }
+
+    const handleCommentChange = event => {
+      setComment(event.target.value)
+    }
+
+    
    
     
     
@@ -111,14 +121,19 @@ export default function ProjectPage(props) {
             const response = await fetch('http://localhost:8080/api/project/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
             const response2 = await fetch('http://localhost:8080/api/project/users/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
             const responseRequests = await fetch('http://localhost:8080/api/invites/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
+            const responseReviews = await fetch('http://localhost:8080/api/ratings/projectReviews/' + id,  {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
             let actualData = await response.json();
             let actualData2 = await response2.json();
             let actualDataRequests = await responseRequests.json();
+            let actualDataReviews = await responseReviews.json();
             //console.log(actualData)
+            console.log(user.username)
             setProject(actualData)
             setUsers(actualData2)
             setRequests(actualDataRequests)
+            setReviews(actualDataReviews)
             setHasLoaded(true)
+            console.log(actualDataReviews)
             console.log(users)
             
         }
@@ -151,7 +166,7 @@ export default function ProjectPage(props) {
         </button>
       </form>
       </div>
-      {/* <button onClick={endProject}>End Project</button>  */}
+      <button onClick={endProject}>End Project</button> 
       <div style={{width:'50%',padding:'10px'}} className="rounded border"><h5>Invite requests:</h5>
       
       {requests.map(request =>
@@ -222,24 +237,30 @@ export default function ProjectPage(props) {
               )}
             </div>
             {project.finished && users.length > 1? 
-            <div style={{width:'20%'}} className="rounded border"><h5>Rate users</h5>
+            <div style={{width:'100%'}} className="rounded border"><h5>Rate users</h5>
             <hr/>
             
             {users.map(userrate =>
-              {return userrate.username != user.username ?
-                <div className="rounded border" key={userrate.id}>
+              {return userrate.username != user.username &&  !reviews.some(review => (review.user.username == userrate.username && review.project.id == id && review.ratingUser.username == user.username)) ?
+                
+                <div className="rounded border" key={userrate.id} onPointerEnter={()=>onPointerEnter(userrate)}>
                 {userrate.username}
+                
                 <Rating
                   
                   onClick={handleRating}
-                  onPointerEnter={()=>onPointerEnter(userrate)}
+                  
                   //onPointerLeave={onPointerLeave}
                   onPointerMove={onPointerMove}
                   size="30"
                   /* Available Props */
                 />
+                <br/>
+                <input type="text" id="comment" name="comment" onChange={handleCommentChange} value={comment}></input>
+                <button onClick={sendRating}>Send your rating</button>
                 
-              </div>: null } 
+              </div>
+              : null } 
                 
                   
               )}
