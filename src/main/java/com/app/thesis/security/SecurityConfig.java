@@ -94,6 +94,7 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/project/end/**").hasAuthority("ROLE_USER")
                 .antMatchers("/api/users/**").hasAuthority("ROLE_USER")
                 .antMatchers("/api/ratings/projectReviews/**").hasAuthority("ROLE_USER")
+                .antMatchers("/api/ratings/user/**").hasAuthority("ROLE_USER")
                 .antMatchers("/api/test/**").permitAll()
 
                 .anyRequest().authenticated();

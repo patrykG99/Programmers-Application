@@ -10,5 +10,6 @@ public interface RatingService {
     Rating saveRating(Rating rating);
 
     List<Rating> getProjectRatings(Project project);
+    List<Rating> getRatingsByUser(User user);
 
 }

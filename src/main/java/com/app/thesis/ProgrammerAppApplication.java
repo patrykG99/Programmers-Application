@@ -36,9 +36,9 @@ public class ProgrammerAppApplication {
 //
 //			final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 ////			userService.saveRole(new Role(null, "ROLE_USER"));
-			userService.saveRole(new Role(ERole.ROLE_USER));
-			userService.saveRole(new Role(ERole.ROLE_ADMIN));
-			userService.saveRole(new Role(ERole.ROLE_MODERATOR));
+//			userService.saveRole(new Role(ERole.ROLE_USER));
+//			userService.saveRole(new Role(ERole.ROLE_ADMIN));
+//			userService.saveRole(new Role(ERole.ROLE_MODERATOR));
 //			userService.saveUser(new User(null,"Patryk","1234",new ArrayList<>(),new ArrayList<>(),new ArrayList<>() ));
 //			userService.saveUser(new User(null,"Admin","1234",new ArrayList<>(),new ArrayList<>(),new ArrayList<>() ));
 //			userService.addRoleToUser("Patryk", "ROLE_USER");

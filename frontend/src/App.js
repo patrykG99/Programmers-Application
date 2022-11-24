@@ -15,6 +15,7 @@ import BoardAdmin from "./components/board-admin.component";
 import Projects from "./components/projects.component";
 import ProjectAdd from "./components/projectAdd.component"
 import ProjectPage from "./components/projectPage.component"
+const user = JSON.parse(localStorage.getItem('user'));
 
 class App extends Component {
   constructor(props) {
@@ -93,7 +94,7 @@ class App extends Component {
           {currentUser ? (
             <div className="navbar-nav ml-auto">
               <li className="nav-item">
-                <Link to={"/profile"} className="nav-link">
+                <Link to={"/profile/"+user.id} className="nav-link">
                   {currentUser.username}
                 </Link>
               </li>

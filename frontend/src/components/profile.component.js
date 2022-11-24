@@ -5,6 +5,8 @@ import Row from 'react-bootstrap/Row';
 import {useParams} from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { Button } from "bootstrap";
+import { Rating } from 'react-simple-star-rating'
+
 
 export default function ProjectPage(props) {
   const [invites, setInvites] = useState([]);
@@ -13,6 +15,7 @@ export default function ProjectPage(props) {
   const [userInvite, setUserInvite] = useState('')
   const [userProjects, setUserProjects] = useState([])
   const [userProfile, setUserProfile] = useState([])
+  const [userReviews, setUserReviews] = useState([])
 
   let { id } = useParams();
   const handleNameChange = event => {
@@ -57,6 +60,7 @@ export default function ProjectPage(props) {
           const response = await fetch('http://localhost:8080/api/myinvites', {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
           const responseProjects = await fetch('http://localhost:8080/api/projects/user/projects/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
           const responseUser = await fetch('http://localhost:8080/api/users/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
+          const responseReviews = await fetch('http://localhost:8080/api/ratings/user/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
           
           
           
@@ -65,15 +69,18 @@ export default function ProjectPage(props) {
           let actualData = await response.json();
           let actualDataProjects = await responseProjects.json();
           let actualDataUser = await responseUser.json();
+          let actualDataReviews = await responseReviews.json();
           
           //console.log(actualData)
           setInvites(actualData)
           setUserProjects(actualDataProjects)
           setUserProfile(actualDataUser)
+          setUserReviews(actualDataReviews)
           if(actualDataUser.id == user.id){
             console.log("dziala")
           }
           console.log(userProjects  )
+          console.log(user.id, id)
           
           setHasLoaded(true)
           //console.log(invites)
@@ -88,37 +95,40 @@ export default function ProjectPage(props) {
   return (
       <>
       <Row lg={1}>
-        <div className="border rounded">
+        <div className="border rounded" style={{padding:'10px'}}>
           <h5>User Information</h5>
           <hr/>
-          Username
+          Username:  {user.username}<br/>
+          User Description:
         </div>
       </Row>
       <Row xs={3} md={3} lg={3} className="g-7">
-          <div style={{width:'20%'}} className="rounded border">
-              <h5>Your invites:</h5>
-              <hr/>
-              <div>
-                  <h6>{invites.map(invite =>
-                  <div key={invite.id}>
-                    {invite.projectName}
-                    <button onClick={acceptInvite} value={invite.id}>Accept</button>
-                  </div>
-              )}</h6>
-              
-              
+        {user.id == id ? 
+        <div style={{width:'20%',padding:'10px'}} className="rounded border">
+        <h5>Your invites:</h5>
+        <hr/>
+        <div>
+            <h6>{invites.map(invite =>
+            <div key={invite.id}>
+              {invite.projectName}
+              <button onClick={acceptInvite} value={invite.id}>Accept</button>
+            </div>
+        )}</h6>
+        
+        
 
-              
-              
-              
-              
-              
-              
-              
-              </div>
-              
-          </div>
-          <div style={{width:'60%'}} className="rounded border"><h5>User's projects</h5>
+        
+        
+        
+        
+        
+        
+        
+        </div>
+        
+    </div>:null}
+          
+          <div style={{width:'80%',padding:'10px'}} className="rounded border"><h5>User's projects</h5>
 
           <hr/>
           {userProjects.map(userProject=>
@@ -138,8 +148,25 @@ export default function ProjectPage(props) {
           </div>
 
 
-          <div style={{width:'20%'}} className="rounded border"><h5>Your invite requests:</h5>
+          
+          <div style={{width:'40%',padding:'10px'}} className="rounded border"><h5>User reviews</h5>
           <hr/>
+          {userReviews.map(review =>
+          <div className="rounded border" style={{padding:'10px'}}>
+            {review.ratingUser.username}<br/>
+            <Rating
+                  initialValue={review.score}
+                  readonly="true"
+                  size={20}
+                  style={{float:'right'}}
+                  
+                  
+                />
+            <hr/>
+            <div  >{review.comment}</div>
+          </div>
+
+          )}
           
           </div>
       </Row>
