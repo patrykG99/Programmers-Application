@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Navigate } from "react-router-dom";
 import AuthService from "../services/auth.service";
 import Row from 'react-bootstrap/Row';
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { Button } from "bootstrap";
 import { Rating } from 'react-simple-star-rating'
@@ -16,6 +16,8 @@ export default function ProjectPage(props) {
   const [userProjects, setUserProjects] = useState([])
   const [userProfile, setUserProfile] = useState([])
   const [userReviews, setUserReviews] = useState([])
+
+  const navigate = useNavigate();
 
   let { id } = useParams();
   const handleNameChange = event => {
@@ -46,6 +48,9 @@ export default function ProjectPage(props) {
              fetch(url, requestOptions)
              window.location.reload(false);
 };
+    const redirectToProject = (project) => {
+        navigate("/projects/" + project)
+    }
   
  
   
@@ -55,12 +60,14 @@ export default function ProjectPage(props) {
       
       async function getData(){
 
-          
+         
           
           const response = await fetch('http://localhost:8080/api/myinvites', {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
           const responseProjects = await fetch('http://localhost:8080/api/projects/user/projects/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
           const responseUser = await fetch('http://localhost:8080/api/users/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
           const responseReviews = await fetch('http://localhost:8080/api/ratings/user/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
+          
+
           
           
           
@@ -79,8 +86,8 @@ export default function ProjectPage(props) {
           if(actualDataUser.id == user.id){
             console.log("dziala")
           }
-          console.log(userProjects  )
-          console.log(user.id, id)
+          console.log(actualDataReviews)
+          
           
           setHasLoaded(true)
           //console.log(invites)
@@ -89,7 +96,7 @@ export default function ProjectPage(props) {
       
       
       getData()
-     }, []);
+     }, [id]);
   
   
   return (
@@ -98,7 +105,7 @@ export default function ProjectPage(props) {
         <div className="border rounded" style={{padding:'10px'}}>
           <h5>User Information</h5>
           <hr/>
-          Username:  {user.username}<br/>
+          Username:  {userProfile.username}<br/>
           User Description:
         </div>
       </Row>
@@ -132,11 +139,19 @@ export default function ProjectPage(props) {
 
           <hr/>
           {userProjects.map(userProject=>
-            <div key={userProject.id} className="rounded border" style={{margin:'10px',padding:'5px'}}>
+            <div key={userProject.id} onClick={() => redirectToProject(userProject.id)} className="rounded border" style={{margin:'10px',padding:'5px'}}>
+                <Row>
+                <div style={{width:'25%'}}> {userProject.name}</div>
+                <div style={{width:'25%'}}> {userProject.owner.id == id ? <p>Owner</p>:<p>Member</p>}</div>
+                <div style={{width:'25%'}}>{userProject.tech}</div>
+                <div style={{width:'25%'}}>{userProject.finished ? <p style={{float:'right'}}>Project finished</p>:null}</div>
+                </Row>
 
-                {userProject.name}
+               
                 
-                {/* <a href={"/projects/" + userProject.id} class="btn btn-primary stretched-link" style={{float:'right',height:'25px',fontSize:'12px'}}>Go to project</a> */}
+                
+                
+           
 
             </div>
             
@@ -154,6 +169,7 @@ export default function ProjectPage(props) {
           {userReviews.map(review =>
           <div className="rounded border" style={{padding:'10px'}}>
             {review.ratingUser.username}<br/>
+            {review.project.name}<br/>
             <Rating
                   initialValue={review.score}
                   readonly="true"

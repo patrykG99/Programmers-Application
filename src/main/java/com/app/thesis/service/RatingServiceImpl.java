@@ -32,5 +32,10 @@ public class RatingServiceImpl implements RatingService{
         return ratingRepo.findByUser(user);
     }
 
+    @Override
+    public List<Rating> getRatingsByUserAndProjects(User user, Project project) {
+        return ratingRepo.findByRatingUserAndProject(user, project);
+    }
+
 
 }

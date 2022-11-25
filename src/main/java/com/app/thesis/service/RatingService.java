@@ -11,5 +11,6 @@ public interface RatingService {
 
     List<Rating> getProjectRatings(Project project);
     List<Rating> getRatingsByUser(User user);
+    List<Rating> getRatingsByUserAndProjects(User user, Project project);
 
 }

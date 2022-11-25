@@ -1,10 +1,11 @@
 
 import React, { Component } from "react";
 import Row from 'react-bootstrap/Row';
-import {useParams} from 'react-router-dom';
+import {redirect, useParams, useNavigate} from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { Rating } from 'react-simple-star-rating'
 import { Button } from "bootstrap";
+import { Redirect } from "react-router-dom";
 
 
 
@@ -21,7 +22,10 @@ export default function ProjectPage(props) {
     const [reviews, setReviews] = useState('')
     const [rating, setRating] = useState(0)
     const [comment, setComment] = useState('')
+    const [currentUserReviews, setCurrentUserReviews] = useState([])
     
+
+    const navigate = useNavigate();
     let { id } = useParams();
     const handleNameChange = event => {
         setUserInvite(event.target.value)
@@ -39,6 +43,11 @@ export default function ProjectPage(props) {
     // const handleRatingChange = event => {
     //   setRating(event.target.rating)
     // };
+
+    const redirectToUser = (user) =>{
+      console.log(user)
+      navigate("/profile/" + user)
+    }
     const handleRating = ( rate,value) => {
       setRating(rate)
       
@@ -63,6 +72,8 @@ export default function ProjectPage(props) {
     };
     console.log(requestOptions)
     fetch(url, requestOptions)
+    window.location.reload(false);
+
       
     }
     
@@ -122,16 +133,19 @@ export default function ProjectPage(props) {
             const response2 = await fetch('http://localhost:8080/api/project/users/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
             const responseRequests = await fetch('http://localhost:8080/api/invites/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
             const responseReviews = await fetch('http://localhost:8080/api/ratings/projectReviews/' + id,  {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
+            const responseUserReviews = await fetch('http://localhost:8080/api/ratings/user/projects/' + id,  {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
             let actualData = await response.json();
             let actualData2 = await response2.json();
             let actualDataRequests = await responseRequests.json();
             let actualDataReviews = await responseReviews.json();
+            let actualDataUserReviews = await responseUserReviews.json();
             //console.log(actualData)
             console.log(user.username)
             setProject(actualData)
             setUsers(actualData2)
             setRequests(actualDataRequests)
             setReviews(actualDataReviews)
+            setCurrentUserReviews(actualDataUserReviews)
             setHasLoaded(true)
             console.log(actualDataReviews)
             console.log(users)
@@ -194,7 +208,7 @@ export default function ProjectPage(props) {
       
       
       }
-      {hasLoaded && project.owner.id == user.id ? <button onClick={endProject} className="btn btn-primary">End Project</button> : null}
+      {!project.finished && hasLoaded && project.owner.id == user.id ? <button onClick={endProject} className="btn btn-primary">End Project</button> : null}
         
         
         
@@ -233,12 +247,12 @@ export default function ProjectPage(props) {
             <div style={{width:'20%',padding:'10px'}} className="rounded border"><h5>Users ({users.length}/{project.maxUsers})</h5>
             <hr/>
             {users.map(user =>
-                  <div key={user.id} className="rounded border" style={{margin:'10px',padding:'5px'}}>
+                  <div key={user.id} onClick={()=>redirectToUser(user.id)} className="rounded border" style={{margin:'10px',padding:'5px'}}>
                     {user.username}
                   </div>
               )}
             </div>
-            {project.finished && users.length > 1? 
+            {currentUserReviews.length  < users.length -1   && project.finished && users.length > 1? 
             <div style={{width:'100%'}} className="rounded border"><h5>Rate users</h5>
             <hr/>
             

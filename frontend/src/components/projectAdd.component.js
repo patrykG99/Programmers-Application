@@ -46,31 +46,40 @@ function BasicForm(){
       return (
         <form onSubmit={handleSubmit}>
           <div>
-            <label>Project Name</label>
-            <input
-              type="name"
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Project name</span>
+              </div>
+              <input type="name"
               name="name"
               placeholder="Enter name"
               onChange={handleNameChange}
-              value={name}
-            />
-            <input
-              type="desc"
+              value={name} class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"/>
+            </div>
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Project description</span>
+              </div>
+              <input  type="desc"
               name="desc"
               placeholder="Description"
               onChange={handleDescChange}
-              value={desc}
-            />
-            <select id="limit" onChange={handleLimitChange} value={limit}>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-               </select>
-               <select id="tech" onChange={handleTechChange} value={tech}>
-                  <option value="Java">Java</option>
-                  <option value="C#">C#</option>
-                  <option value="Python">Python</option>
-               </select>
+              value={desc} class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"/>
+            </div>
+            <select class="form-select" aria-label="Default select example"  id="limit" onChange={handleLimitChange} value={limit}>
+              <option selected>Choose maximum number of users</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+            <select class="form-select" aria-label="Default select example" id="tech" onChange={handleTechChange} value={tech}>
+              <option selected>Choose main language</option>
+              <option value="Java">Java</option>
+              <option value="C#">C#</option>
+              <option value="Python">Python</option>
+            </select>
+            
+               
           </div>
           <button type="submit">
             Submit
