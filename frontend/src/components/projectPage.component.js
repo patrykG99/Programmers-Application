@@ -48,11 +48,13 @@ export default function ProjectPage(props) {
       console.log(user)
       navigate("/profile/" + user)
     }
-    const handleRating = ( rate,value) => {
+    const handleRating = ( rate) => {
+      console.log(rate)
       setRating(rate)
       
       
-      console.log(ratedUser)
+      
+      
       
   
       // other logic
@@ -263,7 +265,7 @@ export default function ProjectPage(props) {
                 {userrate.username}
                 
                 <Rating
-                  
+                  allowFraction="true"
                   onClick={handleRating}
                   
                   //onPointerLeave={onPointerLeave}

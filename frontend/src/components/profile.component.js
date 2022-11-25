@@ -167,10 +167,11 @@ export default function ProjectPage(props) {
           <div style={{width:'40%',padding:'10px'}} className="rounded border"><h5>User reviews</h5>
           <hr/>
           {userReviews.map(review =>
-          <div className="rounded border" style={{padding:'10px'}}>
+          <div className="rounded border" style={{padding:'10px',marginBottom:'10px'}}>
             {review.ratingUser.username}<br/>
             {review.project.name}<br/>
             <Rating
+                    allowFraction="true"
                   initialValue={review.score}
                   readonly="true"
                   size={20}
@@ -178,8 +179,8 @@ export default function ProjectPage(props) {
                   
                   
                 />
-            <hr/>
-            <div  >{review.comment}</div>
+            
+            <div style={{margin:'10px'}} >{review.comment}</div>
           </div>
 
           )}
