@@ -165,8 +165,9 @@ export default function ProjectPage(props) {
           Invite user 
         </button>
       </form>
+      
       </div>
-      <button onClick={endProject}>End Project</button> 
+      
       <div style={{width:'50%',padding:'10px'}} className="rounded border"><h5>Invite requests:</h5>
       
       {requests.map(request =>
@@ -193,6 +194,7 @@ export default function ProjectPage(props) {
       
       
       }
+      {hasLoaded && project.owner.id == user.id ? <button onClick={endProject} className="btn btn-primary">End Project</button> : null}
         
         
         
