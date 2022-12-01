@@ -20,6 +20,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 
 
+
+
 @Configuration
 @EnableGlobalMethodSecurity(
         // securedEnabled = true,
@@ -95,6 +97,14 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/users/**").hasAuthority("ROLE_USER")
                 .antMatchers("/api/ratings/projectReviews/**").hasAuthority("ROLE_USER")
                 .antMatchers("/api/ratings/user/**").hasAuthority("ROLE_USER")
+                .antMatchers("/api/users/recommended/**").hasAuthority("ROLE_USER")
+                .antMatchers("/ws/**").permitAll()
+                .antMatchers("/chatroom/public").permitAll()
+                .antMatchers("/private-message").permitAll()
+                .antMatchers("/user/**/private").permitAll()
+                .antMatchers("/api/project/messages/**").hasAuthority("ROLE_USER")
+                .antMatchers("/message/{id}").hasAuthority("ROLE_USER")
+
                 .antMatchers("/api/test/**").permitAll()
 
                 .anyRequest().authenticated();

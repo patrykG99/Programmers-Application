@@ -12,6 +12,6 @@ public interface UserService {
     User getUser(String username);
     User getUser(Long id);
     List<User> getUsers();
-
+    List<User> getRecommendedUsers(String tech);
 
 }

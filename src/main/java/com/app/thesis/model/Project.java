@@ -38,6 +38,9 @@ public class Project {
 
     private boolean finished = false;
 
+    @OneToMany
+    private List<Message> message;
+
     private String description ;
     private String tech;
 

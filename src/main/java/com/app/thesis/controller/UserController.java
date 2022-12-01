@@ -46,6 +46,15 @@ public class UserController {
         return ResponseEntity.created(uri).body(userService.saveRole(role));
     }
 
+    @GetMapping("/users/recommended/{tech}")
+    public ResponseEntity<List<User>> recommendedUsers(@PathVariable String tech){
+
+
+        System.out.println((userService.getRecommendedUsers(tech)));
+        return ResponseEntity.ok().body(userService.getRecommendedUsers(tech));
+
+    }
+
 //    @PostMapping("/role/addtouser")
 //    public ResponseEntity<?> addRoleToUser(@RequestBody RoleToUserForm form){
 //        userService.addRoleToUser(form.getUsername(), form.getRoleName());

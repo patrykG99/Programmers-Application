@@ -15,6 +15,7 @@ import BoardAdmin from "./components/board-admin.component";
 import Projects from "./components/projects.component";
 import ProjectAdd from "./components/projectAdd.component"
 import ProjectPage from "./components/projectPage.component"
+
 const user = JSON.parse(localStorage.getItem('user'));
 
 class App extends Component {
@@ -126,6 +127,13 @@ class App extends Component {
               </Link>
             </li>
           </div>
+          <div className="navbar-nav mr-auto">
+          <li className="nav-item">
+              <Link to={"/chat"} className="nav-link">
+                Projects
+              </Link>
+            </li>
+          </div>
         </nav>
 
         <div className="container mt-3">
@@ -136,12 +144,12 @@ class App extends Component {
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/user" element={<BoardUser />} />
-            {/* <Route path="/mod" element={<BoardModerator />} />
-            <Route path="/admin" element={<BoardAdmin />} /> */}
+          
             <Route path="/projects" element={<Projects />} />
             <Route path="/projectAdd" element={<ProjectAdd />} />
             <Route path="/projects/:id" element={<ProjectPage />}/>
             <Route path="/profile/:id" element={<Profile />}/>
+            
           </Routes>
         </div>
       </div>

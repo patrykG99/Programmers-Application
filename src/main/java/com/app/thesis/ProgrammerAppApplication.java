@@ -16,6 +16,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+
+import org.springframework.http.HttpStatus;
+
 import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -24,6 +27,7 @@ import java.util.ArrayList;
 
 
 @EnableConfigurationProperties(RsaKeyProperties.class)
+
 @SpringBootApplication
 public class ProgrammerAppApplication {
 

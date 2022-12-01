@@ -54,7 +54,14 @@ public class UserServiceImpl implements UserService{
         return userRepository.findAll();
     }
 
+    @Override
+    public List<User> getRecommendedUsers(String tech) {
 
+
+
+
+        return userRepository.findRecommended(tech);
+    }
 
 
 //    @Override
