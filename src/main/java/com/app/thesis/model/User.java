@@ -16,7 +16,7 @@ import java.util.*;
 })
 @Getter
 @Setter
-@AllArgsConstructor
+
 @NoArgsConstructor
 public class User {
     @Id
@@ -25,6 +25,8 @@ public class User {
     private String username;
     private String email;
     private String password;
+
+    private String description;
 
     @OneToMany(targetEntity = Invite.class)
     private List<Invite> invitesReceived;
@@ -53,5 +55,16 @@ public class User {
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+    public User(String description){
+        this.description = description;
+    }
+
+    public void setDescription(String description){
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

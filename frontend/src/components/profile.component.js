@@ -16,6 +16,9 @@ export default function ProjectPage(props) {
   const [userProjects, setUserProjects] = useState([])
   const [userProfile, setUserProfile] = useState([])
   const [userReviews, setUserReviews] = useState([])
+  const [changeDesc, setChangeDesc] = useState(false)
+  const [newDesc, setNewDesc] = useState('')
+ 
 
   const navigate = useNavigate();
 
@@ -51,7 +54,22 @@ export default function ProjectPage(props) {
     const redirectToProject = (project) => {
         navigate("/projects/" + project)
     }
+  const changeDescValue = event => {
+      setChangeDesc(current => !current)
+      console.log(changeDesc)
+  }
+  const saveNewDesc = event =>{
+    const url = 'http://localhost:8080/api/users/description/' + user.id
+    const requestOptions = {
+      method: 'PATCH',
+      headers: {  'Authorization':'Bearer ' + user.accessToken, 'Content-Type': 'application/json' },
+      body: JSON.stringify({  'description': newDesc })
+  };
   
+  fetch(url, requestOptions)
+  console.log("dizala")
+  window.location.reload(false);
+  }
  
   
   
@@ -61,7 +79,7 @@ export default function ProjectPage(props) {
       async function getData(){
 
          
-          
+        setChangeDesc(false)
           const response = await fetch('http://localhost:8080/api/myinvites', {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
           const responseProjects = await fetch('http://localhost:8080/api/projects/user/projects/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
           const responseUser = await fetch('http://localhost:8080/api/users/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
@@ -97,6 +115,13 @@ export default function ProjectPage(props) {
       
       getData()
      }, [id]);
+
+     const changeNewDesc = event => {
+      setNewDesc(event.target.value)
+      
+
+    
+  }
   
   
   return (
@@ -105,8 +130,21 @@ export default function ProjectPage(props) {
         <div className="border rounded" style={{padding:'10px'}}>
           <h5>User Information</h5>
           <hr/>
-          Username:  {userProfile.username}<br/>
-          User Description:
+          <h6>Username:</h6> {userProfile.username}<br/><br/>
+          <h6>User Description:</h6> {userProfile.description} {userProfile.username === user.username ? <button style={{float:'right', background:'none', color:'inherit', border:'none', color:'blue'}}  onClick={changeDescValue}> Change description</button>: null}
+          {changeDesc && <><div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">New Description</span>
+              </div>
+              <input 
+              type="newDesc"
+              name="newDesc"
+              placeholder="New Description"
+              onChange={changeNewDesc}
+              value={newDesc} class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"/>
+              <button className="btn btn-primary" onClick={saveNewDesc}>Save</button>
+            </div></>}
+          
         </div>
       </Row>
       <Row xs={3} md={3} lg={3} className="g-7">
@@ -141,9 +179,9 @@ export default function ProjectPage(props) {
           {userProjects.map(userProject=>
             <div key={userProject.id} onClick={() => redirectToProject(userProject.id)} className="rounded border" style={{margin:'10px',padding:'5px'}}>
                 <Row>
-                <div style={{width:'25%'}}> {userProject.name}</div>
-                <div style={{width:'25%'}}> {userProject.owner.id == id ? <p>Owner</p>:<p>Member</p>}</div>
-                <div style={{width:'25%'}}>{userProject.tech}</div>
+                <div style={{width:'25%', borderRight:'solid 1px'}}> {userProject.name}</div>
+                <div style={{width:'25%', borderRight:'solid 1px'}}> {userProject.owner.id == id ? <p>Owner</p>:<p>Member</p>}</div>
+                <div style={{width:'25%', borderRight:'solid 1px'}}>{userProject.tech}</div>
                 <div style={{width:'25%'}}>{userProject.finished ? <p style={{float:'right'}}>Project finished</p>:null}</div>
                 </Row>
 

@@ -1,7 +1,7 @@
 
 import React, { Component } from "react";
 import Row from 'react-bootstrap/Row';
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { Rating } from 'react-simple-star-rating'
 import { Button } from "bootstrap";
@@ -19,7 +19,7 @@ export default function ProjectPage(props) {
     const [users, setUsers] = useState([]);
     const [hasLoaded, setHasLoaded] = useState()
     const [userInvite, setUserInvite] = useState('')
-    
+    const [reviewsByUser, setReviewsByUser] = useState([])
     const [ratedUser, setRatedUser] = useState('')
     const [requests, setRequests] = useState('')
     const [reviews, setReviews] = useState('')
@@ -36,7 +36,7 @@ export default function ProjectPage(props) {
         message: ''
       });
 
-    
+      const navigate = useNavigate();
     let { id } = useParams();
     const handleNameChange = event => {
         setUserInvite(event.target.value)
@@ -243,6 +243,9 @@ export default function ProjectPage(props) {
     const handleCommentChange = event => {
       setComment(event.target.value)
     }
+    const redirectToUser = (userRed) => {
+      navigate("/profile/" + userRed)
+  }
 
     
    
@@ -258,13 +261,14 @@ export default function ProjectPage(props) {
             const responseRequests = await fetch('http://localhost:8080/api/invites/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
             const responseReviews = await fetch('http://localhost:8080/api/ratings/projectReviews/' + id,  {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
             const responseMessages = await fetch('http://localhost:8080/project/messages/' + id,  {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
-            
+            const responseUserReviews = await fetch('http://localhost:8080/api/ratings/user/projects/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
 
             let actualData = await response.json();
             let actualData2 = await response2.json();
             let actualDataRequests = await responseRequests.json();
             let actualDataReviews = await responseReviews.json();
             let actualDataMessages = await responseMessages.json();
+            let actualDataUserReviews = await responseUserReviews.json();
             
             console.log(user.username)
             setProject(actualData)
@@ -272,6 +276,7 @@ export default function ProjectPage(props) {
             setUsers(actualData2)
             setRequests(actualDataRequests)
             setReviews(actualDataReviews)
+            setReviewsByUser(actualDataUserReviews)
             const responseSuggested = await fetch('http://localhost:8080/api/users/recommended/' + actualData.tech,  {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
             console.log(project)
             let actualDataSuggested = await responseSuggested.json();
@@ -296,7 +301,7 @@ export default function ProjectPage(props) {
         <>
         <Row xs={2} md={2} lg={2} className="g-7">
         
-        <div  style={{width:'50%', padding:'10px'}} className="rounded border">
+        <div  style={{width:'20%', padding:'10px'}} className="rounded border">
         <form onSubmit={handleSubmit}>
         <div>
           <label>User to invite:</label>
@@ -315,14 +320,8 @@ export default function ProjectPage(props) {
       
       </div>
       
-      <div style={{width:'50%',padding:'10px'}} className="rounded border"><h5>Invite requests:</h5>
-      <div>Suggested Users:
-      {suggestedUsers.map(suggestedUser =>
-              { return !users.some(el=>el.username === suggestedUser.username) ? <div>{suggestedUser.username}<button value={suggestedUser.username} onClick={handleSubmitRecommended}>Invite</button></div>:null}
-                
-                  
-              )}
-      </div>
+      <div style={{width:'40%',padding:'10px'}} className="rounded border"><h5>Invite requests:</h5>
+      
       
       {requests.map(request =>
         <div>
@@ -334,13 +333,21 @@ export default function ProjectPage(props) {
 
 
         </div>)}
+        
       
       
       
+      </div>
+      <div className="rounded border" style={{width:'40%',padding:'10px'}}>Suggested Users:
+      {suggestedUsers.map(suggestedUser =>
+              { return !users.some(el=>el.username === suggestedUser.username) ? <div style={{margin:'3px', padding:'3px'}} className="rounded border"> {suggestedUser.username}<button style={{float:'right'}} value={suggestedUser.username} onClick={handleSubmitRecommended}>Invite</button></div>:null}
+                
+                  
+              )}
       </div></Row>
       </>
        : null}
-       {!project.finished && hasLoaded && !users.includes(user) && users.length < project.maxUsers ?
+       {!project.finished && hasLoaded && !users.some(userSome => (userSome.username === user.username)) && users.length < project.maxUsers ?
        
        <button type="submit" onClick={requestInvite} className="btn btn-primary" style={{margin:'5px'}}>
        Request invite
@@ -387,12 +394,12 @@ export default function ProjectPage(props) {
             <div style={{width:'20%',padding:'10px'}} className="rounded border"><h5>Users ({users.length}/{project.maxUsers})</h5>
             <hr/>
             {users.map(user =>
-                  <div key={user.id} className="rounded border" style={{margin:'10px',padding:'5px'}}>
+                  <div onClick={() => redirectToUser(user.id)} key={user.id} className="rounded border" style={{margin:'10px',padding:'5px'}}>
                     {user.username}
                   </div>
               )}
             </div>
-            {project.finished && users.length > 1? 
+            {project.finished && users.length > 1 && reviewsByUser.length < users.length-1 ? 
             <div style={{width:'100%'}} className="rounded border"><h5>Rate users</h5>
             <hr/>
             
@@ -423,13 +430,13 @@ export default function ProjectPage(props) {
             
             
             </div>: <></>}
-            <div className="container">
+            {users.some(userIs => (userIs.username === user.username)) ? <div className="rounded border" style={{width:'100%'}}>
         {userData.connected?
-        <div className="chat-box rounded border">
+        <div >
           
             Chat
             {tab==="CHATROOM" && <div className="chat-content">
-            <div className="rounded border">
+            <div className="rounded border" style={{overflowY:'scroll',overflowWrap:'break-word', height:'400px',display:'flex', flexDirection:'column-reverse'}}>
                 <ul style={{listStyle:'none'}} className="chat-messages">
                     {messagesHistory.map(message => 
                     <li >
@@ -443,12 +450,19 @@ export default function ProjectPage(props) {
                             
                             
                         </li>)}
+
+
+
                     {publicChats.map((chat,index)=>(
                       <>
-                        <li className={`message ${chat.senderName === userData.username && "self"}`} key={index}>
-                            {chat.senderName !== userData.username && <div className="avatar">{chat.senderName}</div>}
-                            <div className="message-data">{chat.message}</div>
-                            {chat.senderName === userData.username && <div className="avatar self">{chat.senderName}</div>}
+                        <li  key={index}>
+                        {chat.senderName === user.username ? <> <div class="p-3 ms-3" style={{borderRadius:'15px',backgroundColor:'rgba(57, 192, 237,.2)',margin:'3px'}}>
+                            <p class="small mb-0">{chat.senderName}<hr/>{chat.message}</p>
+               </div></>:<div class="p-3 ms-3" style={{borderRadius:'15px',backgroundColor:'rgba(255, 10,10,.2)',margin:'3px'}}>
+                            <p class="small mb-0">{chat.senderName}<hr/>{chat.message}</p>
+              </div>}
+                            
+                            
                         </li>
                         </>
                     ))}
@@ -456,16 +470,21 @@ export default function ProjectPage(props) {
 
                
                 </div>
-                <div className="send-message">
-                    <input type="text" className="input-message" placeholder="enter the message" value={userData.message} onChange={handleMessage} /> 
-                    <button type="button" className="send-button" onClick={sendValue}>send</button>
+                
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Message</span>
+                  </div>
+                  <input type="text" class="form-control" value={userData.message} onChange={handleMessage} maxlength="500"/>
+                  <button  type="button" className="btn btn-primary" onClick={sendValue}>send</button>
                 </div>
             </div>}
             
         </div>
         :
         null}
-    </div>
+    </div> : null}
+            
             
         </Row>
         </>

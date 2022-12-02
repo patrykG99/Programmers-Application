@@ -3,6 +3,8 @@ package com.app.thesis.controller;
 
 import com.app.thesis.model.Role;
 import com.app.thesis.model.User;
+import com.app.thesis.model.UserDescriptionOnly;
+import com.app.thesis.repository.UserRepo;
 import com.app.thesis.service.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -21,6 +24,8 @@ import java.util.List;
 public class UserController {
     @Autowired
     private final UserService userService;
+    @Autowired
+    private final UserRepo userRepo;
 
 
 
@@ -55,6 +60,16 @@ public class UserController {
 
     }
 
+    @PatchMapping("/users/description/{id}")
+    public ResponseEntity<User> updateDescription(@RequestBody User userDet, @PathVariable("id")Long id, Principal p ){
+        User user = userService.getUser(id);
+        user.setDescription(userDet.getDescription());
+        user.setPassword(user.getPassword());
+        System.out.println(user.getPassword());
+        return ResponseEntity.ok(userService.saveUser(user));
+    }
+
+
 //    @PostMapping("/role/addtouser")
 //    public ResponseEntity<?> addRoleToUser(@RequestBody RoleToUserForm form){
 //        userService.addRoleToUser(form.getUsername(), form.getRoleName());
@@ -66,3 +81,5 @@ class RoleToUserForm{
     private String username;
     private String roleName;
 }
+
+

@@ -17,6 +17,8 @@ public class Message {
 
     private String senderName;
     private String receiverName;
+
+    @Column(columnDefinition = "TEXT")
     private String message;
     private String date;
     private Status status;

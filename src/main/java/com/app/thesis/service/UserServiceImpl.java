@@ -2,6 +2,7 @@ package com.app.thesis.service;
 
 import com.app.thesis.model.Role;
 import com.app.thesis.model.User;
+import com.app.thesis.model.UserDescriptionOnly;
 import com.app.thesis.repository.RoleRepo;
 import com.app.thesis.repository.UserRepo;
 import lombok.AllArgsConstructor;
@@ -14,9 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +28,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User saveUser(User user){
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        //user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -62,6 +61,7 @@ public class UserServiceImpl implements UserService{
 
         return userRepository.findRecommended(tech);
     }
+
 
 
 //    @Override
