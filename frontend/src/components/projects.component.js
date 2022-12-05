@@ -1,6 +1,7 @@
 import Button from 'react-bootstrap/Button';
 import React, { Component } from "react";
 import Row from 'react-bootstrap/Row';
+import "./styles.scss"
 
 import { Routes, Route, Link } from "react-router-dom";
 
@@ -32,7 +33,7 @@ export default class Profile extends Component {
       <>
       <div style={{disply:'flex', justifyContent:'left'}}>
         <Link to={"/projectAdd"} className="nav-link">
-        <Button variant="primary">Add Projects</Button>{' '}
+        <Button variant="primary" style={{float:'right'}}>Create New Project</Button>{' '}
         </Link></div>
       <div>
         
@@ -40,8 +41,8 @@ export default class Profile extends Component {
               <Row xs={5} md={5} lg={5} className="g-7">
               {projects.map(project =>
               
-              <Card style={{width:'25rem'}}>
-                <Card.Header>{project.tech}</Card.Header>
+              <Card id="projectCard" style={{width:'25rem', border:'solid rgba(153, 245, 39, 0.8)' }}>
+                <Card.Header style={{backgroundColor:'#101820FF', color:'white'}}>{project.tech}</Card.Header>
                 <Card.Body>
                 <Card.Title><div key={project.id}>
                     {project.name} 

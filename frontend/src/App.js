@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-
+import "./components/styles.scss"
 import AuthService from "./services/auth.service";
 
 import Login from "./components/login.component";
@@ -55,7 +55,7 @@ class App extends Component {
     const { currentUser, showModeratorBoard, showAdminBoard } = this.state;
 
     return (
-      <div>
+      <div id="mainComponent">
         <nav className="navbar navbar-expand navbar-dark bg-dark">
           <Link to={"/"} className="navbar-brand">
             ProjectsApp
@@ -127,13 +127,7 @@ class App extends Component {
               </Link>
             </li>
           </div>
-          <div className="navbar-nav mr-auto">
-          <li className="nav-item">
-              <Link to={"/chat"} className="nav-link">
-                Projects
-              </Link>
-            </li>
-          </div>
+          
         </nav>
 
         <div className="container mt-3">

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -41,7 +42,9 @@ public class ChatController {
 
     @GetMapping("/project/messages/{id}")
     public ResponseEntity<List<Message>> getMessages(@PathVariable("id") Long id){
-        return ResponseEntity.ok().body(messageService.getAllByProjectFrom(projectService.getProject(id)));
+        List<Message> messages = messageService.getAllByProjectFrom(projectService.getProject(id));
+        Collections.reverse(messages);
+        return ResponseEntity.ok().body(messages);
     }
 
     @MessageMapping("/private-message")

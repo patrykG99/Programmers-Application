@@ -48,32 +48,32 @@ function BasicForm(){
           <div>
             <div class="input-group input-group-sm mb-3">
               <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-sm">Project name</span>
+                <span style={{backgroundColor:'#F2AA4CFF'}} class="input-group-text" id="inputGroup-sizing-sm">Project name</span>
               </div>
               <input type="name"
               name="name"
-              placeholder="Enter name"
+              placeholder="Enter name for your project"
               onChange={handleNameChange}
               value={name} class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"/>
             </div>
             <div class="input-group input-group-sm mb-3">
               <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-sm">Project description</span>
+                <span style={{backgroundColor:'#F2AA4CFF'}} class="input-group-text" id="inputGroup-sizing-sm">Project description</span>
               </div>
               <input  type="desc"
               name="desc"
-              placeholder="Description"
+              placeholder="Describe your project idea"
               onChange={handleDescChange}
               value={desc} class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"/>
             </div>
             <select class="form-select" aria-label="Default select example"  id="limit" onChange={handleLimitChange} value={limit}>
-              <option selected>Choose maximum number of users</option>
+              <option selected>Choose maximum number of users for your project</option>
               <option value="2">2</option>
               <option value="3">3</option>
               <option value="4">4</option>
             </select>
-            <select class="form-select" aria-label="Default select example" id="tech" onChange={handleTechChange} value={tech}>
-              <option selected>Choose main language</option>
+            <select style={{marginTop:'15px'}} class="form-select" aria-label="Default select example" id="tech" onChange={handleTechChange} value={tech}>
+              <option selected>Choose main project language</option>
               <option value="Java">Java</option>
               <option value="C#">C#</option>
               <option value="Python">Python</option>
@@ -81,7 +81,7 @@ function BasicForm(){
             
                
           </div>
-          <button type="submit">
+          <button style={{backgroundColor:'#F2AA4CFF', color:"black", float:'right',marginTop:'15px'}} className="btn btn-primary" type="submit">
             Submit
           </button>
         </form>

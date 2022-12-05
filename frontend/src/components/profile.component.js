@@ -6,6 +6,7 @@ import {useParams, useNavigate} from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { Button } from "bootstrap";
 import { Rating } from 'react-simple-star-rating'
+import "./styles.scss"
 
 
 export default function ProjectPage(props) {
@@ -125,31 +126,10 @@ export default function ProjectPage(props) {
   
   
   return (
-      <>
+      <div id="userProfile">
       <Row lg={1}>
-        <div className="border rounded" style={{padding:'10px'}}>
-          <h5>User Information</h5>
-          <hr/>
-          <h6>Username:</h6> {userProfile.username}<br/><br/>
-          <h6>User Description:</h6> {userProfile.description} {userProfile.username === user.username ? <button style={{float:'right', background:'none', color:'inherit', border:'none', color:'blue'}}  onClick={changeDescValue}> Change description</button>: null}
-          {changeDesc && <><div class="input-group input-group-sm mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-sm">New Description</span>
-              </div>
-              <input 
-              type="newDesc"
-              name="newDesc"
-              placeholder="New Description"
-              onChange={changeNewDesc}
-              value={newDesc} class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"/>
-              <button className="btn btn-primary" onClick={saveNewDesc}>Save</button>
-            </div></>}
-          
-        </div>
-      </Row>
-      <Row xs={3} md={3} lg={3} className="g-7">
-        {user.id == id ? 
-        <div style={{width:'20%',padding:'10px'}} className="rounded border">
+      {user.id == id ? 
+        <div style={{width:'20%',padding:'10px'}} className="rounded border" id="profile">
         <h5>Your invites:</h5>
         <hr/>
         <div>
@@ -172,8 +152,30 @@ export default function ProjectPage(props) {
         </div>
         
     </div>:null}
+        <div className="border rounded" id="profile" style={{padding:'10px'}}>
+          <h5>User Information</h5>
+          <hr/>
+          <h6>Username:</h6> {userProfile.username}<br/><br/>
+          <h6>User Description:</h6> {userProfile.description} {userProfile.username === user.username ? <button style={{float:'right', background:'none', color:'inherit', border:'none', color:'blue'}}  onClick={changeDescValue}> Change description</button>: null}
+          {changeDesc && <><div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">New Description</span>
+              </div>
+              <input 
+              type="newDesc"
+              name="newDesc"
+              placeholder="New Description"
+              onChange={changeNewDesc}
+              value={newDesc} class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"/>
+              <button className="btn btn-primary" onClick={saveNewDesc}>Save</button>
+            </div></>}
           
-          <div style={{width:'80%',padding:'10px'}} className="rounded border"><h5>User's projects</h5>
+        </div>
+      </Row>
+      <Row xs={3} md={3} lg={3} className="g-7">
+        
+          
+          <div id="profile" style={{width:'80%',padding:'10px'}} className="rounded border"><h5>User's projects</h5>
 
           <hr/>
           {userProjects.map(userProject=>
@@ -202,7 +204,7 @@ export default function ProjectPage(props) {
 
 
           
-          <div style={{width:'40%',padding:'10px'}} className="rounded border"><h5>User reviews</h5>
+          <div id="profile" style={{width:'40%',padding:'10px'}} className="rounded border"><h5>User reviews</h5>
           <hr/>
           {userReviews.map(review =>
           <div className="rounded border" style={{padding:'10px',marginBottom:'10px'}}>
@@ -225,7 +227,7 @@ export default function ProjectPage(props) {
           
           </div>
       </Row>
-      </>
+      </div>
   )
   
 
