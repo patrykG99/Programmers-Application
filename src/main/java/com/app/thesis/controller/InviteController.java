@@ -69,6 +69,11 @@ public class InviteController {
         User user = userService.getUser(p.getName());
         return ResponseEntity.ok().body(inviteService.getInvitesByUserAndType(user.getId(), "Invite"));
     }
+    @GetMapping("/projectinvites/{id}")
+    public ResponseEntity<List<Invite>> getProjectInvites(@PathVariable("id") Long id){
+
+        return ResponseEntity.ok().body(inviteService.getInvitesByProject(id));
+    }
 
     @DeleteMapping("/invites/accept/{id}")
     public ResponseEntity<Invite> acceptInvite(@PathVariable("id") Long inviteId, Principal p){

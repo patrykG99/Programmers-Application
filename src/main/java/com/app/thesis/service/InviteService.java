@@ -19,4 +19,6 @@ public interface InviteService {
     List<Invite> getInvitesByProjectAndType(Long id, String type);
 
     void deleteInvite(Long id);
+
+    List<Invite> getInvitesByProject(Long id);
 }

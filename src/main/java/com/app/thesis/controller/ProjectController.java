@@ -3,6 +3,8 @@ package com.app.thesis.controller;
 import com.app.thesis.model.Project;
 import com.app.thesis.model.Rating;
 import com.app.thesis.model.User;
+import com.app.thesis.repository.InviteRepo;
+import com.app.thesis.repository.MessageRepo;
 import com.app.thesis.repository.ProjectRepo;
 import com.app.thesis.repository.RatingRepo;
 import com.app.thesis.service.ProjectService;
@@ -11,8 +13,12 @@ import com.app.thesis.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -34,6 +40,9 @@ public class ProjectController {
     private final RatingService ratingService;
     private final ProjectRepo projectRepo;
     private final RatingRepo ratingRepo;
+    private final InviteRepo inviteRepo;
+    private final MessageRepo messageRepo;
+
 
     @GetMapping("/projects")
     public ResponseEntity<List<Project>> getProjects(){
@@ -126,6 +135,37 @@ public class ProjectController {
         return ResponseEntity.badRequest().body(rating);
 
 
+
+    }
+    @GetMapping("/projectsPage")
+    public Page<Project> getItems(Pageable pageable) {
+        // Create a new Pageable instance with the desired page size, page number, and sort order
+        Pageable paging = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
+        // Use the JpaRepository's findAll() method to retrieve the data, passing in the Pageable instance
+        Page<Project> items = projectRepo.findAll(paging);
+        // Return the Page object, which will include the paginated data and metadata
+        return items;
+    }
+
+    @PatchMapping("/project/info/{id}")
+    public ResponseEntity<Project> updateInfo(@RequestBody Project projectDet, @PathVariable("id")Long id, Principal p ){
+        Project project = projectService.getProject(id);
+        project.setAdditionalInfo(projectDet.getAdditionalInfo());
+
+
+        return ResponseEntity.ok(projectService.saveProject(project));
+    }
+
+    @Transactional
+    @DeleteMapping("/project/{id}")
+    public ResponseEntity<Void> deleteProject(@PathVariable Long id, Principal p) {
+        if(projectRepo.findById(id).get().getOwner().equals(userService.getUser(p.getName()))){
+            messageRepo.deleteByProjectFrom(projectService.getProject(id));
+            ratingRepo.deleteByProject(projectService.getProject(id));
+            inviteRepo.deleteAllByProjectId(id);
+            projectRepo.deleteById(id);
+            }
+        return ResponseEntity.noContent().build();
 
     }
 

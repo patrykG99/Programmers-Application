@@ -13,4 +13,8 @@ public interface InviteRepo extends JpaRepository<Invite, Long> {
 
     List<Invite> findByProjectIdAndType(Long id, String type);
     List<Invite> findByUserIdAndType(Long id, String type);
+
+    List<Invite> findByProjectId(Long id);
+
+    void deleteAllByProjectId(Long id);
 }

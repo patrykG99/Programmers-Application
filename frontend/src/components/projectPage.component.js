@@ -2,12 +2,13 @@
 import React, { Component } from "react";
 import Row from 'react-bootstrap/Row';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Rating } from 'react-simple-star-rating'
 import { Button } from "bootstrap";
 
 import { over } from 'stompjs';
 import SockJS from 'sockjs-client';
+import Popup from 'reactjs-popup';
 
 
 
@@ -19,6 +20,7 @@ export default function ProjectPage(props) {
   const [users, setUsers] = useState([]);
   const [hasLoaded, setHasLoaded] = useState()
   const [userInvite, setUserInvite] = useState('')
+  const [userInviteRecommended, setUserInviteRecommended] = useState('')
   const [reviewsByUser, setReviewsByUser] = useState([])
   const [ratedUser, setRatedUser] = useState('')
   const [requests, setRequests] = useState('')
@@ -29,6 +31,12 @@ export default function ProjectPage(props) {
   const [privateChats, setPrivateChats] = useState(new Map());
   const [publicChats, setPublicChats] = useState([]);
   const [tab, setTab] = useState("CHATROOM");
+  const [open, setOpen] = useState(false);
+  const [openRecommended, setOpenRecommended] = useState(false);
+  const [projectInvites, setProjectInvites] = useState([])
+  const [changeInfo, setChangeInfo] = useState(false)
+  const [newInfo, setNewInfo] = useState('')
+  const [borderWidth, setBorderWidth] = useState(100);
   const [userData, setUserData] = useState({
     username: '',
     receivername: '',
@@ -36,6 +44,8 @@ export default function ProjectPage(props) {
     message: ''
   });
   const [ownerPane, setOwnerPane] = useState(false)
+  const [inputs, setInputs]= useState([])
+  
 
   const navigate = useNavigate();
   let { id } = useParams();
@@ -52,27 +62,62 @@ export default function ProjectPage(props) {
     fetch(url, requestOptions)
     window.location.reload(false);
   }
+  let ratingWorking = [];
+  let comments = [];
+  
+  const handleRating = (rate, index) => {
+    
+    ratingWorking[index] = rate
+    console.log(ratingWorking[index], index)
+    
+    
 
-  const handleRating = (rate, value) => {
-    setRating(rate)
-
-
-    console.log(ratedUser)
+    
 
 
 
   }
+  const changeInfoValue = event => {
+    setChangeInfo(current => !current)
+    setNewInfo(project.additionalInfo)
+    
+}
+const saveNewInfo = event =>{
+  const url = 'http://localhost:8080/api/project/info/' + id
+    const requestOptions = {
+      method: 'PATCH',
+      headers: {  'Authorization':'Bearer ' + user.accessToken, 'Content-Type': 'application/json' },
+      body: JSON.stringify({  'additionalInfo': newInfo })
+  };
+  
+  fetch(url, requestOptions)
+  console.log("dizala")
+  window.location.reload(false);
+  
+};
+const changeNewInfo = event => {
+  setNewInfo(event.target.value)
+  
 
-  const onPointerEnter = (userrate) => { setRatedUser(userrate.username); setRating(0) }
+
+}
+  const closeModal = () => setOpen(false);
+  
+  const onPointerEnter = (userrate) => { setRatedUser(userrate.username)}
   const onPointerLeave = () => console.log('Leave')
-  const onPointerMove = (value, index) => console.log(user.username, project.owner.username)
+  
 
-  const sendRating = event => {
+  const sendRating = (index) => {
+    
+    
     const url = 'http://localhost:8080/api/project/rateuser/' + id + '/' + ratedUser
+    console.log("ratingWorking index: ", ratingWorking[index])
+    console.log("index: ", index)
+    console.log(comments[index])
     const requestOptions = {
       method: 'PUT',
       headers: { 'Authorization': 'Bearer ' + user.accessToken, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 'score': rating, 'comment': comment })
+      body: JSON.stringify({ 'score': ratingWorking[index], 'comment': comments[index] })
 
     };
     console.log(requestOptions)
@@ -115,6 +160,7 @@ export default function ProjectPage(props) {
         break;
       case "MESSAGE":
         publicChats.push(payloadData);
+        
         setPublicChats([...publicChats]);
         break;
     }
@@ -132,6 +178,18 @@ export default function ProjectPage(props) {
       privateChats.set(payloadData.senderName, list);
       setPrivateChats(new Map(privateChats));
     }
+  }
+
+  const deleteProject = event =>{
+    const url = 'http://localhost:8080/api/project/' + id
+    const requestOptions = {
+      method: 'DELETE',
+      headers: { 'Authorization': 'Bearer ' + user.accessToken }
+      
+
+    };
+    console.log(requestOptions)
+    fetch(url, requestOptions)
   }
 
   const onError = (err) => {
@@ -198,7 +256,7 @@ export default function ProjectPage(props) {
       body: JSON.stringify({ 'invitedUsername': userInvite, 'type': "Invite" })
     };
     fetch(url, requestOptions)
-      .then(response => console.log('Submitted successfully'))
+      .then(response => {console.log('Submitted successfully');setOpen(o => !o)})
       .catch(error => console.log('Form submit error', error))
     console.log(requestOptions)
   };
@@ -206,7 +264,7 @@ export default function ProjectPage(props) {
 
   const handleSubmitRecommended = event => {
     event.preventDefault();
-    setUserInvite(event.target.value)
+    setUserInviteRecommended(event.target.value)
     console.log(event.target.value)
     const url = 'http://localhost:8080/api/invites/save/' + id
     const requestOptions = {
@@ -215,9 +273,10 @@ export default function ProjectPage(props) {
       body: JSON.stringify({ 'invitedUsername': event.target.value, 'type': "Invite" })
     };
     fetch(url, requestOptions)
-      .then(response => console.log('Submitted successfully'))
+      .then(response => {console.log('Submitted successfully');setOpenRecommended(o => !o)})
       .catch(error => console.log('Form submit error', error))
     console.log(requestOptions)
+    window.location.reload(false);
   };
 
   const requestInvite = event => {
@@ -244,14 +303,28 @@ export default function ProjectPage(props) {
 
   }
 
-  const handleCommentChange = event => {
-    setComment(event.target.value)
+  const handleCommentChange = (event, index) => {
+    comments[index] = event.target.value
+    console.log(comments[index])
   }
   const redirectToUser = (userRed) => {
     navigate("/profile/" + userRed)
   }
   const ownerPageHandler = event => {
     
+  }
+  const handleTime = () =>{
+    // Keep a reference to the interval ID returned by setInterval
+    
+
+    // Schedule the popup to be closed after 3 seconds
+    const timeoutId = setTimeout(() => setOpen(false), 3000);
+
+    // Return a cleanup function that will be called when the Popup is closed
+    return () => {
+      
+      clearTimeout(timeoutId);
+    };
   }
 
 
@@ -269,6 +342,7 @@ export default function ProjectPage(props) {
       const responseReviews = await fetch('http://localhost:8080/api/ratings/projectReviews/' + id, { method: 'GET', headers: { "Authorization": 'Bearer ' + user.accessToken } });
       const responseMessages = await fetch('http://localhost:8080/project/messages/' + id, { method: 'GET', headers: { "Authorization": 'Bearer ' + user.accessToken } });
       const responseUserReviews = await fetch('http://localhost:8080/api/ratings/user/projects/' + id, { method: 'GET', headers: { "Authorization": 'Bearer ' + user.accessToken } });
+      const responseInvites = await fetch('http://localhost:8080/api/projectinvites/' + id, { method: 'GET', headers: { "Authorization": 'Bearer ' + user.accessToken } });
 
       let actualData = await response.json();
       let actualData2 = await response2.json();
@@ -276,6 +350,7 @@ export default function ProjectPage(props) {
       let actualDataReviews = await responseReviews.json();
       let actualDataMessages = await responseMessages.json();
       let actualDataUserReviews = await responseUserReviews.json();
+      let actualDataProjectInvites = await responseInvites.json();
 
       console.log(user.username)
       setProject(actualData)
@@ -284,13 +359,16 @@ export default function ProjectPage(props) {
       setRequests(actualDataRequests)
       setReviews(actualDataReviews)
       setReviewsByUser(actualDataUserReviews)
+      setProjectInvites(actualDataProjectInvites)
       const responseSuggested = await fetch('http://localhost:8080/api/users/recommended/' + actualData.tech, { method: 'GET', headers: { "Authorization": 'Bearer ' + user.accessToken } });
       console.log(project)
       let actualDataSuggested = await responseSuggested.json();
       setSuggestedUsers(actualDataSuggested)
       setMessagesHistory(actualDataMessages)
+      setRating(3);
       
       setHasLoaded(true)
+      console.log(actualDataProjectInvites)
 
       console.log(actualDataSuggested)
       console.log(users)
@@ -302,15 +380,24 @@ export default function ProjectPage(props) {
 
     getData()
   }, []);
+  useEffect(() => {
+    
+  },[rating])
 
 
   return (
     <>
+    <Popup onOpen={handleTime} open={open} contentStyle={{width:'10%', borderRadius:"10px", bottom:'45%', padding:'10px',height:'5%',backgroundColor:'#F2AA4CFF', borderColor:'black',left:'40%'}} className="rounded" position="top center">
+          <div>Invited user {userInvite}</div>
+        </Popup>
+        <Popup open={openRecommended} contentStyle={{width:'10%', borderRadius:"10px", bottom:'45%', padding:'10px',height:'5%',backgroundColor:'#F2AA4CFF', borderColor:'black',left:'40%'}} className="rounded" position="top center">
+          <div>Invited user {userInviteRecommended}</div>
+        </Popup>
       {!project.finished && hasLoaded && project.owner.username == user.username ?
         <>
           <Row xs={2} md={2} lg={2} className="g-7">
 
-            <div id="profile" style={{ width: '20%', padding: '10px' }} className="rounded border">
+            <div id="profile" style={{ width: '20%', padding: '10px' }} className="rounded">
               <form onSubmit={handleSubmit}>
                 <div >
                   <label>User to invite:</label>
@@ -329,13 +416,15 @@ export default function ProjectPage(props) {
 
             </div>
 
-            <div style={{ width: '35%', padding: '10px' }} className="rounded border" id="profile"><h5>Invite requests:</h5>
+            <div style={{ width: '35%', padding: '10px' }} className="rounded" id="profile"><h5>Invite requests:</h5>
 
 
               {requests.map(request =>
-                <div>
+                <div className="rounded" style={{ margin: '10px', padding: '5px',backgroundColor:'#d4943f' }}>
                   {request.invitedUsername}
-                  <button onClick={acceptRequest} value={request.id}>Accept</button>
+                  
+                  <button className="btn btn-primary" onClick={acceptRequest} value={request.id} style={{float:'right', height:'25px', fontSize:'15px'}}>Accept</button>
+                  
 
 
 
@@ -347,8 +436,8 @@ export default function ProjectPage(props) {
 
 
             </div>
-            <div id="profile" className="rounded border" style={{ width: '40%', padding: '10px' }}>Suggested Users:
-              {suggestedUsers.map(suggestedUser => { return !users.some(el => el.username === suggestedUser.username) ? <div style={{ margin: '3px', padding: '3px' }} className="rounded border"> {suggestedUser.username}<button style={{ float: 'right' }} value={suggestedUser.username} onClick={handleSubmitRecommended}>Invite</button></div> : null }
+            <div id="profile" className="rounded" style={{ width: '40%', padding: '10px' }}>Suggested Users:
+              {suggestedUsers.map(suggestedUser => { return !users.some(el => el.username === suggestedUser.username) && !projectInvites.some(el => el.invitedUsername === suggestedUser.username)  ? <div className="rounded" style={{ margin: '10px', padding: '5px',backgroundColor:'#d4943f' }}> {suggestedUser.username}<button style={{float:'right', height:'25px', fontSize:'15px'}} value={suggestedUser.username} onClick={handleSubmitRecommended}>Invite</button></div> : null }
 
 
               )}
@@ -364,26 +453,27 @@ export default function ProjectPage(props) {
 
       }
       {hasLoaded && project.owner.id == user.id ? <button onClick={endProject} className="btn btn-primary">End Project</button> : null}
+      {hasLoaded && project.owner.id == user.id ? <button onClick={deleteProject} className="btn btn-primary">Delete Project</button> : null}
 
 
 
       <Row xs={3} md={3} lg={3} className="g-7">
 
-        <div id="profile" style={{ width: '20%', padding: '10px' }} className="rounded border">
-          <h5>Project information</h5>
+        <div id="profile" style={{ width: '20%', padding: '10px' }} className="rounded">
+          <h5><b>Project information</b></h5>
 
           <hr />
 
           <div >
 
-            <h6>Project name:</h6>
+            <h6><b>Project name:</b></h6>
             {hasLoaded ? <p>{project.name}</p> : <p>Loading...</p>}
-            <h6>Main Language:</h6>
+            <h6><b>Main Language:</b></h6>
             {hasLoaded ? <p>{project.tech}</p> : <p>Loading...</p>}
 
 
 
-            <h6>Owner:</h6>
+            <h6><b>Owner:</b></h6>
             {hasLoaded ? <p>{project.owner.username}</p> : <p>Loading...</p>}
 
 
@@ -393,42 +483,43 @@ export default function ProjectPage(props) {
           </div>
 
         </div>
-        <div id="profile" style={{ width: '55%', padding: '10px' }} className="rounded border"><h5>Description</h5>
+        <div id="profile" style={{ width: '55%', padding: '10px' }} className="rounded"><h5><b>Description</b></h5>
           <hr />
           {project.description}
         </div>
 
 
-        <div id="profile" style={{ width: '20%', padding: '10px' }} className="rounded border"><h5>Users ({users.length}/{project.maxUsers})</h5>
+        <div id="profile" style={{ width: '20%', padding: '10px' }} className="rounded"><h5><b>Users ({users.length}/{project.maxUsers})</b></h5>
           <hr />
           {users.map(user =>
-            <div onClick={() => redirectToUser(user.id)} key={user.id} className="rounded border" style={{ margin: '10px', padding: '5px' }}>
+            <div onClick={() => redirectToUser(user.id)} key={user.id} className="rounded redirectlink" style={{ margin: '10px', padding: '5px',backgroundColor:'#d4943f' }}>
               {user.username}
             </div>
           )}
         </div>
         {project.finished && users.length > 1 && reviewsByUser.length < users.length - 1 ?
-          <div style={{ width: '100%' }} className="rounded border" id="profile"><h5>Rate users</h5>
+          <div style={{ width: '98%', padding:'3px' }} className="rounded" id="profile"><h5><b>Rate users</b></h5>
             <hr />
 
-            {users.map(userrate => {
+            {users.map((userrate, index) => {
+              
               return userrate.username != user.username && !reviews.some(review => (review.user.username == userrate.username && review.project.id == id && review.ratingUser.username == user.username)) ?
 
-                <div className="rounded border" key={userrate.id} onPointerEnter={() => onPointerEnter(userrate)}>
+                <div className="rounded" style={{padding:'3px', margin:'3px',  backgroundColor:'#d4943f'}} key={userrate.id} onPointerEnter={() => onPointerEnter(userrate)}>
                   {userrate.username}
 
                   <Rating
-
-                    onClick={handleRating}
+                    value={ratingWorking[index]}
+                    onClick={(rate, e) =>handleRating(rate, index)}
 
                     //onPointerLeave={onPointerLeave}
-                    onPointerMove={onPointerMove}
+                    
                     size="30"
                   /* Available Props */
                   />
                   <br />
-                  <input type="text" id={userrate.id} name="comment" onChange={handleCommentChange} value={comment}></input>
-                  <button onClick={sendRating}>Send your rating</button>
+                  <input type="text" id={userrate.id} name="comment" onChange={(e) => handleCommentChange(e,index)} value={comments[index]}></input>
+                  <button onClick={() => sendRating(index)}>Send your rating</button>
 
                 </div>
                 : null
@@ -444,35 +535,19 @@ export default function ProjectPage(props) {
 
       </Row>
       <Row style={{ width: '100%' }}>
-        {users.some(userIs => (userIs.username === user.username)) ? <div id="profile" className="rounded border" style={{ width: '100 %' }}>
+        {users.some(userIs => (userIs.username === user.username)) ? <div id="profile" className="rounded" style={{ width: '100 %' }}>
           {userData.connected ?
-            <div >
+            <div style={{padding:'3px'}} >
 
-              Chat
+            <h5><b>Chat</b></h5>
               {tab === "CHATROOM" && <div className="chat-content">
-                <div className="rounded border" style={{ overflowY: 'scroll', overflowWrap: 'break-word', height: '400px', display: 'flex', flexDirection: 'column-reverse' }}>
-
-                  {messagesHistory.map(message =>
-                    <div style={{}}>
-
-
-                      {message.senderName === user.username ? <> <div class="p-3 ms-3" style={{ borderRadius: '15px', backgroundColor: 'rgba(57, 192, 237,.2)', margin: '3px', width: '60%', float: 'right' }}>
-                        <p class="small mb-0">{message.senderName}<hr />{message.message}</p>
-                      </div></> : <div class="p-3 ms-3" style={{ borderRadius: '15px', backgroundColor: 'rgba(255, 10,10,.2)', margin: '3px', width: '60%' }}>
-                        <p class="small mb-0">{message.senderName}<hr />{message.message}</p>
-                      </div>}
-
-
-                    </div>)}
-
-
-
-                  {publicChats.map((chat, index) => (
+                <div  style={{borderRight:'none',borderRadius:'10px',border:'solid 1px',borderColor:'#101820FF' ,overflowY: 'scroll', overflowWrap: 'break-word', height: '20vh', display: 'flex', flexDirection: 'column-reverse' }}>
+                {publicChats.reverse().map((chat, index) => (
                     <>
                       <div key={index}>
                         {chat.senderName === user.username ? <> <div class="p-3 ms-3" style={{ borderRadius: '15px', backgroundColor: 'rgba(57, 192, 237,.2)', margin: '3px', width: '60%' }}>
                           <p class="small mb-0">{chat.senderName}<hr />{chat.message}</p>
-                        </div></> : <div class="p-3 ms-3" style={{ borderRadius: '15px', backgroundColor: 'rgba(255, 10,10,.2)', margin: '3px', width: '60%', float: 'right' }}>
+                        </div></> : <div class="p-3 ms-3" style={{ borderRadius: '15px', backgroundColor: 'rgba(255, 10,10,.2)', margin: '3px', width: '60%',float:'right' }}>
                           <p class="small mb-0">{chat.senderName}<hr />{chat.message}</p>
                         </div>}
 
@@ -480,6 +555,27 @@ export default function ProjectPage(props) {
                       </div>
                     </>
                   ))}
+                
+                
+                {messagesHistory.map(message =>
+                    <div style={{}}>
+                      
+
+
+                      {message.senderName === user.username ? <> <div class="p-3 ms-3" style={{ borderRadius: '15px', backgroundColor: 'rgba(57, 192, 237,.2)', margin: '3px', width: '60%' }}>
+                        <p class="small mb-0">{message.senderName}<hr />{message.message}</p>
+                      </div></> : <div class="p-3 ms-3" style={{ borderRadius: '15px', backgroundColor: 'rgba(255, 10,10,.2)', margin: '3px', width: '60%',float:'right' }}>
+                        <p class="small mb-0">{message.senderName}<hr />{message.message}</p>
+                      </div>}
+
+
+                    </div>)}
+                  
+
+
+
+                  
+                  
 
 
 
@@ -501,9 +597,21 @@ export default function ProjectPage(props) {
       </Row>
       <Row>
       {users.some(userIs => (userIs.username === user.username)) ? 
-      <div id="profile">Private information<hr />
-        <div>Links</div>
-        <div>Additional information</div>
+      <div style={{width:'98%'}} id="profile"><h5><b>Private information</b></h5><hr />
+      {!changeInfo ? <div>{project.additionalInfo}</div>:null}
+        {project.owner.username === user.username ? <button style={{float:'right', background:'none', color:'inherit', border:'none', color:'blue'}}  onClick={changeInfoValue}> Change information</button>: null}
+        {changeInfo && <><div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">New Info</span>
+              </div>
+              <textarea 
+              type="newDesc"
+              name="newDesc"
+              placeholder={project.additionalInfo}
+              onChange={changeNewInfo}
+              value={newInfo} class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"/>
+              <button className="btn btn-primary" onClick={saveNewInfo}>Save</button>
+            </div></>}
 
 
 

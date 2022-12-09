@@ -105,6 +105,9 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/project/messages/**").hasAuthority("ROLE_USER")
                 .antMatchers("/message/{id}").hasAuthority("ROLE_USER")
                 .antMatchers("/api/users/description/**").hasAuthority("ROLE_USER")
+                .antMatchers("/api/projectsPage").permitAll()
+                .antMatchers("/api/projectinvites/**").hasAuthority("ROLE_USER")
+                .antMatchers("/api/project/info/**").hasAuthority("ROLE_USER")
 
                 .antMatchers("/api/test/**").permitAll()
 

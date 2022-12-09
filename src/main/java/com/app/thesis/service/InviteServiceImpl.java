@@ -52,4 +52,9 @@ public class InviteServiceImpl implements InviteService{
         inviteRepo.deleteById(id);
     }
 
+    @Override
+    public List<Invite> getInvitesByProject(Long id) {
+        return inviteRepo.findByProjectId(id);
+    }
+
 }

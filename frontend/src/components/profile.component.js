@@ -5,6 +5,7 @@ import Row from 'react-bootstrap/Row';
 import {useParams, useNavigate} from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { Button } from "bootstrap";
+import Table from 'react-bootstrap/Table';
 import { Rating } from 'react-simple-star-rating'
 import "./styles.scss"
 
@@ -19,6 +20,7 @@ export default function ProjectPage(props) {
   const [userReviews, setUserReviews] = useState([])
   const [changeDesc, setChangeDesc] = useState(false)
   const [newDesc, setNewDesc] = useState('')
+  
  
 
   const navigate = useNavigate();
@@ -126,11 +128,11 @@ export default function ProjectPage(props) {
   
   
   return (
-      <div id="userProfile">
+      <div id="userProfile" style={{height:"100%"}}>
       <Row lg={1}>
       {user.id == id ? 
         <div style={{width:'20%',padding:'10px'}} className="rounded border" id="profile">
-        <h5>Your invites:</h5>
+        <h5><b>Your invites:</b></h5>
         <hr/>
         <div>
             <h6>{invites.map(invite =>
@@ -153,15 +155,15 @@ export default function ProjectPage(props) {
         
     </div>:null}
         <div className="border rounded" id="profile" style={{padding:'10px'}}>
-          <h5>User Information</h5>
+          <h5><b>User Information</b></h5>
           <hr/>
-          <h6>Username:</h6> {userProfile.username}<br/><br/>
-          <h6>User Description:</h6> {userProfile.description} {userProfile.username === user.username ? <button style={{float:'right', background:'none', color:'inherit', border:'none', color:'blue'}}  onClick={changeDescValue}> Change description</button>: null}
+          <h6><b>Username:</b></h6> {userProfile.username}<br/><br/>
+          <h6><b>User Description:</b></h6> {userProfile.description} {userProfile.username === user.username ? <button style={{float:'right', background:'none', color:'inherit', border:'none', color:'blue'}}  onClick={changeDescValue}> Change description</button>: null}
           {changeDesc && <><div class="input-group input-group-sm mb-3">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroup-sizing-sm">New Description</span>
               </div>
-              <input 
+              <textarea 
               type="newDesc"
               name="newDesc"
               placeholder="New Description"
@@ -172,20 +174,31 @@ export default function ProjectPage(props) {
           
         </div>
       </Row>
-      <Row xs={3} md={3} lg={3} className="g-7">
+      <Row xs={3} md={3} lg={3} className="g-7" style={{height:'50%'}}>
         
+          <div id="profile" style={{width:'100%',padding:'10px'}}><h5><b>User's projects</b></h5></div>
+          <div id="profile" style={{width:'100%',padding:'10px', height:'30vh',overflowY: 'scroll',marginTop:"0px"}} className="rounded border"><h5></h5>
+              
           
-          <div id="profile" style={{width:'80%',padding:'10px'}} className="rounded border"><h5>User's projects</h5>
-
-          <hr/>
-          {userProjects.map(userProject=>
-            <div key={userProject.id} onClick={() => redirectToProject(userProject.id)} className="rounded border" style={{margin:'10px',padding:'5px'}}>
-                <Row>
-                <div style={{width:'25%', borderRight:'solid 1px'}}> {userProject.name}</div>
-                <div style={{width:'25%', borderRight:'solid 1px'}}> {userProject.owner.id == id ? <p>Owner</p>:<p>Member</p>}</div>
-                <div style={{width:'25%', borderRight:'solid 1px'}}>{userProject.tech}</div>
-                <div style={{width:'25%'}}>{userProject.finished ? <p style={{float:'right'}}>Project finished</p>:null}</div>
-                </Row>
+          <div style={{}}>
+          <Table striped bordered hover variant="dark">
+            <thead>
+            <tr>
+              <th>Project Name</th>
+              <th>Your role</th>
+              <th>Main Language</th>
+              <th>Project Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            {userProjects.map(userProject=>
+            <tr className="redirectlink" key={userProject.id} onClick={() => redirectToProject(userProject.id)}>
+                
+                <th style={{width:'25%'}}> {userProject.name}</th>
+                <th style={{width:'25%'}}> {userProject.owner.id == id ? <p>Owner</p>:<p>Member</p>}</th>
+                <th style={{width:'25%'}}>{userProject.tech}</th>
+                <th style={{width:'25%'}}>{userProject.finished ? <p>Project finished</p>:<p>Ongoing</p>}</th>
+                
 
                
                 
@@ -193,10 +206,31 @@ export default function ProjectPage(props) {
                 
            
 
-            </div>
+            </tr>
             
             
             )}
+            </tbody>
+          </Table>
+          </div>
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          
                     
                     
           
@@ -204,7 +238,7 @@ export default function ProjectPage(props) {
 
 
           
-          <div id="profile" style={{width:'40%',padding:'10px'}} className="rounded border"><h5>User reviews</h5>
+          <div id="profile" style={{width:'100%',padding:'10px',height:'40hv'}} className="rounded border"><h5><b>User reviews</b></h5>
           <hr/>
           {userReviews.map(review =>
           <div className="rounded border" style={{padding:'10px',marginBottom:'10px'}}>

@@ -15,6 +15,7 @@ import BoardAdmin from "./components/board-admin.component";
 import Projects from "./components/projects.component";
 import ProjectAdd from "./components/projectAdd.component"
 import ProjectPage from "./components/projectPage.component"
+import Pages from "./components/pages.component"
 
 const user = JSON.parse(localStorage.getItem('user'));
 
@@ -120,9 +121,10 @@ class App extends Component {
               </li>
             </div>
           )}
+          
           <div className="navbar-nav mr-auto">
           <li className="nav-item">
-              <Link to={"/projects"} className="nav-link">
+              <Link to={"/pages"} className="nav-link">
                 Projects
               </Link>
             </li>
@@ -143,7 +145,7 @@ class App extends Component {
             <Route path="/projectAdd" element={<ProjectAdd />} />
             <Route path="/projects/:id" element={<ProjectPage />}/>
             <Route path="/profile/:id" element={<Profile />}/>
-            
+            <Route path="/pages" element={<Pages />}/>
           </Routes>
         </div>
       </div>

@@ -3,6 +3,7 @@ package com.app.thesis.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import javax.persistence.*;
@@ -48,6 +49,7 @@ public class User {
                     CascadeType.MERGE
             },
             mappedBy = "members")
+
     @JsonIgnore
     private List<Project> projectsIn;
 

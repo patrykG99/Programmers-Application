@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface MessageRepo extends JpaRepository<Message, Long> {
     List<Message> findAllByProjectFrom(Project project);
+
+    void deleteByProjectFrom(Project project);
 }

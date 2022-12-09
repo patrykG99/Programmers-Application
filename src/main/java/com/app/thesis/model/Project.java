@@ -38,11 +38,14 @@ public class Project {
 
     private boolean finished = false;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Message> message;
 
     private String description ;
     private String tech;
+
+    @Column(columnDefinition = "TEXT")
+    private String additionalInfo;
 
     public Project(String name, String description, int maxUsers, String tech){
 

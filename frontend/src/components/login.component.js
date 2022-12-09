@@ -57,7 +57,7 @@ class Login extends Component {
     if (this.checkBtn.context._errors.length === 0) {
       AuthService.login(this.state.username, this.state.password).then(
         () => {
-          this.props.router.navigate("/projects");
+          this.props.router.navigate("/pages");
           window.location.reload();
         },
         error => {
@@ -83,8 +83,8 @@ class Login extends Component {
 
   render() {
     return (
-      <div className="col-md-12">
-        <div className="card card-container">
+      <div className="col-md-12" >
+        <div className="card card-container" style={{backgroundColor:'#F2AA4CFF', borderRadius:'10px'}}>
           <img
             src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
             alt="profile-img"
@@ -125,6 +125,7 @@ class Login extends Component {
               <button
                 className="btn btn-primary btn-block"
                 disabled={this.state.loading}
+                style={{marginTop:'3px'}}
               >
                 {this.state.loading && (
                   <span className="spinner-border spinner-border-sm"></span>
