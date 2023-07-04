@@ -24,8 +24,6 @@ import java.util.List;
 public class InviteController {
 
     private InviteService inviteService;
-    private UserService userService;
-    private ProjectService projectService;
 
     @GetMapping("/invites")
     public ResponseEntity<List<Invite>> getInvites(){
@@ -39,64 +37,30 @@ public class InviteController {
 
     @PostMapping("/invites/save/{id}")
     public ResponseEntity<Invite> saveInvite(@RequestBody Invite invite, Principal p, @PathVariable("id") Long projectId){
-        User user = userService.getUser(p.getName());
-        Project project = projectService.getProject(projectId);
 
-        User invitedUser = userService.getUser(invite.getInvitedUsername());
-
-        System.out.println(invite);
-
-        if(project.getOwner().equals(user) && !project.getMembers().contains(invitedUser) && invite.getType().equals("Invite")){
-            System.out.println("dziala");
-            invite.setProjectId(projectId);
-            invite.setUser(userService.getUser(invite.getInvitedUsername()));
-            invite.setProjectName(project.getName());
-            URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/invites/save/{id}").toUriString());
-            return ResponseEntity.created(uri).body(inviteService.saveInvite(invite));
-        }
-        else if(!project.getMembers().contains(invitedUser) && invite.getType().equals("Request")){
-            invite.setProjectId(projectId);
-            invite.setUser(userService.getUser(invite.getInvitedUsername()));
-            invite.setProjectName(project.getName());
-            URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/invites/save/{id}").toUriString());
-            return ResponseEntity.created(uri).body(inviteService.saveInvite(invite));
-        }
-        return ResponseEntity.badRequest().body(invite);
+        return ResponseEntity.ok(inviteService.saveInvite(invite, p, projectId));
 
     }
     @GetMapping("/myinvites")
     public ResponseEntity<List<Invite>> getUserInvites(Principal p){
-        User user = userService.getUser(p.getName());
-        return ResponseEntity.ok().body(inviteService.getInvitesByUserAndType(user.getId(), "Invite"));
+
+        return ResponseEntity.ok().body(inviteService.getInvitesByUserAndType("Invite",p));
+
     }
+
     @GetMapping("/projectinvites/{id}")
     public ResponseEntity<List<Invite>> getProjectInvites(@PathVariable("id") Long id){
 
         return ResponseEntity.ok().body(inviteService.getInvitesByProject(id));
+
     }
 
     @DeleteMapping("/invites/accept/{id}")
     public ResponseEntity<Invite> acceptInvite(@PathVariable("id") Long inviteId, Principal p){
-        Invite invite = inviteService.getInvite(inviteId);
-        User user = userService.getUser(invite.getInvitedUsername());
-        User userLogged = userService.getUser(p.getName());
-        Project project = projectService.getProject(invite.getProjectId());
-        if(user.equals(userLogged) && invite.getType().equals("Invite")) {
 
-            System.out.println("dziala");
-            projectService.addUserToProject(userLogged,project);
-            inviteService.deleteInvite(inviteId);
 
-            return ResponseEntity.noContent().build();
-
-        }
-        else if(project.getOwner().equals(userLogged) && invite.getType().equals("Request")){
-            projectService.addUserToProject(user, project);
-            inviteService.deleteInvite(inviteId);
-
-        }
-        return ResponseEntity.noContent().build();
-
+        inviteService.acceptInvite(inviteId,p);
+        return ResponseEntity.ok().build();
 
     }
 

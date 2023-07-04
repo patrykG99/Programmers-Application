@@ -37,7 +37,7 @@ public class ProgrammerAppApplication {
 	@Bean
 	CommandLineRunner run(UserService userService, ProjectService projectService) {
 		return args -> {
-//
+
 //			final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 ////			userService.saveRole(new Role(null, "ROLE_USER"));
 //			userService.saveRole(new Role(ERole.ROLE_USER));
