@@ -33,18 +33,13 @@ public class ChatController {
     @MessageMapping("/message")
     @SendTo("/chatroom/public")
     public Message receivePublicMessage(@Payload Message message){
-        if(message.getStatus().equals(Status.MESSAGE)) {
-            //message.setProject(projectService.getProject(projectId));
-            messageService.saveMessage(message);
-        }
+        messageService.saveMessage(message);
         return message;
     }
 
     @GetMapping("/project/messages/{id}")
     public ResponseEntity<List<Message>> getMessages(@PathVariable("id") Long id){
-        List<Message> messages = messageService.getAllByProjectFrom(projectService.getProject(id));
-        Collections.reverse(messages);
-        return ResponseEntity.ok().body(messages);
+        return ResponseEntity.ok().body(messageService.getAllByProjectFrom(projectService.getProject(id)));
     }
 
     @MessageMapping("/private-message")

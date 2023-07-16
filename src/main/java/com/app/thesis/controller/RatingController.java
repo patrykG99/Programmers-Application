@@ -20,22 +20,19 @@ import java.util.List;
 public class RatingController {
 
     private final RatingService ratingService;
-    private final ProjectService projectService;
-    private final UserService userService;
-
 
     @GetMapping("/ratings/projectReviews/{id}")
     public ResponseEntity<List<Rating>> getRatingsFromProjects(@PathVariable("id") Long id){
-        return ResponseEntity.ok().body(ratingService.getProjectRatings(projectService.getProject(id)));
+        return ResponseEntity.ok().body(ratingService.getProjectRatings(id));
     }
 
     @GetMapping("/ratings/user/{id}")
     public ResponseEntity<List<Rating>> getRatingsByUser(@PathVariable("id") Long id){
-        return ResponseEntity.ok().body(ratingService.getRatingsByUser(userService.getUser(id)));
+        return ResponseEntity.ok().body(ratingService.getRatingsByUser(id));
     }
 
     @GetMapping("/ratings/user/projects/{id}")
-    public ResponseEntity<List<Rating>> getRatingsByRatingUserAndProject(@PathVariable("id") Long id, Principal p){
-        return ResponseEntity.ok().body(ratingService.getRatingsByUserAndProjects(userService.getUser(p.getName()), projectService.getProject(id)));
+    public ResponseEntity<List<Rating>> getRatingsByRatingUserAndProject(@PathVariable("id") Long projectId, Principal p){
+        return ResponseEntity.ok().body(ratingService.getRatingsByUserAndProjects(p, projectId));
     }
 }

@@ -17,6 +17,7 @@ import java.net.URI;
 import java.security.Principal;
 import java.util.List;
 
+
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/api")
@@ -24,10 +25,6 @@ import java.util.List;
 public class UserController {
     @Autowired
     private final UserService userService;
-    @Autowired
-    private final UserRepo userRepo;
-
-
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> getUsers(){
@@ -62,11 +59,12 @@ public class UserController {
 
     @PatchMapping("/users/description/{id}")
     public ResponseEntity<User> updateDescription(@RequestBody User userDet, @PathVariable("id")Long id, Principal p ){
-        User user = userService.getUser(id);
-        user.setDescription(userDet.getDescription());
-        user.setPassword(user.getPassword());
-        System.out.println(user.getPassword());
-        return ResponseEntity.ok(userService.saveUser(user));
+        return ResponseEntity.ok(userService.updateDesc(userDet, id, p));
+//        User user = userService.getUser(id);
+//        user.setDescription(userDet.getDescription());
+//        user.setPassword(user.getPassword());
+//        System.out.println(user.getPassword());
+//        return ResponseEntity.ok(userService.saveUser(user));
     }
 
 

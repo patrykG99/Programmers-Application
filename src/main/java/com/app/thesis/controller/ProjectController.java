@@ -27,6 +27,8 @@ import java.net.URI;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 
 @RestController
@@ -63,7 +65,6 @@ public class ProjectController {
     }
     @GetMapping("/projects/user/projects/{id}")
     public ResponseEntity<List<Project>> getProjectsByUser(@PathVariable("id") Long id){
-
         return ResponseEntity.ok().body(projectService.getProjectsByUser(id));
     }
 
@@ -86,10 +87,15 @@ public class ProjectController {
 //
     @PostMapping("/projects/save")
     public ResponseEntity<Project> saveProject(@RequestBody Project project, Principal p){
-        List<User> membersList = project.getMembers();
+        Set<User> membersList = project.getMembers();
         project.setOwner(userService.getUser(p.getName()));
         membersList.add(userService.getUser(p.getName()));
         project.setMembers(membersList);
+
+        User user = userService.getUser(p.getName());
+        Set<Project> userProjects = user.getProjectsIn();
+        userProjects.add(project);
+
 
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/projects/save").toUriString());
         return ResponseEntity.created(uri).body(projectService.saveProject(project));
@@ -98,6 +104,7 @@ public class ProjectController {
     public ResponseEntity<Project> endProject(@PathVariable("id") Long id){
         Project project = projectService.getProject(id);
         project.setFinished(true);
+        project.getMembers().iterator().forEachRemaining(user -> user.setFinishedProjects(user.getFinishedProjects() + 1));
         System.out.println(project);
         projectRepo.save(project);
         return ResponseEntity.ok().build();

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -47,7 +48,7 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Override
     public void addUserToProject(User user, Project project) {
-        List<User> newUserArray = project.getMembers();
+        Set<User> newUserArray = project.getMembers();
         if(!newUserArray.contains(user)){
             newUserArray.add(user);
         }

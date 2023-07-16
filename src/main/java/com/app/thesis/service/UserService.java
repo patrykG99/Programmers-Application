@@ -5,6 +5,7 @@ import com.app.thesis.model.Role;
 import com.app.thesis.model.User;
 import com.app.thesis.model.UserDescriptionOnly;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ public interface UserService {
     User getUser(Long id);
     List<User> getUsers();
     List<User> getRecommendedUsers(String tech);
+    User updateDesc(User userDet, Long id, Principal p);
 
 
 

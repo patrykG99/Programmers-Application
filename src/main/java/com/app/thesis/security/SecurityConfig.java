@@ -108,6 +108,7 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/projectsPage").permitAll()
                 .antMatchers("/api/projectinvites/**").hasAuthority("ROLE_USER")
                 .antMatchers("/api/project/info/**").hasAuthority("ROLE_USER")
+                .antMatchers("/api/users").hasAuthority("ROLE_USER")
 
                 .antMatchers("/api/test/**").permitAll()
 
