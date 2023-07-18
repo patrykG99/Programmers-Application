@@ -29,6 +29,7 @@ public class User {
     private String username;
     private String email;
     private String password;
+    private String userProfilePicturePath = "D:/programowanie/test.jpg";
 
     private String description;
     private int finishedProjects = 0;
@@ -59,6 +60,7 @@ public class User {
         this.username = username;
         this.email = email;
         this.password = password;
+
     }
     public User(String description){
         this.description = description;

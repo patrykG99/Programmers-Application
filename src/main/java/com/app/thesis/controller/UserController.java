@@ -41,6 +41,10 @@ public class UserController {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
         return ResponseEntity.created(uri).body(userService.saveUser(user));
     }
+    @GetMapping("/user/picture/{id}")
+    public String getUserProfilePicture(@PathVariable("id") Long userId){
+        return userService.getUserImage(userId);
+    }
 
     @PostMapping("/role/save")
     public ResponseEntity<Role> saveRole(@RequestBody Role role){

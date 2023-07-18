@@ -68,6 +68,11 @@ public class UserServiceImpl implements UserService{
         return userRepository.save(user);
     }
 
+    public String getUserImage(Long userId){
+        User user = userRepository.getReferenceById(userId);
+        return user.getUserProfilePicturePath();
+    }
+
 
 //    @Override
 //    public void addRoleToUser(String username, String roleName) {

@@ -57,6 +57,7 @@ class App extends Component {
     const { currentUser, showModeratorBoard, showAdminBoard } = this.state;
 
     return (
+
       <div id="mainComponent">
         <nav className="navbar navbar-expand navbar-dark bg-dark">
           <Link to={"/"} className="navbar-brand">
@@ -137,10 +138,17 @@ class App extends Component {
               </Link>
             </li>
           </div>
+          <div className="navbar-nav mr-auto">
+            <li className="nav-item">
+              <Link to={"/users"} className="nav-link">
+                Users
+              </Link>
+            </li>
+          </div>
           
         </nav>
 
-        <div className="container mt-3">
+        <div className="container mt-3" style={{height:'80%'}}>
           <Routes>
             <Route path="/" element={<Projects />} />
             <Route path="/home" element={<Home />} />

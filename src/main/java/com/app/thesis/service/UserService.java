@@ -20,5 +20,5 @@ public interface UserService {
     User updateDesc(User userDet, Long id, Principal p);
 
 
-
+    String getUserImage(Long userId);
 }
