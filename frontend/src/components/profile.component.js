@@ -272,22 +272,33 @@ export default function ProjectPage(props) {
     //   </>
 
           <div style={{width:'100%',height:'100%'}} id="userProfile">
-              <div className="border rounded" style={{height:'100%', width:'20%',float:'left'}}>
-                  <div  style={{width:'100%', height:'10%', padding:'2px', color:'white'}}>User Information<hr/></div>
-                  <div style={{width:'80%', height:'20%', backgroundColor:'red', alignSelf:'center'}}>Avatar</div>
+              <div className="profileBorder" style={{height:'100%', width:'20%',float:'left'}}>
+                  <div className="sectionTitle"  style={{width:'100%', height:'10%', padding:'2px', color:'white'}}><h4>User Information</h4><hr/></div>
+                  <div className="avatar" style={{width:'80%', height:'20%', backgroundColor:'red', alignSelf:'center'}}>Avatar</div>
+                  <div className="informationSection">
+                      <section>
+                          <h5>Username:</h5>
+                          <p className="infoParagraph">{userProfile.username}</p>
+                      </section>
+                      <section>
+                          <h5>User Description</h5>
+                          <p className="infoParagraph">{userProfile.description}</p>
+                      </section>
+                  </div>
+                  <div className="updateDesc"><hr/><a>Update Information</a></div>
 
 
 
 
               </div>
-              <div className="border rounded" style={{height:'50%', width:'60%', float:'left'}}>
-                  <div  style={{width:'100%', height:'10%', padding:'2px', color:'white'}}>Projects<hr/></div>
+              <div className="profileBorder" style={{height:'50%', width:'60%', float:'left'}}>
+                  <div className="sectionTitle"  style={{width:'100%', height:'10%', padding:'2px', color:'white'}}><h4>User Information</h4><hr/></div>
               </div>
-              <div className="border rounded" style={{height:'50%', width:'20%',float:'right'}}>
-                  <div  style={{width:'100%', height:'10%', padding:'2px', color:'white'}}>Additional Information<hr/></div>
+              <div className="profileBorder" style={{height:'50%', width:'20%',float:'right'}}>
+                  <div className="sectionTitle"  style={{width:'100%', height:'10%', padding:'2px', color:'white'}}><h4>User Information</h4><hr/></div>
               </div>
-              <div className="border rounded" style={{height:'50%',width:'80%', float:'right'}}>
-                  <div  style={{width:'100%', height:'10%', padding:'2px', color:'white'}}>User ratings<hr/></div>
+              <div className="profileBorder" style={{height:'50%',width:'80%', float:'right'}}>
+                  <div className="sectionTitle"  style={{width:'100%', height:'10%', padding:'2px', color:'white'}}><h4>User Information</h4><hr/></div>
               </div>
           </div>
 

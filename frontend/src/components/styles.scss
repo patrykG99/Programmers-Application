@@ -84,5 +84,38 @@ html, body { height: 100%; width: 100%; margin: 0; }
 #firstRow{
   background-color:#F2AA4CFF ;
 }
+.profileBorder{
+  border-radius: 20px;
+  border-style: solid;
+  border-color: #505254;
+  padding: 15px;
+
+}
+.sectionTitle{
+  text-align: center;
+}
+.informationSection{
+  color: white;
+  margin: 10px;
+  margin-top: 30px;
+  text-align: center;
+  height: 60%;
+}
+.infoParagraph{
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 10px;
+  border-color: #505254;
+
+}
+.avatar{
+  align-content: center;
+}
+.updateDesc{
+  clear: both;
+  color: white;
+  text-align: center;
+  font-size: 15px;
+}
 
 
