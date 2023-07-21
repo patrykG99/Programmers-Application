@@ -9,6 +9,7 @@ import Table from 'react-bootstrap/Table';
 import { Rating } from 'react-simple-star-rating'
 import "./styles.scss"
 import {Modal} from "react-bootstrap";
+import {Container ,ListGroup, Col} from 'react-bootstrap';
 
 
 export default function ProjectPage(props) {
@@ -292,7 +293,28 @@ export default function ProjectPage(props) {
 
               </div>
               <div className="profileBorder" style={{height:'50%', width:'60%', float:'left'}}>
-                  <div className="sectionTitle"  style={{width:'100%', height:'10%', padding:'2px', color:'white'}}><h4>User Information</h4><hr/></div>
+                  <div className="sectionTitle"  style={{width:'100%', height:'10%', padding:'2px', color:'white'}}><h4>User Information</h4><hr/>
+
+                              <ListGroup style={{width:'100%',backgroundColor:'#F2AA4CFF'}} className="custom-list-group">
+                                  <ListGroup.Item bsStyle="success" className="listHeaders">
+                                      <div>
+                                          <div className="userProjectsItem">Project name</div>
+                                          <div className="userProjectsItem">Project owner</div>
+                                          <div className="userProjectsItem">Programming language</div>
+                                      </div>
+                                  </ListGroup.Item>
+                                  {userProjects.map(userProject=>
+                                  <ListGroup.Item>
+                                      <div className="userProjectsItem">{userProject.name}</div>
+                                      <div className="userProjectsItem">{userProject.tech}</div>
+                                      <div className="userProjectsItem">{userProject.tech}</div>
+
+                                  </ListGroup.Item>
+                                  )}
+                              </ListGroup>
+
+
+                  </div>
               </div>
               <div className="profileBorder" style={{height:'50%', width:'20%',float:'right'}}>
                   <div className="sectionTitle"  style={{width:'100%', height:'10%', padding:'2px', color:'white'}}><h4>User Information</h4><hr/></div>
