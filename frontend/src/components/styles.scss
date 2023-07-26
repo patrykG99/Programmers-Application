@@ -118,17 +118,19 @@ html, body { height: 100%; width: 100%; margin: 0; }
   font-size: 15px;
 
 }
-.userProjectsItem{
-  width: 30%;
-  float: left;
+
+
+
+
+.tableContainer{
+  height: 90%;
 
 }
-.custom-list-group{
-  background-color: #F2AA4CFF;
+.projectsTable{
+  background-color:white ;
 }
-.listHeaders{
+.MuiTableHead-root{
   background-color: #F2AA4CFF;
-
 }
 
 
