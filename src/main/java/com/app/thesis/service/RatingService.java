@@ -14,4 +14,6 @@ public interface RatingService {
     List<Rating> getRatingsByUser(Long id);
     List<Rating> getRatingsByUserAndProjects(Principal p, Long projectId);
 
+    Float getAverageRatingByUser(Long id);
+
 }

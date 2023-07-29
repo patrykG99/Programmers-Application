@@ -35,4 +35,8 @@ public class RatingController {
     public ResponseEntity<List<Rating>> getRatingsByRatingUserAndProject(@PathVariable("id") Long projectId, Principal p){
         return ResponseEntity.ok().body(ratingService.getRatingsByUserAndProjects(p, projectId));
     }
+    @GetMapping("/ratings/average/{id}")
+    public ResponseEntity<Float> getUserAverageRating(@PathVariable("id") Long id){
+        return ResponseEntity.ok().body(ratingService.getAverageRatingByUser(id));
+    }
 }

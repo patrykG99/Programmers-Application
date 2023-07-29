@@ -44,5 +44,10 @@ public class RatingServiceImpl implements RatingService{
         return ratingRepo.findByRatingUserAndProject((User) p, projectRepo.getReferenceById(projectId));
     }
 
+    @Override
+    public Float getAverageRatingByUser(Long id) {
+        return ratingRepo.getUserAverageRating(id);
+    }
+
 
 }

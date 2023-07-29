@@ -251,13 +251,7 @@ export default function ProjectPage(props) {
     // {/*    <div style={{width:'20%',padding:'10px'}} className="rounded border" id="profile">*/}
     // {/*    <h5><b>Your invites:</b></h5>*/}
     // {/*    <hr/>*/}
-    // {/*    <div>*/}
-    // {/*        <h6>{invites.map(invite =>*/}
-    // {/*        <div key={invite.id}>*/}
-    // {/*          {invite.projectName}*/}
-    // {/*          <button onClick={acceptInvite} value={invite.id}>Accept</button>*/}
-    // {/*        </div>*/}
-    // {/*    )}</h6>*/}
+
     // {/*    */}
     // {/*    */}
     //
@@ -384,6 +378,12 @@ export default function ProjectPage(props) {
     //   </>
 
           <div style={{width:'100%',height:'100%'}} id="userProfile">
+              <h6>{invites.map(invite =>
+                  <div key={invite.id}>
+                      {invite.projectName}
+                      <button onClick={acceptInvite} value={invite.id}>Accept</button>
+                  </div>
+              )}</h6>
               <div className="profileBorder" style={{height:'100%', width:'20%',float:'left'}}>
                   <div className="sectionTitle"  style={{width:'100%', height:'10%', padding:'2px', color:'white'}}><h4>User Information</h4><hr/></div>
                   <div className="avatar" style={{width:'80%', height:'20%', backgroundColor:'red', alignSelf:'center'}}>Avatar</div>
@@ -404,7 +404,7 @@ export default function ProjectPage(props) {
 
               </div>
               <div className="profileBorder" style={{height:'50%', width:'60%', float:'left'}}>
-                  <div className="sectionTitle"  style={{width:'100%', height:'10%', padding:'2px', color:'white'}}><h4>User Information</h4><hr/>
+                  <div className="sectionTitle"  style={{width:'100%', height:'10%', padding:'2px', color:'white'}}><h4>User Projects</h4><hr/>
 
                               {/*<ListGroup style={{width:'100%',backgroundColor:'#F2AA4CFF'}} className="custom-list-group projectList">*/}
                               {/*    <ListGroup.Item bsStyle="success" className="listHeaders">*/}
@@ -479,7 +479,7 @@ export default function ProjectPage(props) {
                   <div className="sectionTitle"  style={{width:'100%', height:'10%', padding:'2px', color:'white'}}><h4>User Information</h4><hr/></div>
               </div>
               <div className="profileBorder" style={{height:'50%',width:'80%', float:'right'}}>
-                  <div className="sectionTitle"  style={{width:'100%', height:'10%', padding:'2px', color:'white'}}><h4>User Information</h4><hr/></div>
+                  <div className="sectionTitle"  style={{width:'100%', height:'10%', padding:'2px', color:'white'}}><section style={{width:'50%',float:'left'}}><h4>Ratings</h4></section><section style={{width:'50%', float:'right'}}>Average rating:</section></div><hr/>
               </div>
           </div>
 
