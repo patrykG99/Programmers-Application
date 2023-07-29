@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -47,13 +48,14 @@ public class ProjectServiceImpl implements ProjectService{
 
 
     @Override
-    public void addUserToProject(User user, Project project) {
-        Set<User> newUserArray = project.getMembers();
-        if(!newUserArray.contains(user)){
-            newUserArray.add(user);
-        }
+    public Project addUserToProject(User user, Long projectId) {
+        Project project = projectRepo.getReferenceById(projectId);
 
-        project.setMembers(newUserArray);
+        Set<User> newMembers = project.getMembers();
+        newMembers.add(user);
+        project.setMembers(newMembers);
+        return projectRepo.save(project);
+
     }
 
     @Override

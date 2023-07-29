@@ -48,12 +48,12 @@ public class User {
     private List<Project> projectsOwned;
 
     @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "users_projects",
-            joinColumns = @JoinColumn(name="user_id"),
-            inverseJoinColumns = @JoinColumn(name = "project_id")
-    )
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "members")
     private Set<Project> projectsIn  = new HashSet<>();
 
     public User(String username, String email, String password) {

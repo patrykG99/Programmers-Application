@@ -30,7 +30,14 @@ public class Project {
 
 
 
-    @ManyToMany(mappedBy = "projectsIn")
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "project_members",
+            joinColumns = { @JoinColumn(name = "project_id") },
+            inverseJoinColumns = { @JoinColumn(name = "user_id") })
     private Set<User> members = new HashSet<>();
 
     private int maxUsers;

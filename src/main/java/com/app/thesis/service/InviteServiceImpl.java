@@ -92,20 +92,10 @@ public class InviteServiceImpl implements InviteService{
     public void acceptInvite(Long id, Principal p) {
 
         Invite invite = inviteRepo.getReferenceById(id);
+        User loggedUser = userRepo.findByUsername(p.getName()).get();
 
-
-        User user = userRepo.findByUsername(invite.getInvitedUsername()).get();
-        User userLogged = userRepo.findByUsername(p.getName()).get();
-        Project project = projectRepo.getReferenceById(invite.getProjectId());
-        if(user.equals(userLogged) && invite.getType().equals("Invite")) {
-            System.out.println("dziala");
-            projectService.addUserToProject(userLogged,project);
-            inviteRepo.deleteById(id);
-        }
-        else if(project.getOwner().equals(userLogged) && invite.getType().equals("Request")){
-            projectService.addUserToProject(user, project);
-            inviteRepo.deleteById(id);
-
+        if(invite.getType().equals("Invite") && invite.getInvitedUsername().equals(p.getName())){
+            projectService.addUserToProject(loggedUser, invite.getProjectId());
         }
 
     }
