@@ -36,7 +36,7 @@ public class RatingServiceImpl implements RatingService{
     @Override
     public List<Rating> getRatingsByUser(Long id) {
 
-        return ratingRepo.findByUser(userRepo.getReferenceById(id));
+        return ratingRepo.findByUser(userRepo.findById(id).get());
     }
 
     @Override

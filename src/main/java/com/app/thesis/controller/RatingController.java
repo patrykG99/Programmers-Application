@@ -28,6 +28,7 @@ public class RatingController {
 
     @GetMapping("/ratings/user/{id}")
     public ResponseEntity<List<Rating>> getRatingsByUser(@PathVariable("id") Long id){
+        System.out.println(ratingService.getRatingsByUser(id));
         return ResponseEntity.ok().body(ratingService.getRatingsByUser(id));
     }
 
