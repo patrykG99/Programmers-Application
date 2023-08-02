@@ -116,6 +116,7 @@ export default function ProjectPage(props) {
   const [userReviews, setUserReviews] = useState([])
   const [changeDesc, setChangeDesc] = useState(false)
   const [newDesc, setNewDesc] = useState('')
+  const [averageRating, setAverageRating] = useState('')
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const emptyRows =
@@ -201,7 +202,8 @@ export default function ProjectPage(props) {
           const responseProjects = await fetch('http://localhost:8080/api/projects/user/projects/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
           const responseUser = await fetch('http://localhost:8080/api/users/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
           const responseReviews = await fetch('http://localhost:8080/api/ratings/user/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
-          
+          const responseAverageRating = await fetch('http://localhost:8080/api/ratings/average/' + id, {method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}});
+
 
           
           
@@ -212,17 +214,19 @@ export default function ProjectPage(props) {
           let actualDataProjects = await responseProjects.json();
           let actualDataUser = await responseUser.json();
           let actualDataReviews = await responseReviews.json();
+          let actualAverage = await responseAverageRating.json();
 
           //console.log(actualData)
           setInvites(actualData)
           setUserProjects(actualDataProjects)
           setUserProfile(actualDataUser)
           setUserReviews(actualDataReviews)
+          setAverageRating(actualAverage)
           if(actualDataUser.id == user.id){
             console.log("dziala")
           }
-          console.log(actualDataReviews)
-          console.log(user.userProfilePicturePath)
+          console.log("halo")
+          console.log(actualAverage)
           
           
           setHasLoaded(true)
@@ -479,7 +483,25 @@ export default function ProjectPage(props) {
                   <div className="sectionTitle"  style={{width:'100%', height:'10%', padding:'2px', color:'white'}}><h4>User Information</h4><hr/></div>
               </div>
               <div className="profileBorder" style={{height:'50%',width:'80%', float:'right'}}>
-                  <div className="sectionTitle"  style={{width:'100%', height:'10%', padding:'2px', color:'white'}}><section style={{width:'50%',float:'left'}}><h4>Ratings</h4></section><section style={{width:'50%', float:'right'}}>Average rating:</section></div><hr/>
+                  <div className="sectionTitle"  style={{width:'100%', height:'10%', padding:'2px', color:'white'}}><section style={{width:'50%',float:'left'}}><h4>Ratings</h4></section><section style={{width:'50%', float:'right'}}>Average rating: {averageRating}</section></div><hr/>
+                  {userReviews.map(review =>
+                      <div className="rounded border" style={{padding:'10px',marginBottom:'10px', color:'white'}}>
+                          {review.ratingUser.username}<br/>
+                          {review.project.name}<br/>
+                          <Rating
+                              allowFraction="true"
+                              initialValue={review.score}
+                              readonly="true"
+                              size={20}
+                              style={{float:'right'}}
+
+
+                          />
+
+                          <div style={{margin:'10px'}} >{review.comment}</div>
+                      </div>
+
+                  )}
               </div>
           </div>
 
