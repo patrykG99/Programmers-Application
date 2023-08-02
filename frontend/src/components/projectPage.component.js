@@ -497,8 +497,9 @@ const changeNewInfo = event => {
             </div>
           )}
         </div>
-        {project.finished && users.length > 1 && reviewsByUser.length < users.length - 1 ?
+        {project.finished && users.length > 1  ?
           <div style={{ width: '98%', padding:'3px' }} className="rounded" id="profile"><h5><b>Rate users</b></h5>
+
             <hr />
 
             {users.map((userrate, index) => {
