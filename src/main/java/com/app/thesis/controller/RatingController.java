@@ -2,15 +2,22 @@ package com.app.thesis.controller;
 
 
 import com.app.thesis.model.Rating;
+import com.app.thesis.model.RatingRequest;
+import com.app.thesis.service.InviteService;
 import com.app.thesis.service.ProjectService;
 import com.app.thesis.service.RatingService;
 import com.app.thesis.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 
@@ -19,25 +26,27 @@ import java.util.List;
 @AllArgsConstructor
 public class RatingController {
 
-    private final RatingService ratingService;
+    private RatingService ratingService;
 
-    @GetMapping("/ratings/projectReviews/{id}")
-    public ResponseEntity<List<Rating>> getRatingsFromProjects(@PathVariable("id") Long id){
-        return ResponseEntity.ok().body(ratingService.getProjectRatings(id));
-    }
+    @PutMapping("/rating/save")
+    ResponseEntity<Rating> rateUser(@RequestBody RatingRequest rating, Principal principal) throws Exception {
+        return ResponseEntity.ok().body(ratingService.saveRating(rating, principal));
 
-    @GetMapping("/ratings/user/{id}")
-    public ResponseEntity<List<Rating>> getRatingsByUser(@PathVariable("id") Long id){
-        System.out.println(ratingService.getRatingsByUser(id));
-        return ResponseEntity.ok().body(ratingService.getRatingsByUser(id));
     }
 
-    @GetMapping("/ratings/user/projects/{id}")
-    public ResponseEntity<List<Rating>> getRatingsByRatingUserAndProject(@PathVariable("id") Long projectId, Principal p){
-        return ResponseEntity.ok().body(ratingService.getRatingsByUserAndProjects(p, projectId));
+    @GetMapping("/rating/{id}")
+    ResponseEntity<Set<Rating>> getUserRatings(@PathVariable("id") Long userId) throws Exception {
+        return ResponseEntity.ok().body(ratingService.getUserRating(userId));
     }
-    @GetMapping("/ratings/average/{id}")
-    public ResponseEntity<Float> getUserAverageRating(@PathVariable("id") Long id){
-        return ResponseEntity.ok().body(ratingService.getAverageRatingByUser(id));
+
+    @GetMapping("/rating/project/{id}")
+    ResponseEntity<Set<Rating>> getProjectRatings(@PathVariable("id") Long projectId) throws Exception {
+        return ResponseEntity.ok().body(ratingService.getProjectRatings(projectId));
     }
+
+    @GetMapping("/rating/avg/{id}")
+    ResponseEntity<Float> getuserAverageRating(@PathVariable("id") Long userId) throws Exception {
+        return  ResponseEntity.ok().body(ratingService.getuserAverageRating(userId));
+    }
+
 }

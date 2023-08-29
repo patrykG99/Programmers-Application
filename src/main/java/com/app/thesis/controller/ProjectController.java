@@ -58,10 +58,10 @@ public class ProjectController {
         return ResponseEntity.ok().body(projectService.getProject(id));
     }
 
-    @GetMapping("/projects/{username}")
-    public ResponseEntity<Project> getProjectByOwner(@PathVariable("username") String username){
+    @GetMapping("/myprojects/{id}")
+    public ResponseEntity<List<Project>> getProjectsByLoggedOwner(Principal principal,@PathVariable("id") Long userId) throws Exception {
+    return ResponseEntity.ok().body(projectService.getProjectsByLoggedOwner(principal, userId));
 
-        return ResponseEntity.ok().body(projectService.getProjectByOwner(username));
     }
     @GetMapping("/projects/user/projects/{id}")
     public ResponseEntity<List<Project>> getProjectsByUser(@PathVariable("id") Long id){
@@ -114,32 +114,7 @@ public class ProjectController {
     @PutMapping("/project/rateuser/{id}/{username}")
     public ResponseEntity<Rating> rateUser(@RequestBody Rating rating,@PathVariable("id") Long projectId, @PathVariable("username") String username, Principal p){
 
-        Project project = projectService.getProject(projectId);
-        User user = userService.getUser(username);
-        User requester = userService.getUser(p.getName());
-        rating.setProject(project);
-        rating.setUser(user);
-        rating.setRatingUser(requester);
-
-        if(!user.equals(requester) && project.getMembers().contains(user) && project.isFinished()){
-
-            Rating ratingExisting = ratingRepo.findByProjectAndUserAndRatingUser(project,user,requester);
-            if(ratingExisting != null && rating.getUser().equals(ratingExisting.getUser()) && rating.getProject().equals(ratingExisting.getProject()) && rating.getRatingUser().equals(ratingExisting.getRatingUser())){
-                rating.setId(ratingExisting.getId());
-                URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/project/rateuser/{id}/{username}").toUriString());
-                return ResponseEntity.created(uri).body(ratingService.saveRating(rating));
-            }else{
-                URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/project/rateuser/{id}/{username}").toUriString());
-                return ResponseEntity.created(uri).body(ratingService.saveRating(rating));
-            }
-
-
-
-
-
-        }
-
-        return ResponseEntity.badRequest().body(rating);
+        return null;
 
 
 
@@ -168,13 +143,14 @@ public class ProjectController {
     public ResponseEntity<Void> deleteProject(@PathVariable Long id, Principal p) {
         if(projectRepo.findById(id).get().getOwner().equals(userService.getUser(p.getName()))){
             messageRepo.deleteByProjectFrom(projectService.getProject(id));
-            ratingRepo.deleteByProject(projectService.getProject(id));
+            //ratingRepo.deleteByProject(projectService.getProject(id));
             inviteRepo.deleteAllByProjectId(id);
             projectRepo.deleteById(id);
             }
         return ResponseEntity.noContent().build();
 
     }
+
 
 }
 @Data

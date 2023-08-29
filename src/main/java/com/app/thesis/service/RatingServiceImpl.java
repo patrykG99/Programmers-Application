@@ -2,51 +2,63 @@ package com.app.thesis.service;
 
 import com.app.thesis.model.Project;
 import com.app.thesis.model.Rating;
+import com.app.thesis.model.RatingRequest;
 import com.app.thesis.model.User;
 import com.app.thesis.repository.ProjectRepo;
 import com.app.thesis.repository.RatingRepo;
 import com.app.thesis.repository.UserRepo;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
 @Transactional
 public class RatingServiceImpl implements RatingService{
 
-    private final RatingRepo ratingRepo;
-    private final ProjectRepo projectRepo;
-    private final UserRepo userRepo;
+    private UserRepo userRepo;
+    private RatingRepo ratingRepo;
+    private ProjectRepo projectRepo;
+
 
     @Override
-    public Rating saveRating(Rating rating) {
-        return ratingRepo.save(rating);
+    public Rating saveRating(RatingRequest rating, Principal principal) throws Exception {
+
+        User loggedUser = userRepo.findByUsername(principal.getName()).orElseThrow(()-> new Exception("User not found"));
+        Rating rating2 = ratingRepo.findAllByRatedUserAndProjectAndUserRating(userRepo.findByUsername(rating.getUsername()).get(),projectRepo.findById(rating.getProjectId()).get(),loggedUser);
+        if(rating2 != null){
+            rating2.setRating(rating.getScore());
+        }
+        else{
+            rating2 = new Rating(userRepo.findByUsername(rating.getUsername()).get(),loggedUser,projectRepo.getReferenceById(rating.getProjectId()), rating.getComment(), rating.getScore());
+
+        }
+
+        return ratingRepo.save(rating2);
+
     }
 
     @Override
-    public List<Rating> getProjectRatings(Long id) {
-
-        return ratingRepo.findByProject(projectRepo.getReferenceById(id));
+    public Set<Rating> getUserRating(Long userId) throws Exception {
+        User user = userRepo.findById(userId).orElseThrow(() -> new Exception("User not found"));
+        return ratingRepo.findAllByRatedUser(user);
     }
 
     @Override
-    public List<Rating> getRatingsByUser(Long id) {
-
-        return ratingRepo.findByUser(userRepo.findById(id).get());
+    public Set<Rating> getProjectRatings(Long projectId) throws Exception {
+        Project project = projectRepo.findById(projectId).orElseThrow(() -> new Exception("Project not found"));
+        return project.getUserRatings();
     }
 
     @Override
-    public List<Rating> getRatingsByUserAndProjects(Principal p, Long projectId) {
-        return ratingRepo.findByRatingUserAndProject((User) p, projectRepo.getReferenceById(projectId));
-    }
-
-    @Override
-    public Float getAverageRatingByUser(Long id) {
-        return ratingRepo.getUserAverageRating(id);
+    public Float getuserAverageRating(Long userId) throws Exception {
+        return ratingRepo.getUserAverageRating(userId);
     }
 
 

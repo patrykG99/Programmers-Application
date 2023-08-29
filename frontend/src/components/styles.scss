@@ -12,8 +12,8 @@ html, body { height: 100%; width: 100%; margin: 0; }
     backdrop-filter: blur(10.7px);
     border: 1px solid rgba(255, 255, 255, 0.3);
     white-space: pre-line;
-    
-    
+
+
 
 }
 #mainComponent{
@@ -34,7 +34,7 @@ html, body { height: 100%; width: 100%; margin: 0; }
     list-style: none;
     display: flex;
     justify-content: center;
-    
+
     color: white;
 }
 .paginationBttns a{
@@ -49,7 +49,7 @@ html, body { height: 100%; width: 100%; margin: 0; }
 
 .loginForm{
     background-color: #F2AA4CFF;
-    
+
 }
 
 .popup-content {
@@ -62,21 +62,28 @@ html, body { height: 100%; width: 100%; margin: 0; }
     color: rgb(255, 255, 255);
   }
   [role='tooltip'].popup-content {
-    
+
     box-shadow: rgba(0, 0, 0, 0.16) 0px 0px 3px;
   }
-  
+
   .popup-overlay {
-    
-    
+
+
   }
   [data-popup='tooltip'].popup-overlay {
-    
-    
+
+
   }
 
 .redirectlink{
     cursor: pointer;
+}
+
+.container{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
 }
 #userTable{
   color:white;
@@ -86,9 +93,17 @@ html, body { height: 100%; width: 100%; margin: 0; }
 }
 .profileBorder{
   border-radius: 20px;
-  border-style: solid;
-  border-color: #505254;
+  margin-top:2%;
+  border: 1px solid #e0e0e0;
   padding: 15px;
+  position: relative;
+  max-height: 100%;
+  overflow: hidden;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.05);
+  .profileBorder + .profileBorder {
+    border-top: 2px solid rgba(255, 255, 255, 0.1); /* Dodaj linię oddzielającą */
+  }
 
 }
 .sectionTitle{
@@ -107,15 +122,18 @@ html, body { height: 100%; width: 100%; margin: 0; }
   border-radius: 10px;
   border-color: #505254;
 
+
+
 }
 .avatar{
   align-content: center;
 }
 .updateDesc{
-  clear: both;
-  color: white;
-  text-align: center;
-  font-size: 15px;
+  position: relative; /* Pozycjonuj względem tego diva */
+  overflow: hidden; /* Ukryj zawartość, która wychodzi poza diva */
+  width: 100%; /* Zajmij całą dostępną szerokość */
+  max-width: 100%;
+  height: 10%;
 
 }
 
@@ -125,6 +143,7 @@ html, body { height: 100%; width: 100%; margin: 0; }
 .tableContainer{
   height: 90%;
 
+
 }
 .projectsTable{
   background-color:white ;
@@ -132,5 +151,659 @@ html, body { height: 100%; width: 100%; margin: 0; }
 .MuiTableHead-root{
   background-color: #F2AA4CFF;
 }
+
+.reviewCard{
+  width: 30%;
+  height: 30%;
+  float: left;
+  margin-right: 3%;
+  margin-top: 3%;
+  background-color: darkred;
+  border-radius: 10px;
+  position: relative;
+  color: white;
+  transition: all 0.3s; /* Dodaj przejście dla efektu uniesienia */
+  box-shadow: 0px 4px 6px rgba(255, 255, 255, 0.1);
+
+}
+.reviewCard:hover {
+  transform: translateY(-3px); /* Unieś kartę podczas najechania */
+  box-shadow: 0px 4px 6px rgba(255, 255, 255, 0.3); /* Dodaj większy cień podczas najechania */
+}
+#reviewComment {
+  overflow: hidden;
+  width: 100%;
+  height: 70%;
+  padding: 5px;
+  word-wrap: break-word;
+}
+#reviewTitle {
+  padding: 3px;
+  border-bottom: solid;
+  height: 30%;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#reviews{
+  border-radius: 20px;
+  margin-left:2%;
+
+  padding: 15px;
+  position: relative;
+  max-height: 100%;
+  overflow: hidden;
+  height: 48%;
+  float: right;
+  width: 78%;
+
+
+  overflow-y:auto;
+  ::-webkit-scrollbar {
+    width: 0.5em;
+    background-color: #f5f5f5;
+  }
+
+  /* Make scrollbar visible when needed */
+  ::-webkit-scrollbar-thumb {
+    background-color: #000000;
+  }
+
+  /* Make scrollbar track visible when needed */
+  ::-webkit-scrollbar-track {
+    background-color: #f5f5f5;
+  }
+}
+.avatar {
+  width: 100%; /* Szerokość awatara */
+  height: auto; /* Zachowaj proporcje */
+  max-height: 200px; /* Maksymalna wysokość */
+
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar img {
+  max-width: 80%; /* Szerokość obrazu */
+  max-height: 100%; /* Wysokość obrazu */
+  object-fit: cover; /* Zachowaj proporcje obrazu */
+  border: 2px solid #ccc;
+  border-radius: 50%;
+}
+
+#popupButton{
+
+  background-color: darkred;
+  border:none;
+  color: white;
+
+  border-radius: 10px;
+  width: 100%; /* Zajmij całą dostępną szerokość kontenera */
+  max-width: 100%;
+  box-sizing: border-box;
+  position: absolute;
+
+
+
+}
+#popupButton:hover{
+  background-color: #520000;
+}
+.popup-menu {
+  position: fixed;
+  height: 35%;
+  width: 20%;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  z-index: 1000;
+  overflow: hidden; /* Dodaj tę linię */
+  border-radius: 10px;
+  color: white;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+.popup-menu .glass-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+}
+.popup-menu .content {
+  position: relative; /* Upewnij się, że zawartość jest względem tej pozycji */
+}
+.popup-menu textarea {
+  width: 100%; /* Dostosuj szerokość */
+  padding: 10px; /* Odstępy wewnątrz pola tekstowego */
+  border-radius: 5px; /* Zaokrąglenie rogów pola tekstowego */
+  border: 1px solid #ccc; /* Ramka wokół pola tekstowego */
+  resize: none;
+}
+.popup-menu .buttons {
+  position: absolute; /* Pozycjonuj przyciski względem diva .content */
+  right: 0; /* Wyrównaj do prawej strony */
+  bottom: 0; /* Wyrównaj do dolnej strony */
+  padding: 10px; /* Dodaj trochę odstępu */
+}
+.popup-menu button{
+  padding: 5px 10px; /* Odstępy wewnątrz przycisku */
+  border-radius: 5px; /* Zaokrąglenie rogów przycisku */
+  border: none; /* Usunięcie ramki wokół przycisku */
+  background: #F2AA4C; /* Kolor tła przycisku */
+  color: white; /* Kolor tekstu przycisku */
+  cursor: pointer; /* Kursor wskaźnika dla przycisku */
+  transition: background 0.3s ease-in-out;
+  margin-right: 5px;
+}
+.popup-menu button:hover {
+  background: #d18f3c; /* Kolor tła przycisku podczas najechania */
+}
+.project-list {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: #101820FF;
+  padding: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #F2AA4C;
+  box-shadow: 0px 4px 6px rgba(255, 255, 255, 0.1);
+}
+
+
+
+.project-list table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #101820FF;
+}
+
+.project-list th,
+.project-list td {
+  border: none;
+  padding: 12px;
+  text-align: left;
+  color: #F2AA4C;
+}
+
+.project-list th {
+  background-color: #520000;
+  color: white;
+  border-radius: 5px 5px 0 0;
+  box-shadow: 0px 4px 6px rgba(255, 255, 255, 0.1);
+}
+
+.project-list tbody tr:nth-child(odd) {
+  background-color: #1a232f; /* Lekko jaśniejszy kolor dla nieparzystych wierszy */
+}
+
+.project-list tbody tr:nth-child(even) {
+  background-color: #101820FF; /* Kolor tła dla parzystych wierszy */
+}
+
+.project-list tbody tr:hover {
+  background-color: #2a353f; /* Kolor tła dla wiersza podczas najechania */
+  transform: translateY(-3px); /* Unieś wiersz podczas najechania */
+  box-shadow: 0px 4px 6px rgba(255, 255, 255, 0.2); /* Dodaj cień podczas najechania */
+}
+
+.project-list tbody td {
+  border-bottom: 1px solid #2a353f; /* Dodaj linię między wierszami */
+  border-radius: 3px;
+}
+.project-list tbody tr {
+  transition: all 0.3s; /* Dodaj przejście dla efektu uniesienia */
+}
+#projects{
+  margin-right: 2%;
+  margin-left: 2%;
+  height: 50%;
+  width: 56%;
+  float:left;
+}
+
+/* Styl dla całego paska nawigacji */
+.bg-body-tertiary {
+  background-color: #333; /* Kolor tła paska nawigacji */
+  border-bottom: 1px solid #444; /* Cienki dolny obramowanie */
+  height: 50px; /* Wysokość paska nawigacji */
+}
+
+/* Styl dla linków w pasku nawigacji */
+.navbar-nav .navbar-brand {
+  color: #fff; /* Kolor tekstu linków */
+  padding: 0 15px; /* Odstępy wokół linków */
+  line-height: 50px; /* Wysokość linii, aby wyśrodkować tekst wertykalnie */
+  border-right: 1px solid #444; /* Prawe obramowanie dla linków */
+
+  margin-right: 0px;
+}
+
+/* Usuń prawe obramowanie dla ostatniego linku */
+.navbar-nav .navbar-brand:last-child {
+  border-right: none;
+}
+
+/* Styl dla linku po najechaniu myszką */
+.navbar-nav .navbar-brand:hover {
+  background-color: #444; /* Kolor tła po najechaniu myszką */
+  text-decoration: none;
+  color: black !important;/* Usuń podkreślenie */
+}
+
+/* Styl dla linku "Your invites" */
+.navbar .navbar-brand:last-of-type {
+  color: #fff; /* Kolor tekstu */
+  padding-left: 15px; /* Lewy odstęp */
+}
+.dropdown-menu {
+  background-color: #333; /* Kolor tła */
+  border: 1px solid #444; /* Kolor obramowania */
+}
+
+/* Styl dla elementów w rozwijanym menu */
+.dropdown-item {
+  color: #fff; /* Kolor tekstu */
+}
+
+/* Styl dla elementów w rozwijanym menu po najechaniu myszką */
+.dropdown-item:hover {
+  background-color: #444; /* Kolor tła po najechaniu myszką */
+}
+
+#dropdown-basic {
+  background-color: #343a40; /* Kolor tła przycisku */
+  color: #fff; /* Kolor tekstu przycisku */
+  border: none; /* Usuń ramkę */
+  padding: 10px 20px; /* Odstęp wewnętrzny przycisku */
+}
+
+#dropdown-basic:hover {
+  background-color: #23272b; /* Kolor tła przycisku podczas najechania myszą */
+}
+
+.dropdown-menu {
+  width: 200px; /* Szerokość menu */
+  background-color: #f9f9f9; /* Kolor tła */
+  border: 1px solid #ccc; /* Ramka */
+  border-radius: 5px; /* Zaokrąglenie rogów */
+}
+
+.dropdown-item {
+  padding: 10px; /* Odstęp wewnętrzny dla każdej opcji */
+  font-size: 14px; /* Rozmiar czcionki */
+  color: #333; /* Kolor tekstu */
+  display: flex;
+  justify-content: space-between; /* Rozmieść elementy równomiernie */
+  align-items: center;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0; /* Kolor tła podczas najechania myszą */
+}
+
+.dropdown-item button {
+  margin: 0 5px; /* Odstępy dla przycisków akceptacji/odrzucenia */
+  padding: 5px 10px; /* Odstęp wewnętrzny dla przycisków */
+  font-size: 12px; /* Rozmiar czcionki dla przycisków */
+  background-color: #4caf50; /* Kolor tła dla przycisku akceptacji */
+  color: #fff; /* Kolor tekstu dla przycisków */
+  border: none; /* Usuń ramkę */
+  cursor: pointer; /* Kursor myszy */
+}
+
+.dropdown-item button:last-child {
+  background-color: #f44336; /* Kolor tła dla przycisku odrzucenia */
+}
+.dropdown-item div {
+  flex-grow: 1; /* Pozwól nazwie projektu rosnąć, aby zająć dostępną przestrzeń */
+}
+#invitesName{
+  width: 30%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#invitesButtons{
+  width: 70%;
+}
+.project-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-grow: 1;
+   /* Ustaw pozycję na względną, aby tooltip był względem tego elementu */
+}
+
+.project-name:hover::after {
+  content: attr(data-title);
+  position: absolute;
+  left: 0;
+  top: 100%; /* Umieść tooltip tuż pod elementem .project-name */
+  background: #333; /* Ciemne tło tooltipa */
+  color: #fff; /* Biały kolor tekstu */
+  border: 1px solid #555; /* Ciemniejsza ramka tooltipa */
+  padding: 5px 10px; /* Większe odstępy wewnętrzne tooltipa */
+  white-space: normal;
+  max-width: 200px;
+  font-size: 12px; /* Mniejszy rozmiar czcionki */
+  border-radius: 4px; /* Zaokrąglone rogi */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Cień wokół tooltipa */
+  z-index: 1000; /* Upewnij się, że tooltip jest wyżej niż inne elementy */
+  opacity: 0.9; /* Lekka przezroczystość */
+}
+.tooltip-text{
+  overflow: visible;
+}
+
+.invite-count {
+  background-color: #f00; /* Czerwone tło */
+  color: #fff; /* Biały tekst */
+  padding: 2px 5px; /* Odstępy wewnętrzne */
+  border-radius: 5px; /* Zaokrąglone rogi */
+  font-size: 12px; /* Mniejszy rozmiar czcionki */
+  margin-left: 5px; /* Odstęp od przycisku */
+
+}
+.information{
+  margin-top: 10%;
+
+}
+.titleContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.titleContainer h4 {
+  margin: 0;
+  flex-grow: 1; /* Rozciąga napis, aby wypełnił dostępną przestrzeń */
+  text-align: center; /* Wyśrodkowanie napisu */
+}
+
+.dropdownProjects {
+  position: absolute;
+  right: 0;
+}
+.dropdownProjects .dropdown-item {
+  display: flex;
+  justify-content: space-between; /* Rozmieszcza elementy na całej szerokości */
+  align-items: center;
+}
+
+.project-name {
+  text-align: left; /* Wyjustowanie tekstu do lewej */
+}
+
+#dropdownButtons {
+  text-align: right; /* Wyjustowanie przycisku do prawej */
+}
+//////////////////////////////////////////////////////////
+
+
+.ownerPanel {
+  width: 100%;
+  margin-top: 1%;
+
+
+
+}
+
+.header {
+  background-color: #f0f0f0;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.content {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border: 1px solid #ccc;
+  max-height: 0; /* Początkowa maksymalna wysokość */
+  opacity: 0; /* Początkowa przezroczystość */
+  overflow: hidden; /* Ukryj zawartość, która nie mieści się w maksymalnej wysokości */
+  transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Animacja maksymalnej wysokości i przezroczystości */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+
+}
+
+.content.open {
+  max-height: 500px; /* Maksymalna wysokość po rozwinięciu */
+  opacity: 1; /* Przezroczystość po rozwinięciu */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+
+}
+.projectPage{
+  width: 100%;
+}
+
+.projectInfo{
+  color: white;
+}
+
+
+
+.userInviteUsername, .suggestedUsers, .requests {
+  width: 33.3333%; /* Każdy div zajmuje 1/3 szerokości */
+  flex: 1;
+  padding: 10px;
+  box-sizing: border-box;
+  float: left; /* Aby divy były obok siebie */
+  border: 1px solid #ccc;
+  height:15vh;
+  margin-right: 1%;
+  overflow-y:auto;
+  ::-webkit-scrollbar {
+    width: 12px;
+    background-color: #F5F5F5;
+  }
+
+  /* Make scrollbar visible when needed */
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    background-color: #555;
+  }
+
+    /* Make scrollbar track visible when needed */
+  ::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: #F5F5F5;
+  }
+
+
+
+
+}
+div::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  background-color: #F5F5F5;
+}
+
+div::-webkit-scrollbar {
+  width: 12px;
+  background-color: #F5F5F5;
+}
+
+div::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+  background-color: #555;
+}
+
+.userInviteUsername label,
+.suggestedUsers,
+.requests {
+  font-weight: bold;
+  margin-bottom: 10px;
+
+
+}
+
+.userInviteUsername input {
+  width: 100%;
+  padding: 5px;
+  margin: 5px 0 20px;
+  box-sizing: border-box;
+}
+
+.buttonInvite {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.suggestedUsers div,
+.requests div {
+  margin: 10px 0;
+  padding: 5px;
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.ownerOptions{
+  width: 100%;
+
+  clear: both; /* Dodaj tę linię */
+}
+.optionButton{
+  background-color: #007bff; /* Kolor tła */
+  color: white; /* Kolor tekstu */
+  padding: 10px 20px; /* Odstępy wewnętrzne */
+  border-radius: 5px; /* Zaokrąglenie rogów */
+  border: none; /* Usuwa domyślną ramkę */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Cień */
+  cursor: pointer; /* Kursor zmienia się na "łapkę" */
+  transition: background-color 0.3s ease;
+  margin:2px;
+  float: right;
+}
+.optionButton:hover{
+  background-color: #0056b3;
+}
+.inviteButton{
+  background-color: #007bff; /* Kolor tła */
+  color: white; /* Kolor tekstu */
+  border-radius: 5px; /* Zaokrąglenie rogów */
+  border: none; /* Usuwa domyślną ramkę */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Cień */
+  cursor: pointer; /* Kursor zmienia się na "łapkę" */
+  transition: background-color 0.3s ease;
+
+  float: right;
+}
+.inviteButton:hover{
+  background-color: #0056b3;
+}
+
+.projectInfo{
+  width: 20%;
+  float:left;
+  padding: 10px;
+}
+.memberList {
+  width: 100%;
+
+  box-sizing: border-box;
+  color: black;
+}
+
+.memberList h6 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color:white;
+}
+
+.redirectlink {
+  padding: 10px;
+  margin: 5px 0;
+  background-color: #f2f2f2; /* Kolor tła */
+  border: 1px solid #ccc; /* Ramka */
+  border-radius: 5px; /* Zaokrąglenie rogów */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Cień */
+  cursor: pointer; /* Kursor zmienia się na "łapkę" */
+  transition: background-color 0.3s ease; /* Animacja zmiany koloru tła */
+}
+
+.redirectlink:hover {
+  background-color: #e0e0e0; /* Kolor tła po najechaniu */
+}
+
+.projectPage{
+  width: 100%;
+}
+.project{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.projectInfo, .chat {
+
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+
+
+}
+
+.projectDetails, .moreInfo {
+  width: 80%;
+  background-color: #e6e6e6;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+
+}
+.projectInfo{
+  width: 19%;
+  margin-right: 1%;
+  margin-bottom: 1%;
+}
+.projectDetails{
+  margin-bottom: 1%;
+
+}
+.chat{
+  width: 19%;
+  margin-right: 1%;
+}
+
+
+
+
+
+
+
+
+
+
 
 

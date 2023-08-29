@@ -7,17 +7,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Set;
 
 public interface RatingRepo extends JpaRepository<Rating, Long> {
-    Rating findByProjectAndUserAndRatingUser(Project project, User user, User ratingUser);
-    List<Rating> findByProject(Project project);
-    List<Rating> findByUser(User user);
 
-    List<Rating> findByRatingUserAndProject(User user, Project project);
+    Set<Rating> findAllByRatedUser(User user);
 
-    void deleteByProject(Project project);
+    Rating findAllByRatedUserAndProjectAndUserRating(User ratedUser,Project project, User userRating);
 
-    @Query("SELECT AVG(e.score) FROM Rating e WHERE e.user.id = ?1")
-   // @Query("SELECT u FROM User u inner join u.projectsIn p WHERE p.tech = ?1 GROUP BY u.id ORDER BY COUNT(u.id) DESC")
-    float getUserAverageRating(Long id);
+    @Query("SELECT AVG(e.rating) FROM Rating e WHERE e.ratedUser.id = ?1")
+    Float getUserAverageRating(Long userId);
+
 }

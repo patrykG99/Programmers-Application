@@ -4,13 +4,14 @@ import com.app.thesis.model.Project;
 import com.app.thesis.model.User;
 import org.springframework.security.core.parameters.P;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface ProjectService {
 
     List<Project> getProjects();
     Project saveProject(Project project);
-    Project getProjectByOwner(String username);
+    List<Project> getProjectsByLoggedOwner(Principal principal, Long userId) throws Exception;
     Project getProject(Long id);
 
     List<User> getUsersFromProject(Long id);

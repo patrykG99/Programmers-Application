@@ -9,11 +9,19 @@ import com.app.thesis.service.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
 import java.security.Principal;
 import java.util.List;
 
@@ -25,6 +33,31 @@ import java.util.List;
 public class UserController {
     @Autowired
     private final UserService userService;
+    private final UserRepo userRepository;
+
+
+    @GetMapping("/users/{userId}/avatar")
+    public ResponseEntity<byte[]> getAvatar(@PathVariable Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("nie znaleziono użytkownika"));
+        String path = user.getUserProfilePicturePath();
+        File file = new File(path);
+        try {
+            byte[] fileContent = Files.readAllBytes(file.toPath());
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_PNG);
+            return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
+        } catch (IOException e) {
+            throw new RuntimeException("Błąd podczas odczytywania pliku", e);
+        }
+    }
+
+    @PostMapping("/user/{id}/avatar")
+    public ResponseEntity<?> uploadAvatar(@PathVariable("id") Long userId, @RequestParam("file") MultipartFile file){
+        userService.uploadAvatar(userId, file);
+
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> getUsers(){

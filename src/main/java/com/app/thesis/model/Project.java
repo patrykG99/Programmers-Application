@@ -4,6 +4,7 @@ package com.app.thesis.model;
 import com.app.thesis.service.ProjectService;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -29,6 +30,8 @@ public class Project {
     private User owner;
 
 
+    @OneToMany(mappedBy = "project")
+    private Set<Rating> userRatings;
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {

@@ -96,6 +96,7 @@ public class InviteServiceImpl implements InviteService{
 
         if(invite.getType().equals("Invite") && invite.getInvitedUsername().equals(p.getName())){
             projectService.addUserToProject(loggedUser, invite.getProjectId());
+            inviteRepo.deleteById(id);
         }
 
     }

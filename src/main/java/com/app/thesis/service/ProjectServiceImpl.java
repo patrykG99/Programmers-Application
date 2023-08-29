@@ -4,10 +4,14 @@ import com.app.thesis.model.Project;
 import com.app.thesis.model.User;
 import com.app.thesis.repository.ProjectRepo;
 import com.app.thesis.repository.UserRepo;
+import com.app.thesis.security.services.UserDetailsImpl;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,10 +34,13 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     @Override
-    public Project getProjectByOwner(String username) {
-        return projectRepo.findByOwner(userRepo.findByUsername(username).get());
-
+    public List<Project> getProjectsByLoggedOwner(Principal principal, Long userId) throws Exception {
+        UserDetailsImpl userDetails = (UserDetailsImpl) ((Authentication) principal).getPrincipal();
+        User userExcluded = userRepo.findById(userId).orElseThrow(()-> new Exception("User not found"));
+        return projectRepo.findAllByOwnerAndNotMember(userRepo.findById(userDetails.getId()).orElseThrow(()-> new Exception("User not found")),userExcluded);
     }
+
+
 
     @Override
     public Project getProject(Long id) {

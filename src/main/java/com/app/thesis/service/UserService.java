@@ -4,6 +4,7 @@ package com.app.thesis.service;
 import com.app.thesis.model.Role;
 import com.app.thesis.model.User;
 import com.app.thesis.model.UserDescriptionOnly;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
@@ -21,4 +22,6 @@ public interface UserService {
 
 
     String getUserImage(Long userId);
+
+    void uploadAvatar(Long userId, MultipartFile file);
 }

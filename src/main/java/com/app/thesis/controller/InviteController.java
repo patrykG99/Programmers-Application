@@ -63,6 +63,11 @@ public class InviteController {
         return ResponseEntity.ok().build();
 
     }
+    @DeleteMapping("/invites/refuse/{id}")
+    public ResponseEntity<Invite> refuseInvite(@PathVariable("id") Long inviteId, Principal p){
+        inviteService.deleteInvite(inviteId);
+        return ResponseEntity.ok().build();
+    }
 
 
 

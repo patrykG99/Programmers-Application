@@ -29,7 +29,7 @@ public class User {
     private String username;
     private String email;
     private String password;
-    private String userProfilePicturePath = "D:/programowanie/test.jpg";
+    private String userProfilePicturePath;
 
     private String description;
     private int finishedProjects = 0;

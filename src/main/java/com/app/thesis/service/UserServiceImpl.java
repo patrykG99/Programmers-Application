@@ -14,8 +14,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.*;
 
@@ -71,6 +77,23 @@ public class UserServiceImpl implements UserService{
     public String getUserImage(Long userId){
         User user = userRepository.getReferenceById(userId);
         return user.getUserProfilePicturePath();
+    }
+
+    @Override
+    public void uploadAvatar(Long userId, MultipartFile file) {
+        try {
+            String path = System.getProperty("user.dir") +"/uploads/" + userId;
+            File dest = new File(path);
+
+            file.transferTo(dest);
+            User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("nie znaleziono użytkownika"));
+            user.setUserProfilePicturePath(path);
+            userRepository.save(user);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
 
