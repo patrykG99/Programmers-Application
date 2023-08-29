@@ -137,6 +137,10 @@ public class ProjectController {
 
         return ResponseEntity.ok(projectService.saveProject(project));
     }
+    @PatchMapping("/project/desc/{id}")
+    public ResponseEntity<Project> updateDesc(@PathVariable("id")Long projectId,@RequestBody UpdateDescriptionRequest request) throws Exception {
+        return ResponseEntity.ok(projectService.updateDesc(projectId,request.getDescription()));
+    }
 
     @Transactional
     @DeleteMapping("/project/{id}")
@@ -158,3 +162,11 @@ class UserToProjectForm{
     private String username;
     private Long projectId;
 }
+@Data
+class UpdateDescriptionRequest {
+    private String description;
+
+
+}
+
+

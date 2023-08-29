@@ -69,6 +69,13 @@ public class ProjectServiceImpl implements ProjectService{
     public List<Project> getProjectsByUser(Long id) {
         return projectRepo.findAllByMembersId(id);
     }
+
+    @Override
+    public Project updateDesc(Long projectId, String newDesc) throws Exception {
+        Project newProject = projectRepo.findById(projectId).orElseThrow(()-> new Exception("Project not found"));
+        newProject.setDescription(newDesc);
+        return projectRepo.save(newProject);
+    }
 //
 //    @Override
 //    public void removeUserFromProject(String username, Long projectId) {

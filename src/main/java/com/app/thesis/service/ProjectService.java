@@ -19,5 +19,7 @@ public interface ProjectService {
 
     List<Project> getProjectsByUser(Long id);
 
+    Project updateDesc(Long projectId, String newDesc) throws Exception;
+
 
 }

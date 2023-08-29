@@ -336,12 +336,15 @@ export default function ProjectPage(props) {
         setNewDesc(event.target.value)
     }
     const saveNewDesc = event => {
-        const url = 'http://localhost:8080/api/users/description/' + user.id
+        const url = 'http://localhost:8080/api/project/desc/'+ id
         const requestOptions = {
             method: 'PATCH',
-            headers: {'Authorization': 'Bearer ' + user.accessToken, 'Content-Type': 'application/json'},
-            body: JSON.stringify({'description': newDesc})
+            headers: {  'Authorization':'Bearer ' + user.accessToken, 'Content-Type': 'application/json' },
+            body: JSON.stringify({  'description': newDesc })
         };
+        setChangeDesc(false)
+        fetch(url, requestOptions)
+        window.location.reload(false);
     }
 
 
@@ -732,10 +735,10 @@ export default function ProjectPage(props) {
                                                          onChange={changeNewDesc}
                                                          value={newDesc} class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"/>
                                                      <button className="btn btn-primary" onClick={saveNewDesc}>Save</button>
-                                                 </div></>:null}
+                                                 </div></>: project.description }
 
                         </div>
-                        <div style={{height:'10%'}}><button style={{float:'right'}}>Update description</button></div>
+                        <div style={{height:'10%'}}><button onClick={() => setChangeDesc(true)} style={{float:'right'}}>Update description</button></div>
                     </div>
                     <div className={"chat"}>Halo</div>
                     <div className={"moreInfo"}>Halo</div>
