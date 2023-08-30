@@ -561,63 +561,7 @@ export default function ProjectPage(props) {
 
             {/*  </Row>*/}
             {/*  <Row style={{ width: '100%' }}>*/}
-            {/*    {users.some(userIs => (userIs.username === user.username)) ? <div id="profile" className="rounded" style={{ width: '100 %' }}>*/}
-            {/*      {userData.connected ?*/}
-            {/*        <div style={{padding:'3px'}} >*/}
 
-            {/*        <h5><b>Chat</b></h5>*/}
-            {/*          {tab === "CHATROOM" && <div className="chat-content">*/}
-            {/*            <div  style={{borderRight:'none',borderRadius:'10px',border:'solid 1px',borderColor:'#101820FF' ,overflowY: 'scroll', overflowWrap: 'break-word', height: '20vh', display: 'flex', flexDirection: 'column-reverse' }}>*/}
-            {/*            {publicChats.reverse().map((chat, index) => (*/}
-            {/*                <>*/}
-            {/*                  <div key={index}>*/}
-            {/*                    {chat.senderName === user.username ? <> <div class="p-3 ms-3" style={{ borderRadius: '15px', backgroundColor: 'rgba(57, 192, 237,.2)', margin: '3px', width: '60%' }}>*/}
-            {/*                      <p class="small mb-0">{chat.senderName}<hr />{chat.message}</p>*/}
-            {/*                    </div></> : <div class="p-3 ms-3" style={{ borderRadius: '15px', backgroundColor: 'rgba(255, 10,10,.2)', margin: '3px', width: '60%',float:'right' }}>*/}
-            {/*                      <p class="small mb-0">{chat.senderName}<hr />{chat.message}</p>*/}
-            {/*                    </div>}*/}
-
-
-            {/*                  </div>*/}
-            {/*                </>*/}
-            {/*              ))}*/}
-            {/*            */}
-            {/*            */}
-            {/*            {messagesHistory.map(message =>*/}
-            {/*                <div style={{}}>*/}
-            {/*                  */}
-
-
-            {/*                  {message.senderName === user.username ? <> <div class="p-3 ms-3" style={{ borderRadius: '15px', backgroundColor: 'rgba(57, 192, 237,.2)', margin: '3px', width: '60%' }}>*/}
-            {/*                    <p class="small mb-0">{message.senderName}<hr />{message.message}</p>*/}
-            {/*                  </div></> : <div class="p-3 ms-3" style={{ borderRadius: '15px', backgroundColor: 'rgba(255, 10,10,.2)', margin: '3px', width: '60%',float:'right' }}>*/}
-            {/*                    <p class="small mb-0">{message.senderName}<hr />{message.message}</p>*/}
-            {/*                  </div>}*/}
-
-
-            {/*                </div>)}*/}
-            {/*              */}
-
-
-            {/*              */}
-            {/*              */}
-
-
-            {/*            </div>*/}
-
-            {/*            <div class="input-group mb-3">*/}
-            {/*              <div class="input-group-prepend">*/}
-            {/*                <span class="input-group-text" id="basic-addon1">Message</span>*/}
-            {/*              </div>*/}
-            {/*              <input type="text" class="form-control" value={userData.message} onChange={handleMessage} maxlength="500" />*/}
-            {/*              <button type="button" className="btn btn-primary" onClick={sendValue}>send</button>*/}
-            {/*            </div>*/}
-            {/*          </div>}*/}
-
-            {/*        </div>*/}
-            {/*        :*/}
-            {/*        null}*/}
-            {/*    </div> : null}*/}
             {/*  </Row>*/}
             {/*  <Row>*/}
             {/*  {users.some(userIs => (userIs.username === user.username)) ? */}
@@ -740,7 +684,41 @@ export default function ProjectPage(props) {
                         </div>
                         <div style={{height:'10%'}}><button onClick={() => setChangeDesc(true)} style={{float:'right'}}>Update description</button></div>
                     </div>
-                    <div className={"chat"}>Halo</div>
+                    <div className={"chat"}>
+                        {users.some(userIs => (userIs.username === user.username)) ? <div className="rounded" style={{ width: '100 %' }}>
+                            {userData.connected ?
+                                <div style={{padding:'3px'}} >
+                                    <h5><b>Chat</b></h5>
+                                    {tab === "CHATROOM" && <div className="chat-content">
+                                        <div className={"messages"}>
+                                            {publicChats.reverse().map((chat, index) => (
+
+                                                    <div key={index} className={`message ${chat.senderName === user.username ? 'my-message' : 'other-message'}`}>
+                                                        <p>{chat.senderName}<hr />{chat.message}</p>
+                                                    </div>
+
+                                            ))}
+                                            {messagesHistory.map(message =>
+                                                <div style={{}}>
+                                                    <div className={`message ${message.senderName === user.username ? 'my-message' : 'other-message'}`}>
+                                                        <p>{message.senderName}<hr />{message.message}</p>
+                                                    </div>
+                                                </div>)}
+                                        </div>
+                                        <div>
+                                            <div>
+                                                <span id="basic-addon1">Message</span>
+                                            </div>
+                                            <input type="text" class="form-control" value={userData.message} onChange={handleMessage} maxlength="500" />
+                                            <button type="button" className="btn btn-primary" onClick={sendValue}>send</button>
+                                        </div>
+                                    </div>}
+
+                                </div>
+                                :
+                                null}
+                        </div> : null}
+                    </div>
                     <div className={"moreInfo"}>Halo</div>
                 </div>
 
