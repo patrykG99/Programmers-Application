@@ -725,7 +725,23 @@ export default function ProjectPage(props) {
                                 null}
                         </div> : null}
                     </div>
-                    <div className={"moreInfo"}>Halo</div>
+                    <div className={"moreInfo"}>
+                        <div style={{height:'90%'}}>
+                            {changeInfo ? <><div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">New Description</span>
+                                </div>
+                                <textarea
+                                    type="newInfo"
+                                    name="newInfo"
+                                    placeholder="New Description"
+                                    onChange={changeNewInfo}
+                                    value={newInfo} class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"/>
+                                <button className="btn btn-primary" onClick={saveNewInfo}>Save</button>
+                            </div></>: project.additionalInfo }
+                        </div>
+                        <div style={{height:'10%'}}><button onClick={() => setChangeInfo(true)} style={{float:'right'}}>Update information</button></div></div>
+
                 </div>
 
 
