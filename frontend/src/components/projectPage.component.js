@@ -34,7 +34,7 @@ export default function ProjectPage(props) {
     const [openRecommended, setOpenRecommended] = useState(false);
     const [projectInvites, setProjectInvites] = useState([])
     const [changeInfo, setChangeInfo] = useState(false)
-    const [newInfo, setNewInfo] = useState('')
+    const [newInfo, setNewInfo] = useState(project.additionalInfo || "")
     const [borderWidth, setBorderWidth] = useState(100);
     const [userData, setUserData] = useState({
         username: '',
@@ -218,32 +218,11 @@ export default function ProjectPage(props) {
         }
     }
 
-    const sendPrivateValue = () => {
-        if (stompClient) {
-            var chatMessage = {
-                senderName: userData.username,
-                receiverName: tab,
-                message: userData.message,
-                status: "MESSAGE"
-            };
 
-            if (userData.username !== tab) {
-                privateChats.get(tab).push(chatMessage);
-                setPrivateChats(new Map(privateChats));
-            }
-            stompClient.send("/app/private-message", {}, JSON.stringify(chatMessage));
-            setUserData({...userData, "message": ""});
-        }
-    }
 
-    const handleUsername = (event) => {
-        const {value} = event.target;
-        setUserData({...userData, "username": value});
-    }
 
-    const registerUser = () => {
-        connect();
-    }
+
+
 
 
     const user = JSON.parse(localStorage.getItem('user'));
@@ -294,7 +273,6 @@ export default function ProjectPage(props) {
             body: JSON.stringify({'invitedUsername': user.username, 'type': "Request"})
         };
         fetch(url, requestOptions)
-
     }
 
     const acceptRequest = event => {
@@ -316,22 +294,8 @@ export default function ProjectPage(props) {
     const redirectToUser = (userRed) => {
         navigate("/profile/" + userRed)
     }
-    const ownerPageHandler = event => {
-
-    }
-    const handleTime = () => {
-        // Keep a reference to the interval ID returned by setInterval
 
 
-        // Schedule the popup to be closed after 3 seconds
-        const timeoutId = setTimeout(() => setOpen(false), 3000);
-
-        // Return a cleanup function that will be called when the Popup is closed
-        return () => {
-
-            clearTimeout(timeoutId);
-        };
-    }
     const changeNewDesc = event => {
         setNewDesc(event.target.value)
     }
@@ -414,8 +378,10 @@ export default function ProjectPage(props) {
         }
 
 
+
         getData()
-    }, []);
+        setNewInfo(project.additionalInfo || '')
+    }, [project.additionalInfo]);
     useEffect(() => {
 
     }, [rating])
@@ -423,227 +389,67 @@ export default function ProjectPage(props) {
 
     return (
         <>
-            {/*<Popup onOpen={handleTime} open={open} contentStyle={{width:'10%', borderRadius:"10px", bottom:'45%', padding:'10px',height:'5%',backgroundColor:'#F2AA4CFF', borderColor:'black',left:'40%'}} className="rounded" position="top center">*/}
-            {/*      <div>Invited user {userInvite}</div>*/}
-            {/*    </Popup>*/}
-            {/*    <Popup open={openRecommended} contentStyle={{width:'10%', borderRadius:"10px", bottom:'45%', padding:'10px',height:'5%',backgroundColor:'#F2AA4CFF', borderColor:'black',left:'40%'}} className="rounded" position="top center">*/}
-            {/*      <div>Invited user {userInviteRecommended}</div>*/}
-            {/*    </Popup>*/}
-            {/*  {!project.finished && hasLoaded && project.owner.username == user.username ?*/}
-            {/*    <>*/}
-            {/*      <Row xs={2} md={2} lg={2} className="g-7">*/}
-
-            {/*        <div id="profile" style={{ width: '20%', padding: '10px' }} className="rounded">*/}
-            {/*          <form onSubmit={handleSubmit}>*/}
-            {/*            <div >*/}
-            {/*              <label>User to invite:</label>*/}
-            {/*              <input*/}
-            {/*                type="userInvite"*/}
-            {/*                name="userInvite"*/}
-            {/*                placeholder="Enter name"*/}
-            {/*                onChange={handleNameChange}*/}
-            {/*                value={userInvite}*/}
-            {/*              />*/}
-            {/*            </div>*/}
-            {/*            <button type="submit" className="btn btn-primary" style={{ margin: '5px' }}>*/}
-            {/*              Invite user*/}
-            {/*            </button>*/}
-            {/*          </form>*/}
-
-            {/*        </div>*/}
-
-            {/*        <div style={{ width: '35%', padding: '10px' }} className="rounded" id="profile"><h5>Invite requests:</h5>*/}
-
-
-            {/*          {requests.map(request =>*/}
-            {/*            <div className="rounded" style={{ margin: '10px', padding: '5px',backgroundColor:'#d4943f' }}>*/}
-            {/*              {request.invitedUsername}*/}
-            {/*              */}
-            {/*              <button className="btn btn-primary" onClick={acceptRequest} value={request.id} style={{float:'right', height:'25px', fontSize:'15px'}}>Accept</button>*/}
-            {/*              */}
-
-
-            {/*            </div>)}*/}
-
-
-            {/*        </div>*/}
-            {/*        <div id="profile" className="rounded" style={{ width: '40%', padding: '10px' }}>Suggested Users:*/}
-            {/*          {suggestedUsers.map(suggestedUser => { return !users.some(el => el.username === suggestedUser.username) && !projectInvites.some(el => el.invitedUsername === suggestedUser.username)  ? <div className="rounded" style={{ margin: '10px', padding: '5px',backgroundColor:'#d4943f' }}> {suggestedUser.username}<button style={{float:'right', height:'25px', fontSize:'15px'}} value={suggestedUser.username} onClick={handleSubmitRecommended}>Invite</button></div> : null }*/}
-
-
-            {/*          )}*/}
-            {/*        </div></Row>*/}
-            {/*    </>*/}
-            {/*    : null}*/}
-            {/*  {!project.finished && hasLoaded && !users.some(userSome => (userSome.username === user.username)) && users.length < project.maxUsers ?*/}
-
-            {/*    <button type="submit" onClick={requestInvite} className="btn btn-primary" style={{ margin: '5px' }}>*/}
-            {/*      Request invite*/}
-            {/*    </button> : null*/}
-
-
-            {/*  }*/}
-            {/*  {hasLoaded && project.owner.id == user.id ? <button onClick={endProject} className="btn btn-primary">End Project</button> : null}*/}
-            {/*  {hasLoaded && project.owner.id == user.id ? <button onClick={deleteProject} className="btn btn-primary">Delete Project</button> : null}*/}
-
-
-            {/*  <Row xs={3} md={3} lg={3} className="g-7">*/}
-
-            {/*    <div id="profile" style={{ width: '20%', padding: '10px' }} className="rounded">*/}
-            {/*      <h5><b>Project information</b></h5>*/}
-
-            {/*      <hr />*/}
-
-            {/*      <div >*/}
-
-            {/*        <h6><b>Project name:</b></h6>*/}
-            {/*        {hasLoaded ? <p>{project.name}</p> : <p>Loading...</p>}*/}
-            {/*        <h6><b>Main Language:</b></h6>*/}
-            {/*        {hasLoaded ? <p>{project.tech}</p> : <p>Loading...</p>}*/}
-
-
-            {/*        <h6><b>Owner:</b></h6>*/}
-            {/*        {hasLoaded ? <p>{project.owner.username}</p> : <p>Loading...</p>}*/}
-
-
-            {/*      </div>*/}
-
-            {/*    </div>*/}
-            {/*    <div id="profile" style={{ width: '55%', padding: '10px' }} className="rounded"><h5><b>Description</b></h5>*/}
-            {/*      <hr />*/}
-            {/*      {project.description}*/}
-            {/*    </div>*/}
-
-
-            {/*    <div id="profile" style={{ width: '20%', padding: '10px' }} className="rounded"><h5><b>Users ({users.length}/{project.maxUsers})</b></h5>*/}
-            {/*      <hr />*/}
-            {/*      {users.map(user =>*/}
-            {/*        <div onClick={() => redirectToUser(user.id)} key={user.id} className="rounded redirectlink" style={{ margin: '10px', padding: '5px',backgroundColor:'#d4943f' }}>*/}
-            {/*          {user.username}*/}
-            {/*        </div>*/}
-            {/*      )}*/}
-            {/*    </div>*/}
-            {/*    /!*{project.finished && users.length > 1  ?*!/*/}
-            {/*    /!*  <div style={{ width: '98%', padding:'3px' }} className="rounded" id="profile"><h5><b>Rate users</b></h5>*!/*/}
-
-            {/*    /!*    <hr />*!/*/}
-
-            {/*    /!*    {users.map((userrate, index) => {*!/*/}
-            {/*    /!*      *!/*/}
-            {/*    /!*      return userrate.username != user.username && !reviews.some(review => (review.user.username == userrate.username && review.project.id == id && review.ratingUser.username == user.username)) ?*!/*/}
-
-            {/*    /!*        <div className="rounded" style={{padding:'3px', margin:'3px',  backgroundColor:'#d4943f'}} key={userrate.id} onPointerEnter={() => onPointerEnter(userrate)}>*!/*/}
-            {/*    /!*          {userrate.username}*!/*/}
-
-            {/*    /!*          <Rating*!/*/}
-            {/*    /!*            value={ratingWorking[index]}*!/*/}
-            {/*    /!*            onClick={(rate, e) =>handleRating(rate, index)}*!/*/}
-
-            {/*    /!*            //onPointerLeave={onPointerLeave}*!/*/}
-            {/*    /!*            *!/*/}
-            {/*    /!*            size="30"*!/*/}
-            {/*    /!*          /* Available Props *!/*/}
-            {/*    /!*          />*!/*/}
-            {/*    /!*          <br />*!/*/}
-            {/*    /!*          <input type="text" id={userrate.id} name="comment" onChange={(e) => handleCommentChange(e,index)} value={comments[index]}></input>*!/*/}
-            {/*    /!*          <button onClick={() => sendRating(index)}>Send your rating</button>*!/*/}
-
-            {/*    /!*        </div>*!/*/}
-            {/*    /!*        : null*!/*/}
-            {/*    /!*    }*!/*/}
-
-
-            {/*    /!*    )}*!/*/}
-
-
-            {/*    /!*  </div> : <></>}*!/*/}
-
-
-            {/*  </Row>*/}
-            {/*  <Row style={{ width: '100%' }}>*/}
-
-            {/*  </Row>*/}
-            {/*  <Row>*/}
-            {/*  {users.some(userIs => (userIs.username === user.username)) ? */}
-            {/*  <div style={{width:'98%'}} id="profile"><h5><b>Private information</b></h5><hr />*/}
-            {/*  {!changeInfo ? <div>{project.additionalInfo}</div>:null}*/}
-            {/*    {project.owner.username === user.username ? <button style={{float:'right', background:'none', color:'inherit', border:'none', color:'blue'}}  onClick={changeInfoValue}> Change information</button>: null}*/}
-            {/*    {changeInfo && <><div class="input-group input-group-sm mb-3">*/}
-            {/*          <div class="input-group-prepend">*/}
-            {/*            <span class="input-group-text" id="inputGroup-sizing-sm">New Info</span>*/}
-            {/*          </div>*/}
-            {/*          <textarea */}
-            {/*          type="newDesc"*/}
-            {/*          name="newDesc"*/}
-            {/*          placeholder={project.additionalInfo}*/}
-            {/*          onChange={changeNewInfo}*/}
-            {/*          value={newInfo} class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"/>*/}
-            {/*          <button className="btn btn-primary" onClick={saveNewInfo}>Save</button>*/}
-            {/*        </div></>}*/}
-
-
-            {/*    </div>:null}*/}
-            {/*    */}
-            {/*  </Row>*/}
             <div className={"projectPage"}>
-                <div className="ownerPanel">
-                    <div className="header" onClick={() => setIsOpen(!isOpen)}>
-                        Owner Panel
-                        <button><i className={`fa fa-chevron-${isOpen ? 'up' : 'down'}`}/></button>
-                    </div>
-                    <div className={`content ${isOpen ? 'open' : ''}`}>
-                        {/* Umieść tutaj opcje i inne elementy dla właściciela projektu */}
-                        <div className={"userInviteUsername"}>
-                            <form onSubmit={handleSubmit}>
-                                <div>
-                                    <p><h6><b>User to invite</b></h6></p>
-                                    <input
-                                        type="userInvite"
-                                        name="userInvite"
-                                        placeholder="Enter name"
-                                        onChange={handleNameChange}
-                                        value={userInvite}
-                                    />
+                {project && project.owner && project.owner.username == user.username ?
+                    <div className="ownerPanel">
+                        <div className="header" onClick={() => setIsOpen(!isOpen)}>
+                            Owner Panel
+                            <button><i className={`fa fa-chevron-${isOpen ? 'up' : 'down'}`}/></button>
+                        </div>
+                        <div className={`content ${isOpen ? 'open' : ''}`}>
+
+                            <div className={"userInviteUsername"}>
+                                <form onSubmit={handleSubmit}>
+                                    <div>
+                                        <p><h6><b>User to invite</b></h6></p>
+                                        <input
+                                            type="userInvite"
+                                            name="userInvite"
+                                            placeholder="Enter name"
+                                            onChange={handleNameChange}
+                                            value={userInvite}
+                                        />
+                                    </div>
+                                    <button onClick="submit" className="buttonInvite" style={{margin: '5px'}}>
+                                        Invite user
+                                    </button>
+                                </form>
+                            </div>
+
+                            <div className="suggestedUsers">
+                                <p><h6><b>Suggested Users</b></h6></p>
+                                {suggestedUsers.map(suggestedUser => {
+                                        return !users.some(el => el.username === suggestedUser.username) && !projectInvites.some(el => el.invitedUsername === suggestedUser.username) ?
+                                            <div> {suggestedUser.username}
+                                                <button className={"inviteButton"} value={suggestedUser.username}
+                                                        onClick={handleSubmitRecommended}>Invite
+                                                </button>
+                                            </div> : null
+                                    }
+                                )}
+                            </div>
+                            <div className={"requests"}>
+                                <p><h6><b>Invite requests</b></h6></p>
+                                <div>{requests.map(request =>
+                                    <div>
+                                        1234567
+
+                                        <button className="btn btn-primary" onClick={acceptRequest} value={request.id}
+                                                style={{float: 'right', height: '25px', fontSize: '15px'}}>Accept</button>
+
+
+                                    </div>)}
                                 </div>
-                                <button onClick="submit" className="buttonInvite" style={{margin: '5px'}}>
-                                    Invite user
-                                </button>
-                            </form>
-                        </div>
+                            </div>
 
-                        <div className="suggestedUsers">
-                            <p><h6><b>Suggested Users</b></h6></p>
-                            {suggestedUsers.map(suggestedUser => {
-                                    return !users.some(el => el.username === suggestedUser.username) && !projectInvites.some(el => el.invitedUsername === suggestedUser.username) ?
-                                        <div> {suggestedUser.username}
-                                            <button className={"inviteButton"} value={suggestedUser.username}
-                                                    onClick={handleSubmitRecommended}>Invite
-                                            </button>
-                                        </div> : null
-                                }
-                            )}
-                        </div>
-                        <div className={"requests"}>
-                            <p><h6><b>Invite requests</b></h6></p>
-                            <div>{requests.map(request =>
-                                <div>
-                                    1234567
-
-                                    <button className="btn btn-primary" onClick={acceptRequest} value={request.id}
-                                            style={{float: 'right', height: '25px', fontSize: '15px'}}>Accept</button>
-
-
-                                </div>)}
+                            <div className={"ownerOptions"}>
+                                {hasLoaded && project.owner.id == user.id ? <button className={"optionButton"} onClick={endProject}>End Project</button> : null}
+                                {hasLoaded && project.owner.id == user.id ? <button className={"optionButton"} onClick={deleteProject}>Delete Project</button> : null}
                             </div>
                         </div>
 
-                        <div className={"ownerOptions"}>
-                            {hasLoaded && project.owner.id == user.id ? <button className={"optionButton"} onClick={endProject}>End Project</button> : null}
-                            {hasLoaded && project.owner.id == user.id ? <button className={"optionButton"} onClick={deleteProject}>Delete Project</button> : null}
-                        </div>
-                    </div>
+                    </div>:null}
 
-                </div>
                 <div className={"project"}>
                     <div className={"projectInfo"}>
                         <h5><b>Project information</b></h5>
@@ -668,7 +474,7 @@ export default function ProjectPage(props) {
                     </div>
                     <div className={"projectDetails"}>
                         <div style={{height:'90%'}}>
-                            {changeDesc ? <><div class="input-group input-group-sm mb-3">
+                            {changeDesc && project.owner.username == user.username ? <><div class="input-group input-group-sm mb-3">
                                                      <div class="input-group-prepend">
                                                          <span class="input-group-text" id="inputGroup-sizing-sm">New Description</span>
                                                      </div>
@@ -682,7 +488,8 @@ export default function ProjectPage(props) {
                                                  </div></>: project.description }
 
                         </div>
-                        <div style={{height:'10%'}}><button onClick={() => setChangeDesc(true)} style={{float:'right'}}>Update description</button></div>
+                        {project && project.owner && project.owner.username == user.username ? <div style={{height:'10%'}}><button onClick={() => setChangeDesc(true)} style={{float:'right'}}>Update description</button></div>:null}
+
                     </div>
                     <div className={"chat"}>
                         {users.some(userIs => (userIs.username === user.username)) ? <div className="rounded" style={{ width: '100 %' }}>
@@ -727,20 +534,22 @@ export default function ProjectPage(props) {
                     </div>
                     <div className={"moreInfo"}>
                         <div style={{height:'90%'}}>
-                            {changeInfo ? <><div class="input-group input-group-sm mb-3">
+                            {changeInfo && project.owner.username == user.username ? <><div class="input-group input-group-sm mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">New Description</span>
                                 </div>
                                 <textarea
                                     type="newInfo"
                                     name="newInfo"
-                                    placeholder="New Description"
+                                    defaultValue={project ? project.additionalInfo : ''}
                                     onChange={changeNewInfo}
                                     value={newInfo} class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"/>
                                 <button className="btn btn-primary" onClick={saveNewInfo}>Save</button>
                             </div></>: project.additionalInfo }
                         </div>
-                        <div style={{height:'10%'}}><button onClick={() => setChangeInfo(true)} style={{float:'right'}}>Update information</button></div></div>
+                        {project && project.owner && project.owner.username == user.username ? <div style={{height:'10%'}}><button onClick={() => setChangeInfo(true)} style={{float:'right'}}>Update information</button></div>:null}
+
+                    </div>
 
                 </div>
 
