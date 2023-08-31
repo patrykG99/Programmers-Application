@@ -709,8 +709,14 @@ export default function ProjectPage(props) {
                                             <div>
                                                 <span id="basic-addon1">Message</span>
                                             </div>
-                                            <input type="text" class="form-control" value={userData.message} onChange={handleMessage} maxlength="500" />
-                                            <button type="button" className="btn btn-primary" onClick={sendValue}>send</button>
+                                            <div className="input-group">
+                                                <input type="text" className="form-control" value={userData.message}
+                                                       onChange={handleMessage} maxLength="500"/>
+                                                <button type="button" className="btn btn-primary"
+                                                        onClick={sendValue}>send
+                                                </button>
+                                            </div>
+
                                         </div>
                                     </div>}
 
