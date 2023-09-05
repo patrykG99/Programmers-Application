@@ -864,6 +864,59 @@ height: 30vh;
 .input-group button {
   border-left: none;
 }
+.project-list {
+  width: 100%;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  height: auto;
+}
+
+.project-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 5px 0;
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+.paginationBttns {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.filter-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.create-project-button {
+  margin-bottom: 20px;
+}
+.mainList{
+  width: 100%;
+}
+.project-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.project-table th, .project-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.project-table th {
+  background-color: #f2f2f2;
+}
+.project-table tr:hover{
+  background-color: #f5f5f5;
+}
 
 
 

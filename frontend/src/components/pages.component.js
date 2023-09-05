@@ -2,7 +2,7 @@ import Button from 'react-bootstrap/Button';
 import React, { Component } from "react";
 import Row from 'react-bootstrap/Row';
 import ReactPaginate from 'react-paginate';
-
+import { useNavigate } from 'react-router-dom';
 
 import { useState, useEffect, useMemo } from "react";
 import "./styles.scss"
@@ -17,7 +17,7 @@ export default function Pages(props) {
   const [projects, setProjects] = useState();
   const [pageNumber, setPageNumber] = useState(0);
   const [hasLoaded, setHasLoaded] = useState(false)
-
+    const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
@@ -46,9 +46,10 @@ export default function Pages(props) {
       const displayedProjects = filteredProjects
           .slice(pagesVisited, pagesVisited + projectsPerPage)
           .map(project => (
-              <li key={project.id}>
-                  {project.name} - {project.tech}
-              </li>
+              <tr key={project.id} onClick={() => navigate(`/projects/${project.id}`)} className={"project-item"} >
+                  <td>{project.name}</td>
+                  <td>{project.tech}</td>
+              </tr>
           ));
       const changePage = ({ selected }) => {
           setPageNumber(selected);
@@ -57,25 +58,34 @@ export default function Pages(props) {
 
 
 
-      console.log(projects)
+      console.log(displayedProjects)
 
 
 
 
       return (
-          <div>
+          <div className="mainList">
               <h2>Projects</h2>
               <input
                   type="text"
                   placeholder="Search projects"
+                  className="filter-input"
                   onChange={(e) => setSearchTerm(e.target.value)}
               />
-              <Link to="/projectAdd">
-                  <Button variant="primary">Create New Project</Button>
+              <Link to="/projectAdd"  className="nav-link">
+                  <Button className="create-project-button" variant="primary">Create New Project</Button>
               </Link>
-              <ul>
+              <table className="project-table">
+                  <thead>
+                  <tr>
+                      <th>Name</th>
+                      <th>Tech</th>
+                  </tr>
+                  </thead>
+                  <tbody>
                   {displayedProjects}
-              </ul>
+                  </tbody>
+              </table>
               <ReactPaginate
                   previousLabel={"Previous"}
                   nextLabel={"Next"}
