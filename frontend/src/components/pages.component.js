@@ -18,7 +18,9 @@ export default function Pages(props) {
   const [pageNumber, setPageNumber] = useState(0);
   const [hasLoaded, setHasLoaded] = useState(false)
     const navigate = useNavigate();
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchName, setSearchName] = useState("");
+    const [searchTech, setSearchTech] = useState("");
+
 
     useEffect(() => {
         async function fetchData() {
@@ -37,7 +39,8 @@ export default function Pages(props) {
 
   if(hasLoaded) {
       const filteredProjects = projects.filter(project =>
-          project.name.toLowerCase().includes(searchTerm.toLowerCase())
+          project.name.toLowerCase().includes(searchName.toLowerCase()) &&
+          project.tech.toLowerCase().includes(searchTech.toLowerCase())
       );
       const projectsPerPage = 6;
       const pageCount = Math.ceil(filteredProjects.length / projectsPerPage);
@@ -49,10 +52,20 @@ export default function Pages(props) {
               <tr key={project.id} onClick={() => navigate(`/projects/${project.id}`)} className={"project-item"} >
                   <td>{project.name}</td>
                   <td>{project.tech}</td>
+                  <td>{project.owner.username}</td>
+                  <td className={"tableProjectDesc"}>{project.description}</td>
               </tr>
           ));
       const changePage = ({ selected }) => {
           setPageNumber(selected);
+      };
+
+      const handleNameSearch = (e) => {
+          setSearchName(e.target.value);
+      };
+
+      const handleTechSearch = (e) => {
+          setSearchTech(e.target.value);
       };
 
 
@@ -65,21 +78,37 @@ export default function Pages(props) {
 
       return (
           <div className="mainList">
-              <h2>Projects</h2>
-              <input
-                  type="text"
-                  placeholder="Search projects"
-                  className="filter-input"
-                  onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <Link to="/projectAdd"  className="nav-link">
-                  <Button className="create-project-button" variant="primary">Create New Project</Button>
-              </Link>
+              <div className="project-page-header">
+                  <h1>Lista Projektów</h1>
+              </div>
+              <div className="search-bar">
+                  <label htmlFor="nameSearch">Search by Name: </label>
+                  <input
+                      type="text"
+                      id="nameSearch"
+                      value={searchName}
+                      onChange={handleNameSearch}
+                      placeholder="Search by name..."
+                  />
+                  <label htmlFor="techSearch">Search by Tech: </label>
+                  <input
+                      type="text"
+                      id="techSearch"
+                      value={searchTech}
+                      onChange={handleTechSearch}
+                      placeholder="Search by tech..."
+                  />
+              </div>
+              {/*<Link to="/projectAdd"  className="nav-link">*/}
+              {/*    <Button className="create-project-button" variant="primary">Create New Project</Button>*/}
+              {/*</Link>*/}
               <table className="project-table">
                   <thead>
                   <tr>
                       <th>Name</th>
                       <th>Tech</th>
+                      <th>Owner</th>
+                      <th>Description</th>
                   </tr>
                   </thead>
                   <tbody>
