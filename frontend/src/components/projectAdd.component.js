@@ -48,58 +48,94 @@ function BasicForm(){
             console.log(requestOptions)
       };
 
-      return (
+    return (
         <>
-        <Popup open={open} contentStyle={{width:'10%', borderRadius:"10px", bottom:'45%', padding:'10px',height:'5%',backgroundColor:'#F2AA4CFF', borderColor:'black',left:'40%'}} className="rounded" position="top center">
-          <div>Utworzono nowy projekt</div>
-        </Popup>
-        <form onSubmit={handleSubmit}>
-          <div>
-          <label for="name" class="form-label" style={{color:'white'}}>Project name</label>
-            <div class="input-group input-group-sm mb-3">
-              <input type="name"
-              id="name"
-              name="name"
-              className="form-control"
-              placeholder="Enter name for your project"
-              onChange={handleNameChange}
-              value={name} class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"/>
-            </div>
-            <label for="desc" class="form-label" style={{color:'white'}}>Project description</label>
-            <div class="input-group input-group-sm mb-3">
-              <textarea  type="desc"
-              id="desc"
-              name="desc"
-              placeholder="Describe your project idea"
-              onChange={handleDescChange}
-              value={desc} class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"/>
-            </div>
-            <label for="limit" class="form-label" style={{color:'white'}}>Maximum number of users</label>
-            <select class="form-select" aria-label="Default select example"  id="limit" onChange={handleLimitChange} value={limit}>
-              <option selected>Choose maximum number of users for your project</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-            </select>
-            <label for="tech" class="form-label" style={{color:'white'}}>Main language</label>
-            <select style={{marginTop:'15px'}} class="form-select" aria-label="Default select example" id="tech" onChange={handleTechChange} value={tech}>
-              <option selected>Choose main project language</option>
-              <option value="Java">Java</option>
-              <option value="C#">C#</option>
-              <option value="Python">Python</option>
-            </select>
-            
-               
-          </div>
-          <button style={{backgroundColor:'#F2AA4CFF', color:"black", float:'right',marginTop:'15px'}} className="btn btn-primary" type="submit">
-            Submit
-          </button>
-          
-      
-        </form>
-        
-      </>
-      )
+            <Popup
+                open={open}
+                contentStyle={{
+                    width:'30%',
+                    borderRadius:"10px",
+                    bottom:'45%',
+                    padding:'10px',
+                    height:'auto',
+                    backgroundColor:'#F2AA4CFF',
+                    borderColor:'black',
+                    left:'35%'
+                }}
+                className="rounded"
+                position="top center"
+            >
+                <div>Utworzono nowy projekt</div>
+            </Popup>
+            <form onSubmit={handleSubmit} style={{ maxWidth: '500px', margin: '0 auto', padding: '20px', backgroundColor: '#101820FF', borderRadius: '10px', color: '#F2AA4CFF' }}>
+                <div style={{ marginBottom: '20px' }}>
+                    <label htmlFor="name" className="form-label">Project name</label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        className="form-control input-group-sm mb-3"
+                        placeholder="Enter name for your project"
+                        onChange={handleNameChange}
+                        value={name}
+                    />
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <label htmlFor="desc" className="form-label">Project description</label>
+                    <textarea
+                        id="desc"
+                        name="desc"
+                        className="form-control input-group-sm mb-3"
+                        placeholder="Describe your project idea"
+                        onChange={handleDescChange}
+                        value={desc}
+                    />
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <label htmlFor="limit" className="form-label">Maximum number of users</label>
+                    <select
+                        className="form-select"
+                        id="limit"
+                        onChange={handleLimitChange}
+                        value={limit}
+                    >
+                        <option value="" disabled>Choose maximum number of users for your project</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <label htmlFor="tech" className="form-label">Main language</label>
+                    <select
+                        className="form-select"
+                        id="tech"
+                        onChange={handleTechChange}
+                        value={tech}
+                    >
+                        <option value="" disabled>Choose main project language</option>
+                        <option value="Java">Java</option>
+                        <option value="C#">C#</option>
+                        <option value="Python">Python</option>
+                    </select>
+                </div>
+                <button
+                    style={{
+                        backgroundColor:'#F2AA4CFF',
+                        color:"black",
+                        float:'right',
+                        border: 'none',
+                        padding: '10px 20px',
+                        borderRadius: '5px',
+                        cursor: 'pointer'
+                    }}
+                    type="submit"
+                >
+                    Submit
+                </button>
+            </form>
+        </>
+    );
     }
 
 export default BasicForm;
