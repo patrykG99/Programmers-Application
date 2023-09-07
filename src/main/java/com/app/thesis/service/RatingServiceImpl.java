@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -58,7 +59,9 @@ public class RatingServiceImpl implements RatingService{
 
     @Override
     public Float getuserAverageRating(Long userId) throws Exception {
-        return ratingRepo.getUserAverageRating(userId);
+        Float rating = ratingRepo.getUserAverageRating(userId);
+        return Objects.requireNonNullElse(rating, 0f);
+
     }
 
 
