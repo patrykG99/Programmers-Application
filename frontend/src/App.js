@@ -136,72 +136,6 @@ class App extends Component {
         return (
 
             <div id="mainComponent">
-                {/*<nav className="navbar navbar-expand navbar-dark bg-dark">*/}
-                {/*  <Link to={"/"} className="navbar-brand">*/}
-                {/*    ProjectsApp*/}
-                {/*  </Link>*/}
-                {/*  <Col>*/}
-                {/*  {currentUser ? (*/}
-                {/*    <div className="navbar-nav ml-auto">*/}
-                {/*      <li className="nav-item">*/}
-                {/*        <Link to={"/profile/"+user.id} className="nav-link">*/}
-                {/*          {currentUser.username}*/}
-                {/*        </Link>*/}
-                {/*      </li>*/}
-                {/*      <li className="nav-item">*/}
-                {/*        <a href="/login" className="nav-link" onClick={this.logOut}>*/}
-                {/*          LogOut*/}
-                {/*        </a>*/}
-                {/*      </li>*/}
-                {/*    </div>*/}
-                {/*  ) : (*/}
-                {/*    <div className="navbar-nav ml-auto">*/}
-                {/*      <li className="nav-item">*/}
-                {/*        <Link to={"/login"} className="nav-link">*/}
-                {/*          Login*/}
-                {/*        </Link>*/}
-                {/*      </li>*/}
-
-                {/*      <li className="nav-item">*/}
-                {/*        <Link to={"/register"} className="nav-link">*/}
-                {/*          Sign Up*/}
-                {/*        </Link>*/}
-                {/*      </li>*/}
-                {/*    </div>*/}
-                {/*  )}*/}
-
-                {/*  <div className="navbar-nav mr-auto">*/}
-                {/*  <li className="nav-item">*/}
-                {/*      <Link to={"/pages"} className="nav-link">*/}
-                {/*        Projects*/}
-                {/*      </Link>*/}
-                {/*    </li>*/}
-                {/*  </div>*/}
-                {/*  <div className="navbar-nav mr-auto">*/}
-                {/*    <li className="nav-item">*/}
-                {/*      <Link to={"/users"} className="nav-link">*/}
-                {/*        Users*/}
-                {/*      </Link>*/}
-                {/*    </li>*/}
-                {/*  </div>*/}
-                {/*  <div className="navbar-nav mr-auto">*/}
-                {/*    <li className="nav-item">*/}
-                {/*      <Link to={"/users"} className="nav-link">*/}
-                {/*        Users*/}
-                {/*      </Link>*/}
-                {/*    </li>*/}
-                {/*  </div>*/}
-                {/*  </Col>*/}
-                {/*  <div style={{marginLeft:"70%"}} className="navbar-nav ml-auto">*/}
-                {/*    <li className="nav-item">*/}
-                {/*      <Link to={"/twoj-link"} className="nav-link">*/}
-                {/*        Twoja Opcja Po Prawej*/}
-                {/*      </Link>*/}
-                {/*    </li>*/}
-                {/*  </div>*/}
-
-                {/*</nav>*/}
-
                 <Navbar expand="lg" className="bg-body-tertiary">
                     <Container>
                         <div className="navbar-nav ml-auto">
@@ -238,26 +172,33 @@ class App extends Component {
                                 Users
                             </Navbar.Brand>
                         </div>
-                      {currentUser && this.state.invites ?
+                        {currentUser &&
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <Navbar.Brand href={"/projectAdd"} className="createProjectButton">
+                                    Create Project
+                                </Navbar.Brand>
+                                {this.state.invites ?
+                                    <Dropdown>
+                                        <Dropdown.Toggle variant="success"  className={"dropdownButton"}>
+                                            Your invites <span className="invite-count">{this.state.invites.length}</span>
+                                        </Dropdown.Toggle>
+                                        <Dropdown.Menu>
+                                            {this.state.invites.map((invite, index) => (
+                                                <Dropdown.Item key={index}>
+                                                    <div className={"project-name"} data-title={invite.projectName} id="invitesName">{invite.projectName}</div>
+                                                    <div id="invitesButtons">
+                                                        <button onClick={this.acceptInvite} value={invite.id}>Accept</button>
+                                                        <button onClick={this.refuseInvite} value={invite.id}>Decline</button>
+                                                    </div>
+                                                </Dropdown.Item>
+                                            ))}
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                    : null
+                                }
+                            </div>
+                        }
 
-                        <Dropdown>
-                            <Dropdown.Toggle variant="success" id="dropdown-basic">
-                                Your invites <span className="invite-count">{this.state.invites.length}</span>
-                            </Dropdown.Toggle>
-
-                          <Dropdown.Menu>
-                            {this.state.invites.map((invite, index) => (
-                                <Dropdown.Item key={index}>
-                                    <div className={"project-name"} data-title={invite.projectName} id="invitesName">{invite.projectName}</div> {/* Umieść nazwę projektu w divie */}
-                                    <div id="invitesButtons"> {/* Umieść przyciski w oddzielnym divie */}
-                                        <button onClick={this.acceptInvite} value={invite.id}>Accept</button>
-                                        <button onClick={this.refuseInvite} value={invite.id}>Decline</button>
-                                    </div>
-                                </Dropdown.Item>
-                            ))}
-
-                          </Dropdown.Menu>
-                        </Dropdown>:null}
                     </Container>
                 </Navbar>
 
@@ -269,7 +210,6 @@ class App extends Component {
                         <Route path="/register" element={<Register/>}/>
                         <Route path="/profile" element={<Profile/>}/>
                         <Route path="/user" element={<BoardUser/>}/>
-
                         <Route path="/projects" element={<Projects/>}/>
                         <Route path="/projectAdd" element={<ProjectAdd/>}/>
                         <Route path="/projects/:id" element={<ProjectPage/>}/>

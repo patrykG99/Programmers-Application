@@ -938,6 +938,24 @@ height: 30vh;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.createProjectButton, .dropdownButton  {
+  margin-right: 10px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  background-color: #F2AA4CFF;
+  color: white;
+  cursor: pointer;
+  height: 40px;
+  line-height: 20px;
+  border: none;
+  display: inline-block;
+  vertical-align: middle;
+
+}
+.createProjectButton:hover, .dropdownButton:hover {
+  background-color: #d99544; /* Lekko ciemniejszy odcień podstawowego koloru tła */
+  color: #ffffff; /* Biały kolor tekstu */
+}
 
 
 
