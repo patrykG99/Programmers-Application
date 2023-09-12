@@ -1,90 +1,103 @@
-import React, {Component} from "react";
-import {Link} from "react-router-dom";
-import Button from "react-bootstrap/Button";
-import Row from "react-bootstrap/Row";
-import Card from "react-bootstrap/Card";
-import Table from 'react-bootstrap/Table';
-
-
-export default class Users extends Component {
-    state = {
-        users: [],
-        userProjects: []
-    };
+import React, { Component } from "react";
+import ReactPaginate from 'react-paginate';
+import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useMemo } from "react";
+import "./styles.scss"
 
 
 
-    async componentDidMount() {
-        const user = JSON.parse(localStorage.getItem('user'));
-        //console.log(user.accessToken);
-        const response = await fetch('http://localhost:8080/api/users',{
-            method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}
-        });
-
-        const body = await response.json();
-        this.setState({users: body});
-
-    }
-
-    render() {
-        const {users} = this.state;
-        return (
-            <>
+export default function Pages(props) {
+    const [users, setUsers] = useState();
+    const [pageNumber, setPageNumber] = useState(0);
+    const [hasLoaded, setHasLoaded] = useState(false)
+    const navigate = useNavigate();
+    const [searchName, setSearchName] = useState("");
 
 
 
-                    <Row xs={5} md={5} lg={5} className="g-7" >
-                       <Table className="table table-dark table-bordered mb-0" id="userTable">
-                           <thead className="firstRow">
-                           <tr>
-                               <th scope="col">Username</th>
-                               <th scope="col">Finished Projects</th>
-                               <th scope="col">Most used language</th>
-                           </tr>
-                           </thead>
-                           <tbody>
-                        {users.map(user =>
-                            <tr>
-                                <th scope="row">{user.username}</th>
-                                <td>{user.finishedProjects}</td>
-                                <td>Java</td>
-                            </tr>
+    useEffect(() => {
+        async function fetchData() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            console.log(user.accessToken);
+            const response = await fetch('http://localhost:8080/api/users',{
+                method:'GET', headers:{"Authorization":'Bearer ' +user.accessToken}
+            });
+            const body = await response.json();
 
+            setUsers(body);
+            setHasLoaded(true)
+        }
+        fetchData();
+    }, []);
 
-
-
-                        )}
-                           </tbody>
-                       </Table>
-
-
-
-
-
-
-
-                        {/*{users.map(user =>*/}
-
-                        {/*    <Card id="projectCard" style={{width:'25rem', border:'solid rgba(153, 245, 39, 0.8)' }}>*/}
-                        {/*        <Card.Header >{user.username}</Card.Header>*/}
-                        {/*        <Card.Body>*/}
-                        {/*            <Card.Title><div key={user.id}>*/}
-                        {/*                Halo*/}
-                        {/*            </div></Card.Title>*/}
-                        {/*            <Card.Text>*/}
-                        {/*                Siema<br/><br/>*/}
-                        {/*            </Card.Text>*/}
-                        {/*        </Card.Body>*/}
-                        {/*    </Card>*/}
-
-                        {/*)}*/}
-                    </Row>
-
-
-
-
-
-            </>
+    if(hasLoaded) {
+        const filteredUsers = users.filter(user =>
+            user.username.toLowerCase().includes(searchName.toLowerCase())
         );
+        const usersPerPage = 6;
+        const pageCount = Math.ceil(filteredUsers.length / usersPerPage);
+        const pagesVisited = pageNumber * usersPerPage;
+
+        const displayedUsers = filteredUsers
+            .slice(pagesVisited, pagesVisited + usersPerPage)
+            .map(user => (
+                <tr key={user.id} className={"project-item"} onClick={() => navigate(`/profile/${user.id}`)} >
+
+                    <td>{user.username}</td>
+                    <td className={"tableProjectDesc"}>{user.description}</td>
+                </tr>
+            ));
+        const changePage = ({ selected }) => {
+            setPageNumber(selected);
+        };
+
+        const handleNameSearch = (e) => {
+            setSearchName(e.target.value);
+        };
+        return (
+            <div className="mainList">
+                <div className="project-page-header">
+                    <h1>Users</h1>
+                </div>
+                <div className="search-bar">
+                    <label htmlFor="nameSearch">Search by Name: </label>
+                    <input
+                        type="text"
+                        id="nameSearch"
+                        value={searchName}
+                        onChange={handleNameSearch}
+                        placeholder="Search by name..."
+                    />
+
+
+                </div>
+                <table className="project-table">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+
+                        <th>Description</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {displayedUsers}
+                    </tbody>
+                </table>
+                <ReactPaginate
+                    previousLabel={"Previous"}
+                    nextLabel={"Next"}
+                    pageCount={pageCount}
+                    onPageChange={changePage}
+                    containerClassName={"paginationBttns"}
+                    previousLinkClassName={"previousBttn"}
+                    nextLinkClassName={"nextBttn"}
+                    disabledClassName={"paginationDisabled"}
+                    activeClassName={"paginationActive"}
+                />
+            </div>
+        );
+
     }
+
+
 }

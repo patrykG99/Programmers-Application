@@ -79,7 +79,7 @@ export default function Pages(props) {
       return (
           <div className="mainList">
               <div className="project-page-header">
-                  <h1>Lista Projektów</h1>
+                  <h1>Projects</h1>
               </div>
               <div className="search-bar">
                   <label htmlFor="nameSearch">Search by Name: </label>
