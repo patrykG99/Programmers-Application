@@ -103,6 +103,8 @@ class App extends Component {
 
 
 
+
+
     logOut() {
         AuthService.logout();
         this.setState({
@@ -171,6 +173,7 @@ class App extends Component {
                             <Navbar.Brand href={"/users"}>
                                 Users
                             </Navbar.Brand>
+
                         </div>
                         {currentUser &&
                             <div style={{ display: 'flex', alignItems: 'center' }}>

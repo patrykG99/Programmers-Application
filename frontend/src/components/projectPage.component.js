@@ -310,6 +310,15 @@ export default function ProjectPage(props) {
         fetch(url, requestOptions)
         window.location.reload(false);
     }
+    const reportProject = event =>{
+        const url = 'http://localhost:8080/api/report'
+        const requestOptions = {
+            method: 'POST',
+            headers: {  'Authorization':'Bearer ' + user.accessToken, 'Content-Type': 'application/json' },
+            body: JSON.stringify({  'reason':"testReason",'projectId':id })
+        };
+        fetch(url,requestOptions)
+    };
 
 
 
@@ -390,6 +399,7 @@ export default function ProjectPage(props) {
     return (
         <>
             <div className={"projectPage"}>
+                <button onClick={reportProject}>Report</button>
                 {project && project.owner && project.owner.username == user.username ?
                     <div className="ownerPanel">
                         <div className="header" onClick={() => setIsOpen(!isOpen)}>

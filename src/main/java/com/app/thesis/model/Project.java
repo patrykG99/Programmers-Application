@@ -56,6 +56,10 @@ public class Project {
     @Column(columnDefinition = "TEXT")
     private String additionalInfo;
 
+    @JsonBackReference
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    private List<Report> reports = new ArrayList<>();
+
     public Project(String name, String description, int maxUsers, String tech){
 
         this.name = name;
