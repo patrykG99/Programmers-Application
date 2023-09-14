@@ -1,5 +1,6 @@
 package com.app.thesis.service;
 
+import com.app.thesis.model.ERole;
 import com.app.thesis.model.Role;
 import com.app.thesis.model.User;
 import com.app.thesis.model.UserDescriptionOnly;
@@ -24,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +60,10 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<User> getUsers() {
-        return userRepository.findAll();
+        return userRepository.findAll().stream().
+                filter(user -> user.getRoles().stream()
+                        .noneMatch(role->role.getName().equals(ERole.ROLE_MODERATOR) || role.getName().equals(ERole.ROLE_ADMIN)))
+                .toList();
     }
 
     @Override
@@ -97,13 +102,13 @@ public class UserServiceImpl implements UserService{
     }
 
 
-//    @Override
-//    public void addRoleToUser(String username, String roleName) {
-//        User user = userRepository.findByUsername(username);
-//        Role role = roleRepository.findByName(roleName);
-//        user.getRoles().add(role);
-//
-//    }
+    @Override
+    public void addRoleToUser(String username, String roleName) throws Exception {
+        User user = userRepository.findByUsername(username).orElseThrow(()-> new Exception("User not found"));
+        Role role = roleRepository.findByName(ERole.valueOf(roleName.toUpperCase())).orElseThrow(()-> new Exception("role not found"));
+        user.getRoles().add(role);
+
+    }
 
 //    @Override
 //    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

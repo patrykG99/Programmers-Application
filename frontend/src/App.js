@@ -173,6 +173,11 @@ class App extends Component {
                             <Navbar.Brand href={"/users"}>
                                 Users
                             </Navbar.Brand>
+                            {showModeratorBoard ?
+                                <Navbar.Brand href={"/modBoard"}>
+                                    Moderator Board
+                                </Navbar.Brand>:null
+                            }
 
                         </div>
                         {currentUser &&

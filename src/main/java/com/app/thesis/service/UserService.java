@@ -20,7 +20,7 @@ public interface UserService {
     List<User> getRecommendedUsers(String tech);
     User updateDesc(User userDet, Long id, Principal p);
 
-
+    void addRoleToUser(String username, String roleName) throws Exception;
     String getUserImage(Long userId);
 
     void uploadAvatar(Long userId, MultipartFile file);
