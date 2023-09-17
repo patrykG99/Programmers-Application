@@ -1022,6 +1022,45 @@ height: 30vh;
 }
 
 
+/////////////////////////////
+.reports-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+.reports-table tr{
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 5px 0;
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+.reports-table th, .reports-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.reports-table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #101820FF;
+  color: white;
+}
+
+
+
+.reports-table tr:hover {
+  background-color: #F2AA4CFF;
+}
+
+.reports-table td, .reports-table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+
 
 
 

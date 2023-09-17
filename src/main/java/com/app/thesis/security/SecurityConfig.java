@@ -113,6 +113,7 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/user/{id}/avatar").hasAuthority("ROLE_USER")
                 .antMatchers("/api/myprojects").hasAuthority("ROLE_USER")
                 .antMatchers("/api/report").hasAuthority("ROLE_USER")
+                .antMatchers("/api/reports").hasAuthority("ROLE_MODERATOR")
                 .antMatchers("/api/users/**").permitAll()
                 .antMatchers("/api/test/**").permitAll()
 

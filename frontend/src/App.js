@@ -224,6 +224,7 @@ class App extends Component {
                         <Route path="/profile/:id" element={<Profile/>}/>
                         <Route path="/pages" element={<Pages/>}/>
                         <Route path="/users" element={<Users/>}/>
+                        <Route path="/modBoard" element={<BoardModerator/>}/>
                     </Routes>
                 </div>
             </div>

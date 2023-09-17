@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.security.Principal;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -36,5 +37,10 @@ public class ReportServiceImpl implements ReportService{
 
         return reportRepo.save(new Report(project, report.getReason(), user));
 
+    }
+
+    @Override
+    public List<Report> getReports() {
+        return reportRepo.findAll();
     }
 }
