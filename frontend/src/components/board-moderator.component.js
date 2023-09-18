@@ -36,16 +36,28 @@ function ModBoard() {
     };
 
     const removeProject = event => {
+        const shouldDelete = window.confirm("Are you sure you want to delete this project?");
+        if (!shouldDelete) {
+            return;
+        }
+
         console.log("HEHEHEHELOL")
         console.log(event.target.value)
 
         const url = 'http://localhost:8080/api/project/mod/' + event.target.value
         const requestOptions = {
             method: 'DELETE',
-            headers: {  'Authorization':'Bearer ' + user.accessToken, 'Content-Type': 'application/json' },
-
+            headers: { 'Authorization': 'Bearer ' + user.accessToken, 'Content-Type': 'application/json' },
         };
         fetch(url, requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                // Here you can update the state to remove the deleted project from the list
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         //window.location.reload(false);
     };
 
