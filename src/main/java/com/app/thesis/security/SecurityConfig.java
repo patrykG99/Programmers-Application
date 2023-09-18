@@ -114,6 +114,7 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/myprojects").hasAuthority("ROLE_USER")
                 .antMatchers("/api/report").hasAuthority("ROLE_USER")
                 .antMatchers("/api/reports").hasAuthority("ROLE_MODERATOR")
+                .antMatchers("/api/project/mod/{id}").hasAuthority("ROLE_MODERATOR")
                 .antMatchers("/api/users/**").permitAll()
                 .antMatchers("/api/test/**").permitAll()
 

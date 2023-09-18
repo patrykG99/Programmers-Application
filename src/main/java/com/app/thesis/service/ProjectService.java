@@ -21,5 +21,7 @@ public interface ProjectService {
 
     Project updateDesc(Long projectId, String newDesc) throws Exception;
 
+    void deleteProjectMod(Long id) throws Exception;
+
 
 }

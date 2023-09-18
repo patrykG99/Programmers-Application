@@ -18,4 +18,6 @@ public interface RatingRepo extends JpaRepository<Rating, Long> {
     @Query("SELECT AVG(e.rating) FROM Rating e WHERE e.ratedUser.id = ?1")
     Float getUserAverageRating(Long userId);
 
+    void deleteByProject(Project project);
+
 }

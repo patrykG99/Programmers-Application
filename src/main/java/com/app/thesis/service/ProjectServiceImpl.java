@@ -2,8 +2,7 @@ package com.app.thesis.service;
 
 import com.app.thesis.model.Project;
 import com.app.thesis.model.User;
-import com.app.thesis.repository.ProjectRepo;
-import com.app.thesis.repository.UserRepo;
+import com.app.thesis.repository.*;
 import com.app.thesis.security.services.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -23,6 +22,9 @@ public class ProjectServiceImpl implements ProjectService{
 
     private final ProjectRepo projectRepo;
     private final UserRepo userRepo;
+    private final MessageRepo messageRepo;
+    private final InviteRepo inviteRepo;
+    private final RatingRepo ratingRepo;
     @Override
     public List<Project> getProjects() {
         return projectRepo.findAll();
@@ -75,6 +77,14 @@ public class ProjectServiceImpl implements ProjectService{
         Project newProject = projectRepo.findById(projectId).orElseThrow(()-> new Exception("Project not found"));
         newProject.setDescription(newDesc);
         return projectRepo.save(newProject);
+    }
+
+    @Override
+    public void deleteProjectMod(Long id) throws Exception {
+        messageRepo.deleteByProjectFrom(projectRepo.findById(id).orElseThrow(()-> new Exception("Project not found")));
+        ratingRepo.deleteByProject(projectRepo.findById(id).orElseThrow(()-> new Exception("Project not found")));
+        inviteRepo.deleteAllByProjectId(id);
+        projectRepo.deleteById(id);
     }
 //
 //    @Override

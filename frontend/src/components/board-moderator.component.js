@@ -14,6 +14,7 @@ function ModBoard() {
                 method: 'GET',
                 headers: { "Authorization": 'Bearer ' + user.accessToken }
             });
+
             let actualReports = await responseReports.json();
             setReports(actualReports);
         }
@@ -32,6 +33,20 @@ function ModBoard() {
         setExpandedRows((prev) =>
             prev.includes(projectId) ? prev.filter((id) => id !== projectId) : [...prev, projectId]
         );
+    };
+
+    const removeProject = event => {
+        console.log("HEHEHEHELOL")
+        console.log(event.target.value)
+
+        const url = 'http://localhost:8080/api/project/mod/' + event.target.value
+        const requestOptions = {
+            method: 'DELETE',
+            headers: {  'Authorization':'Bearer ' + user.accessToken, 'Content-Type': 'application/json' },
+
+        };
+        fetch(url, requestOptions)
+        //window.location.reload(false);
     };
 
     return (
@@ -62,7 +77,7 @@ function ModBoard() {
                                             <tr key={report.id} className="expanded-row">
                                                 <td colSpan="2"></td>
                                                 <td>{report.reason}</td>
-                                                <td><button>Remove</button></td>
+                                                <td><button onClick={removeProject} value={report.project.id}>Remove</button></td>
                                             </tr>
                                         ))}
                                 </>

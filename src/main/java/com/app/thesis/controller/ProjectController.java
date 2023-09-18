@@ -154,6 +154,11 @@ public class ProjectController {
         return ResponseEntity.noContent().build();
 
     }
+    @DeleteMapping("/project/mod/{id}")
+    public ResponseEntity<Void> deleteProjectMod(@PathVariable Long id) throws Exception {
+        projectService.deleteProjectMod(id);
+        return ResponseEntity.noContent().build();
+    }
 
 
 }
