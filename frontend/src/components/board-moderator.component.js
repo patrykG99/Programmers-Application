@@ -35,30 +35,26 @@ function ModBoard() {
         );
     };
 
-    const removeProject = event => {
+    const removeProject = async (projectId) => {
         const shouldDelete = window.confirm("Are you sure you want to delete this project?");
         if (!shouldDelete) {
             return;
         }
 
-        console.log("HEHEHEHELOL")
-        console.log(event.target.value)
-
-        const url = 'http://localhost:8080/api/project/mod/' + event.target.value
-        const requestOptions = {
-            method: 'DELETE',
-            headers: { 'Authorization': 'Bearer ' + user.accessToken, 'Content-Type': 'application/json' },
-        };
-        fetch(url, requestOptions)
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                // Here you can update the state to remove the deleted project from the list
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-        //window.location.reload(false);
+        try {
+            const url = 'http://localhost:8080/api/project/mod/' + projectId;
+            const requestOptions = {
+                method: 'DELETE',
+                headers: { 'Authorization': 'Bearer ' + user.accessToken, 'Content-Type': 'application/json' },
+            };
+            const response = await fetch(url, requestOptions);
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            setReports(reports.filter(report => report.project.id !== projectId));
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
     return (
@@ -82,14 +78,14 @@ function ModBoard() {
                                         <td>{group[0].project.name}</td>
                                         <td>{group[0].project.owner.username}</td>
                                         <td>{group.length}</td>
-                                        <td></td>
+                                        <td><button onClick={() => removeProject(group[0].project.id)}>Remove</button></td>
                                     </tr>
                                     {expandedRows.includes(group[0].project.id) &&
                                         group.map((report) => (
                                             <tr key={report.id} className="expanded-row">
                                                 <td colSpan="2"></td>
                                                 <td>{report.reason}</td>
-                                                <td><button onClick={removeProject} value={report.project.id}>Remove</button></td>
+                                                <td></td>
                                             </tr>
                                         ))}
                                 </>
