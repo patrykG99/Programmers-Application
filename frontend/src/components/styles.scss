@@ -604,7 +604,7 @@ html, body { height: 100%; width: 100%; margin: 0; }
   padding: 15px;
   position: relative;
   max-height: 100%;
-  overflow: hidden;
+
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   background-color: rgba(255, 255, 255, 0.05);
   .profileBorder + .profileBorder {
@@ -854,7 +854,7 @@ div::-webkit-scrollbar-thumb {
   margin-right: 1%;
   margin-bottom: 1%;
 
-  overflow: hidden;
+
   text-overflow: ellipsis;
 }
 .projectDetails{
@@ -1058,6 +1058,46 @@ height: 30vh;
 .reports-table td, .reports-table th {
   border: 1px solid #ddd;
   padding: 8px;
+}
+
+.report-popup {
+  position: fixed;
+  top: 10%;
+  left: 40%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 1px solid #ccc;
+  z-index: 1000;
+}
+
+.report-popup label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.report-popup input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.report-button-container {
+  position: relative;
+  display: inline-block; /* Aby kontener nie zajmował całej szerokości */
+}
+
+
+.modal-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
 }
 
 

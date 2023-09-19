@@ -10,6 +10,7 @@ import SockJS from 'sockjs-client';
 import Popup from 'reactjs-popup';
 import {Navbar, Nav, Dropdown} from 'react-bootstrap';
 import 'font-awesome/css/font-awesome.min.css';
+import ReportPopup from './ReportPopup';
 
 
 var stompClient = null;
@@ -47,6 +48,19 @@ export default function ProjectPage(props) {
     const [isOpen, setIsOpen] = useState(false);
     const [changeDesc, setChangeDesc] = useState(false)
     const [newDesc, setNewDesc] = useState('')
+
+    const [isReportPopupVisible, setIsReportPopupVisible] = useState(false);
+    const [reportReason, setReportReason] = useState("");
+    const reportButtonRef = useRef(null);
+
+
+    const showReportPopup = () => {
+        setIsReportPopupVisible(true);
+    };
+
+    const hideReportPopup = () => {
+        setIsReportPopupVisible(false);
+    };
 
 
     const navigate = useNavigate();
@@ -310,14 +324,25 @@ export default function ProjectPage(props) {
         fetch(url, requestOptions)
         window.location.reload(false);
     }
-    const reportProject = event =>{
-        const url = 'http://localhost:8080/api/report'
-        const requestOptions = {
-            method: 'POST',
-            headers: {  'Authorization':'Bearer ' + user.accessToken, 'Content-Type': 'application/json' },
-            body: JSON.stringify({  'reason':"testReason",'projectId':id })
-        };
-        fetch(url,requestOptions)
+    const reportProject = event => {
+
+        if (reportProject) {
+            const url = 'http://localhost:8080/api/report';
+            console.log(reportReason)
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Authorization': 'Bearer ' + user.accessToken, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 'reason':reportReason, 'projectId': id }),
+            };
+            fetch(url, requestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Report submitted:', data);
+                })
+                .catch(error => console.error('Error:', error));
+        } else {
+            console.log('Report cancelled.');
+        }
     };
 
 
@@ -399,7 +424,8 @@ export default function ProjectPage(props) {
     return (
         <>
             <div className={"projectPage"}>
-                <button onClick={reportProject}>Report</button>
+
+
                 {project && project.owner && project.owner.username == user.username ?
                     <div className="ownerPanel">
                         <div className="header" onClick={() => setIsOpen(!isOpen)}>
@@ -462,7 +488,21 @@ export default function ProjectPage(props) {
 
                 <div className={"project"}>
                     <div className={"projectInfo"}>
-                        <h5><b>Project information</b></h5>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} className="report-button-container">
+                            <h5><b>Project information</b></h5>
+                            <button onClick={showReportPopup} ref={reportButtonRef} style={{ backgroundColor: 'transparent', border: 'none', fontSize: '24px', cursor: 'pointer' }} className="report-button">
+                                <i className="fa fa-exclamation-circle" aria-hidden="true"></i>
+                            </button>
+                            <ReportPopup
+                                buttonRef={reportButtonRef}
+                                isOpen={isReportPopupVisible}
+                                onClose={hideReportPopup}
+                                onSubmit={() => reportProject(reportReason)}
+                                reportReason={reportReason}
+                                setReportReason={setReportReason}
+                            />
+
+                        </div>
 
                         <hr/>
 
