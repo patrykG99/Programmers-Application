@@ -79,11 +79,12 @@ function ModBoard() {
                                         <td>{group[0].project.owner.username}</td>
                                         <td>{group.length}</td>
                                         <td><button onClick={() => removeProject(group[0].project.id)}>Remove</button></td>
+                                        <td><button onClick={() => window.location.href = `/projects/${group[0].project.id}`}>Go to Project</button></td>
                                     </tr>
                                     {expandedRows.includes(group[0].project.id) &&
                                         group.map((report) => (
                                             <tr key={report.id} className="expanded-row">
-                                                <td colSpan="2"></td>
+                                                <td colSpan="3"></td>
                                                 <td>{report.reason}</td>
                                                 <td></td>
                                             </tr>
