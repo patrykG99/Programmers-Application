@@ -31,6 +31,7 @@ public class User {
     private String password;
     private String userProfilePicturePath;
 
+
     private String description;
     private int finishedProjects = 0;
 
@@ -73,4 +74,6 @@ public class User {
     public String getDescription() {
         return description;
     }
+
+
 }

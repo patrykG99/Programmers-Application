@@ -1,17 +1,11 @@
 import React, {Component} from "react";
-import Row from 'react-bootstrap/Row';
 import {useParams, useNavigate} from 'react-router-dom';
 import {useState, useEffect, useRef} from "react";
-import {Rating} from 'react-simple-star-rating'
-import {Button} from "bootstrap";
 import "./styles.scss"
 import {over} from 'stompjs';
 import SockJS from 'sockjs-client';
-import Popup from 'reactjs-popup';
-import {Navbar, Nav, Dropdown} from 'react-bootstrap';
 import 'font-awesome/css/font-awesome.min.css';
 import ReportPopup from './ReportPopup';
-
 
 var stompClient = null;
 export default function ProjectPage(props) {
@@ -142,13 +136,16 @@ export default function ProjectPage(props) {
     }
 
     const connect = () => {
-        console.log("probuje polaczyc")
-        let Sock = new SockJS('http://localhost:8080/ws');
-        stompClient = over(Sock);
-        stompClient.connect({}, onConnected, onError);
+        if(!user.roles.includes("ROLE_MODERATOR")) {
+            console.log("probuje polaczyc")
+            let Sock = new SockJS('http://localhost:8080/ws');
+            stompClient = over(Sock);
+            stompClient.connect({}, onConnected, onError);
+        }
     }
 
     const onConnected = () => {
+
         console.log("laczy")
         setUserData({...userData, "connected": true});
 
@@ -542,8 +539,8 @@ export default function ProjectPage(props) {
 
                     </div>
                     <div className={"chat"}>
-                        {users.some(userIs => (userIs.username === user.username)) ? <div className="rounded" style={{ width: '100 %' }}>
-                            {userData.connected ?
+                        {users.some(userIs => (userIs.username === user.username)) || user.roles.includes("ROLE_MODERATOR") ? <div className="rounded" style={{ width: '100 %' }}>
+                            {userData.connected || user.roles.includes("ROLE_MODERATOR") ?
                                 <div style={{padding:'3px'}} >
                                     <h5><b>Chat</b></h5>
                                     {tab === "CHATROOM" && <div className="chat-content">
@@ -563,16 +560,24 @@ export default function ProjectPage(props) {
                                                 </div>)}
                                         </div>
                                         <div>
-                                            <div>
-                                                <span id="basic-addon1">Message</span>
-                                            </div>
-                                            <div className="input-group">
-                                                <input type="text" className="form-control" value={userData.message}
-                                                       onChange={handleMessage} maxLength="500"/>
-                                                <button type="button" className="btn btn-primary"
-                                                        onClick={sendValue}>send
-                                                </button>
-                                            </div>
+                                            {user.roles.includes("ROLE_MODERATOR") ? null:
+                                                <>
+                                                    <div>
+                                                        <span id="basic-addon1">Message</span>
+                                                    </div>
+
+                                                    <div className="input-group">
+                                                        <input type="text" className="form-control" value={userData.message}
+                                                               onChange={handleMessage} maxLength="500"/>
+                                                        <button type="button" className="btn btn-primary"
+                                                                onClick={sendValue}>send
+                                                        </button>
+                                                    </div></>
+
+
+
+                                            }
+
 
                                         </div>
                                     </div>}

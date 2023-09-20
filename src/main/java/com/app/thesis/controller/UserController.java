@@ -94,6 +94,7 @@ public class UserController {
 
     }
 
+
     @PatchMapping("/users/description/{id}")
     public ResponseEntity<User> updateDescription(@RequestBody User userDet, @PathVariable("id")Long id, Principal p ){
         return ResponseEntity.ok(userService.updateDesc(userDet, id, p));
