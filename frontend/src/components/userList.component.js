@@ -12,6 +12,7 @@ export default function Pages(props) {
     const [hasLoaded, setHasLoaded] = useState(false)
     const navigate = useNavigate();
     const [searchName, setSearchName] = useState("");
+    const [sortDirection, setSortDirection] = useState('asc');
 
 
 
@@ -29,30 +30,43 @@ export default function Pages(props) {
         }
         fetchData();
     }, []);
+    const filteredUsers = users ? users.filter(user =>
+        user.username.toLowerCase().includes(searchName.toLowerCase())
+    ):[]
+    const sortedUsers = useMemo(() => {
+        return [...filteredUsers].sort((a, b) => {
+            return sortDirection === 'asc'
+                ? a.finishedProjects - b.finishedProjects
+                : b.finishedProjects - a.finishedProjects;
+        });
+    }, [filteredUsers, sortDirection]);
 
     if(hasLoaded) {
-        const filteredUsers = users.filter(user =>
-            user.username.toLowerCase().includes(searchName.toLowerCase())
-        );
+
         const usersPerPage = 6;
         const pageCount = Math.ceil(filteredUsers.length / usersPerPage);
         const pagesVisited = pageNumber * usersPerPage;
 
-        const displayedUsers = filteredUsers
+        const displayedUsers = sortedUsers
             .slice(pagesVisited, pagesVisited + usersPerPage)
             .map(user => (
                 <tr key={user.id} className={"project-item"} onClick={() => navigate(`/profile/${user.id}`)} >
 
                     <td>{user.username}</td>
                     <td className={"tableProjectDesc"}>{user.description}</td>
+                    <td>{user.finishedProjects}</td>
                 </tr>
             ));
         const changePage = ({ selected }) => {
             setPageNumber(selected);
         };
 
+
         const handleNameSearch = (e) => {
             setSearchName(e.target.value);
+        };
+        const toggleSortDirection = () => {
+            setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
         };
         return (
             <div className="mainList">
@@ -77,6 +91,7 @@ export default function Pages(props) {
                         <th>Name</th>
 
                         <th>Description</th>
+                        <th onClick={toggleSortDirection}>Finished Projects</th>
                     </tr>
                     </thead>
                     <tbody>

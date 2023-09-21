@@ -69,8 +69,10 @@ export default function ProjectPage(props) {
             headers: {'Authorization': 'Bearer ' + user.accessToken},
 
         };
+        console.log("ended")
+
         fetch(url, requestOptions)
-        window.location.reload(false);
+        //window.location.reload(false);
     }
     let ratingWorking = [];
     let comments = [];
