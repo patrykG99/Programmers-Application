@@ -32,6 +32,7 @@ public class RatingServiceImpl implements RatingService{
     public Rating saveRating(RatingRequest rating, Principal principal) throws Exception {
 
         User loggedUser = userRepo.findByUsername(principal.getName()).orElseThrow(()-> new Exception("User not found"));
+        System.out.println(rating.getComment());
         Rating rating2 = ratingRepo.findAllByRatedUserAndProjectAndUserRating(userRepo.findByUsername(rating.getUsername()).get(),projectRepo.findById(rating.getProjectId()).get(),loggedUser);
         if(rating2 != null){
             rating2.setRating(rating.getScore());
@@ -40,6 +41,7 @@ public class RatingServiceImpl implements RatingService{
             rating2 = new Rating(userRepo.findByUsername(rating.getUsername()).get(),loggedUser,projectRepo.getReferenceById(rating.getProjectId()), rating.getComment(), rating.getScore());
 
         }
+
 
         return ratingRepo.save(rating2);
 

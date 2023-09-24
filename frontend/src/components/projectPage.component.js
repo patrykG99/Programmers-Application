@@ -6,6 +6,7 @@ import {over} from 'stompjs';
 import SockJS from 'sockjs-client';
 import 'font-awesome/css/font-awesome.min.css';
 import ReportPopup from './ReportPopup';
+import { Rating } from 'react-simple-star-rating'
 
 var stompClient = null;
 export default function ProjectPage(props) {
@@ -46,6 +47,9 @@ export default function ProjectPage(props) {
     const [isReportPopupVisible, setIsReportPopupVisible] = useState(false);
     const [reportReason, setReportReason] = useState("");
     const reportButtonRef = useRef(null);
+    const [comments,setComments] = useState([])
+    const [ratingWorking,setWorkingRatings] = useState([])
+
 
 
     const showReportPopup = () => {
@@ -74,13 +78,12 @@ export default function ProjectPage(props) {
         fetch(url, requestOptions)
         //window.location.reload(false);
     }
-    let ratingWorking = [];
-    let comments = [];
+
 
     const handleRating = (rate, index) => {
-
-        ratingWorking[index] = rate
-        console.log(ratingWorking[index], index)
+        const newRatings =[...ratingWorking];
+        newRatings[index] = rate
+        setWorkingRatings(newRatings)
 
     }
     const changeInfoValue = event => {
@@ -117,9 +120,10 @@ export default function ProjectPage(props) {
     const sendRating = (index) => {
 
 
-        const url = 'http://localhost:8080/api/project/rateuser'
+        const url = 'http://localhost:8080/api/rating/save'
         console.log("ratingWorking index: ", ratingWorking[index])
         console.log("index: ", index)
+        console.log("comments", comments)
         console.log(comments[index])
         const requestOptions = {
             method: 'PUT',
@@ -301,9 +305,10 @@ export default function ProjectPage(props) {
     }
 
     const handleCommentChange = (event, index) => {
-        comments[index] = event.target.value
-        console.log(comments[index])
-    }
+        const newComments = [...comments];
+        newComments[index] = event.target.value;
+        setComments(newComments);
+    };
     const redirectToUser = (userRed) => {
         navigate("/profile/" + userRed)
     }
@@ -423,6 +428,26 @@ export default function ProjectPage(props) {
     return (
         <>
             <div className={"projectPage"}>
+                <div>
+                    <div >
+                        {users.map((userrate,index)=>
+                            <div onPointerEnter={() => onPointerEnter(userrate)}>
+                        <Rating
+                            value={ratingWorking[index]}
+                            onClick={(rate,e) => handleRating(rate,index)}
+                            size={30}
+                            />
+                                <input type="text" id={userrate.id} name="comment" onChange={(e) => handleCommentChange(e,index)} value={comments[index]}></input>
+                                <button onClick={() => sendRating(index)}>Send your rating</button>
+                            </div>
+
+
+
+                        )}
+
+
+                    </div>
+                </div>
 
 
                 {project && project.owner && project.owner.username == user.username ?
