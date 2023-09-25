@@ -428,26 +428,29 @@ export default function ProjectPage(props) {
     return (
         <>
             <div className={"projectPage"}>
-                <div>
+                {project.finished ? <div>
                     <div >
-                        {users.map((userrate,index)=>
+                        {users.map((userrate,index)=><>
+                        {userrate.username != user.username ?
                             <div onPointerEnter={() => onPointerEnter(userrate)}>
-                        <Rating
-                            value={ratingWorking[index]}
-                            onClick={(rate,e) => handleRating(rate,index)}
-                            size={30}
+                            <Rating
+                                value={ratingWorking[index]}
+                                onClick={(rate,e) => handleRating(rate,index)}
+                                size={30}
                             />
-                                <input type="text" id={userrate.id} name="comment" onChange={(e) => handleCommentChange(e,index)} value={comments[index]}></input>
-                                <button onClick={() => sendRating(index)}>Send your rating</button>
-                            </div>
+                            <input type="text" id={userrate.id} name="comment" onChange={(e) => handleCommentChange(e,index)} value={comments[index]}></input>
+                            <button onClick={() => sendRating(index)}>Send your rating</button>
+                        </div>:null}
 
 
 
-                        )}
+
+                        </>)}
 
 
                     </div>
-                </div>
+                </div>:null}
+
 
 
                 {project && project.owner && project.owner.username == user.username ?
