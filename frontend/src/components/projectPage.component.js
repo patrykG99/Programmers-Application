@@ -41,6 +41,7 @@ export default function ProjectPage(props) {
     const [ownerPane, setOwnerPane] = useState(false)
     const [inputs, setInputs] = useState([])
     const [isOpen, setIsOpen] = useState(false);
+    const [isOpenRate, setIsOpenRate] = useState(false);
     const [changeDesc, setChangeDesc] = useState(false)
     const [newDesc, setNewDesc] = useState('')
 
@@ -428,31 +429,30 @@ export default function ProjectPage(props) {
     return (
         <>
             <div className={"projectPage"}>
-                {project.finished ? <div>
+                {project.finished && users.length > 1 ? <div>
                     <div >
-                        {users.map((userrate,index)=><>
-                        {userrate.username != user.username ?
-                            <div onPointerEnter={() => onPointerEnter(userrate)}>
-                            <Rating
-                                value={ratingWorking[index]}
-                                onClick={(rate,e) => handleRating(rate,index)}
-                                size={30}
-                            />
-                            <input type="text" id={userrate.id} name="comment" onChange={(e) => handleCommentChange(e,index)} value={comments[index]}></input>
-                            <button onClick={() => sendRating(index)}>Send your rating</button>
-                        </div>:null}
-
-
-
-
-                        </>)}
-
-
+                        <div className="ownerPanel">
+                            <div className="header" onClick={() => setIsOpenRate(!isOpenRate)}>
+                                Rate users
+                                <button><i className={`fa fa-chevron-${isOpen ? 'up' : 'down'}`}/></button>
+                            </div>
+                            <div className={`content ${isOpenRate ? 'open' : ''}`}>
+                                {users.map((userrate,index)=><>
+                                    {userrate.username != user.username ?
+                                        <div onPointerEnter={() => onPointerEnter(userrate)}>
+                                            <Rating
+                                                value={ratingWorking[index]}
+                                                onClick={(rate,e) => handleRating(rate,index)}
+                                                size={30}
+                                            />
+                                            <input type="text" id={userrate.id} name="comment" onChange={(e) => handleCommentChange(e,index)} value={comments[index]}></input>
+                                            <button onClick={() => sendRating(index)}>Send your rating</button>
+                                        </div>:null}
+                                </>)}
+                            </div>
+                        </div>
                     </div>
                 </div>:null}
-
-
-
                 {project && project.owner && project.owner.username == user.username ?
                     <div className="ownerPanel">
                         <div className="header" onClick={() => setIsOpen(!isOpen)}>
@@ -460,7 +460,6 @@ export default function ProjectPage(props) {
                             <button><i className={`fa fa-chevron-${isOpen ? 'up' : 'down'}`}/></button>
                         </div>
                         <div className={`content ${isOpen ? 'open' : ''}`}>
-
                             <div className={"userInviteUsername"}>
                                 <form onSubmit={handleSubmit}>
                                     <div>
@@ -499,8 +498,6 @@ export default function ProjectPage(props) {
 
                                         <button className="btn btn-primary" onClick={acceptRequest} value={request.id}
                                                 style={{float: 'right', height: '25px', fontSize: '15px'}}>Accept</button>
-
-
                                     </div>)}
                                 </div>
                             </div>
@@ -510,9 +507,7 @@ export default function ProjectPage(props) {
                                 {hasLoaded && project.owner.id == user.id ? <button className={"optionButton"} onClick={deleteProject}>Delete Project</button> : null}
                             </div>
                         </div>
-
                     </div>:null}
-
                 <div className={"project"}>
                     <div className={"projectInfo"}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} className="report-button-container">
@@ -528,13 +523,9 @@ export default function ProjectPage(props) {
                                 reportReason={reportReason}
                                 setReportReason={setReportReason}
                             />
-
                         </div>
-
                         <hr/>
-
                         <div>
-
                             <h6><b>Project name:</b></h6>
                             {hasLoaded ? <p>{project.name}</p> : <p>Loading...</p>}
                             <h6><b>Main Language:</b></h6>
