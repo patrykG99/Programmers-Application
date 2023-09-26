@@ -16,12 +16,9 @@ export default function ProjectPage(props) {
     const [hasLoaded, setHasLoaded] = useState()
     const [userInvite, setUserInvite] = useState('')
     const [userInviteRecommended, setUserInviteRecommended] = useState('')
-    const [reviewsByUser, setReviewsByUser] = useState([])
     const [ratedUser, setRatedUser] = useState('')
     const [requests, setRequests] = useState([])
-    const [reviews, setReviews] = useState('')
     const [rating, setRating] = useState(0)
-    const [comment, setComment] = useState('')
     const [suggestedUsers, setSuggestedUsers] = useState([])
     const [privateChats, setPrivateChats] = useState(new Map());
     const [publicChats, setPublicChats] = useState([]);
@@ -31,15 +28,13 @@ export default function ProjectPage(props) {
     const [projectInvites, setProjectInvites] = useState([])
     const [changeInfo, setChangeInfo] = useState(false)
     const [newInfo, setNewInfo] = useState(project.additionalInfo || "")
-    const [borderWidth, setBorderWidth] = useState(100);
     const [userData, setUserData] = useState({
         username: '',
         receivername: '',
         connected: false,
         message: ''
     });
-    const [ownerPane, setOwnerPane] = useState(false)
-    const [inputs, setInputs] = useState([])
+
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenRate, setIsOpenRate] = useState(false);
     const [changeDesc, setChangeDesc] = useState(false)
@@ -77,7 +72,17 @@ export default function ProjectPage(props) {
         console.log("ended")
 
         fetch(url, requestOptions)
-        //window.location.reload(false);
+
+    }
+
+    const endRating = event => {
+        const url = 'http://localhost:8080/api/project/endRating/' + id
+        const requestOptions = {
+            method: 'PUT',
+            headers: {'Authorization': 'Bearer ' + user.accessToken},
+
+        };
+        fetch(url, requestOptions)
     }
 
 
@@ -87,11 +92,7 @@ export default function ProjectPage(props) {
         setWorkingRatings(newRatings)
 
     }
-    const changeInfoValue = event => {
-        setChangeInfo(current => !current)
-        setNewInfo(project.additionalInfo)
 
-    }
     const saveNewInfo = event => {
         const url = 'http://localhost:8080/api/project/info/' + id
         const requestOptions = {
@@ -107,16 +108,11 @@ export default function ProjectPage(props) {
     };
     const changeNewInfo = event => {
         setNewInfo(event.target.value)
-
-
     }
-    const closeModal = () => setOpen(false);
 
     const onPointerEnter = (userrate) => {
         setRatedUser(userrate.username)
     }
-    const onPointerLeave = () => console.log('Leave')
-
 
     const sendRating = (index) => {
 
@@ -429,7 +425,7 @@ export default function ProjectPage(props) {
     return (
         <>
             <div className={"projectPage"}>
-                {project.finished && users.length > 1 ? <div>
+                {project.finished && users.length > 1 && !project.ratingFinished ? <div>
                     <div >
                         <div className="ownerPanel">
                             <div className="header" onClick={() => setIsOpenRate(!isOpenRate)}>
@@ -439,17 +435,41 @@ export default function ProjectPage(props) {
                             <div className={`content ${isOpenRate ? 'open' : ''}`}>
                                 {users.map((userrate,index)=><>
                                     {userrate.username != user.username ?
-                                        <div onPointerEnter={() => onPointerEnter(userrate)}>
+                                        <div className={"rating-container"}>
+                                        <div onPointerEnter={() => onPointerEnter(userrate)} className={"rating-item"} style={{ padding: '10px', border: '1px solid #ccc', borderRadius: '5px', marginBottom: '10px' }}>
+                                            <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>{userrate.username}</div>
                                             <Rating
                                                 value={ratingWorking[index]}
                                                 onClick={(rate,e) => handleRating(rate,index)}
                                                 size={30}
+                                                style={{ marginBottom: '10px' }}
                                             />
-                                            <input type="text" id={userrate.id} name="comment" onChange={(e) => handleCommentChange(e,index)} value={comments[index]}></input>
-                                            <button onClick={() => sendRating(index)}>Send your rating</button>
-                                        </div>:null}
+                                            <input
+                                                type="text"
+                                                id={userrate.id}
+                                                name="comment"
+                                                onChange={(e) => handleCommentChange(e,index)}
+                                                value={comments[index]}
+                                                style={{ width: '100%', padding: '5px', marginBottom: '10px' }}
+                                            />
+                                            <button
+                                                onClick={() => sendRating(index)}
+                                                style={{ backgroundColor: '#007bff', color: 'white', padding: '10px 20px', borderRadius: '5px', cursor: 'pointer' }}
+                                            >
+                                                Send your rating
+                                            </button>
+                                        </div>
+                                        </div>
+                                        : null
+                                    }
                                 </>)}
+                                <div className={"ownerOptions"}>
+
+                                    {hasLoaded && project.owner.id == user.id ? <button className={"optionButton"} onClick={endRating}>End Rating</button> : null}
+                                </div>
                             </div>
+
+
                         </div>
                     </div>
                 </div>:null}

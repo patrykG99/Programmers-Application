@@ -55,6 +55,7 @@ public class Project {
 
     private String description ;
     private String tech;
+    private boolean ratingFinished = false;
 
     @Column(columnDefinition = "TEXT")
     private String additionalInfo;

@@ -110,6 +110,14 @@ public class ProjectController {
         return ResponseEntity.ok().build();
 
     }
+    @PutMapping("/project/endRating/{id}")
+    public ResponseEntity<Project> endRating(@PathVariable("id") Long id){
+        Project project = projectService.getProject(id);
+        project.setRatingFinished(true);
+        projectRepo.save(project);
+        return ResponseEntity.ok().build();
+
+    }
 
     @PutMapping("/project/rateuser/{id}/{username}")
     public ResponseEntity<Rating> rateUser(@RequestBody Rating rating,@PathVariable("id") Long projectId, @PathVariable("username") String username, Principal p){
